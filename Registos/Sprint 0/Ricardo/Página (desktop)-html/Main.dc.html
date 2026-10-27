@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<title>Fluxo em 10 minutos</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#0B6E62}a:hover{color:#08493F}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #F2B33D;outline-offset:2px}
+</style>
+</helmet>
+<div style="background:#F4F6F8;color:#12202F;font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.55">
+
+<!-- Cabeçalho -->
+<header style="background:#12202F">
+<div style="max-width:1120px;margin:0 auto;padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:12px">
+<div aria-hidden="true" style="display:flex;align-items:flex-end;gap:3px;height:26px">
+<div style="width:7px;height:12px;background:#C9D3DD;border-radius:2px"></div>
+<div style="width:7px;height:26px;background:#F2B33D;border-radius:2px"></div>
+<div style="width:7px;height:18px;background:#3FB5A3;border-radius:2px"></div>
+</div>
+<span style="font-family:Sora,system-ui,sans-serif;font-weight:700;font-size:20px;color:#FFFFFF">Fluxo em 10 min</span>
+</div>
+<nav aria-label="Secções" style="display:flex;flex-wrap:wrap;gap:8px 24px">
+<a href="#metricas" style="color:#E3EAF1;text-decoration:none;font-weight:500;font-size:15px">Métricas</a>
+<a href="#grafico" style="color:#E3EAF1;text-decoration:none;font-weight:500;font-size:15px">Gráfico</a>
+<a href="#simulador" style="color:#E3EAF1;text-decoration:none;font-weight:500;font-size:15px">Simulador</a>
+<a href="#quiz" style="color:#E3EAF1;text-decoration:none;font-weight:500;font-size:15px">Quiz</a>
+<a href="#assistente" style="color:#E3EAF1;text-decoration:none;font-weight:500;font-size:15px">Assistente</a>
+</nav>
+</div>
+</header>
+
+<!-- Hero -->
+<section style="background:#12202F;color:#FFFFFF">
+<div style="max-width:1120px;margin:0 auto;padding:56px 24px 72px;display:flex;flex-wrap:wrap;align-items:center;gap:48px">
+<div style="flex:1 1 440px;min-width:0">
+<p style="margin:0 0 16px;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#F2B33D">Para novos elementos da equipa</p>
+<h1 style="margin:0 0 20px;font-family:Sora,system-ui,sans-serif;font-weight:700;font-size:48px;line-height:1.12">Perceber o fluxo de trabalho em 10 minutos</h1>
+<p style="margin:0 0 32px;font-size:18px;color:#C9D6E2;max-width:520px">Porque é que começar muitas tarefas curtas e deixá-las a meio atrasa tudo, e como ver isso num gráfico.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<a href="#metricas" style="display:inline-block;background:#F2B33D;color:#12202F;text-decoration:none;font-weight:600;padding:14px 28px;border-radius:10px">Começar</a>
+<a href="#simulador" style="display:inline-block;color:#FFFFFF;text-decoration:none;font-weight:600;padding:12px 26px;border-radius:10px;border:2px solid #5B7189">Ir direto ao simulador</a>
+</div>
+</div>
+<div aria-hidden="true" style="flex:1 1 380px;min-width:0;background:#1B2D40;border-radius:16px;padding:20px">
+<div style="display:flex;gap:12px">
+<div style="flex:1;min-width:0">
+<div style="font-size:13px;font-weight:600;color:#C9D6E2;margin-bottom:10px">Por fazer</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="height:30px;border-radius:6px;background:#3A4F66"></div>
+<div style="height:30px;border-radius:6px;background:#3A4F66"></div>
+</div>
+</div>
+<div style="flex:1;min-width:0">
+<div style="font-size:13px;font-weight:600;color:#F2B33D;margin-bottom:10px">Em curso</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="height:30px;border-radius:6px;background:#F2B33D"></div>
+<div style="height:30px;border-radius:6px;background:#F2B33D"></div>
+<div style="height:30px;border-radius:6px;background:#F2B33D"></div>
+<div style="height:30px;border-radius:6px;background:#F2B33D"></div>
+<div style="height:30px;border-radius:6px;background:#F2B33D"></div>
+</div>
+</div>
+<div style="flex:1;min-width:0">
+<div style="font-size:13px;font-weight:600;color:#C9D6E2;margin-bottom:10px">Concluído</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="height:30px;border-radius:6px;background:#3FB5A3"></div>
+</div>
+</div>
+</div>
+<p style="margin:16px 0 0;font-size:14px;color:#C9D6E2">Muitas tarefas começadas, poucas acabadas.</p>
+</div>
+</div>
+</section>
+
+<!-- Percurso -->
+<section style="max-width:1120px;margin:0 auto;padding:48px 24px 8px">
+<h2 style="margin:0 0 20px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:22px">O teu percurso: 5 passos, cerca de 10 minutos</h2>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<a href="#metricas" style="flex:1 1 180px;text-decoration:none;color:#12202F;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PASSO 1 · 2 min</div>
+<div style="font-weight:600;margin-top:4px">Métricas</div>
+</a>
+<a href="#grafico" style="flex:1 1 180px;text-decoration:none;color:#12202F;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PASSO 2 · 2 min</div>
+<div style="font-weight:600;margin-top:4px">Gráfico cumulativo</div>
+</a>
+<a href="#simulador" style="flex:1 1 180px;text-decoration:none;color:#12202F;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PASSO 3 · 3 min</div>
+<div style="font-weight:600;margin-top:4px">Simulador de WIP</div>
+</a>
+<a href="#quiz" style="flex:1 1 180px;text-decoration:none;color:#12202F;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PASSO 4 · 2 min</div>
+<div style="font-weight:600;margin-top:4px">Quiz rápido</div>
+</a>
+<a href="#assistente" style="flex:1 1 180px;text-decoration:none;color:#12202F;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PASSO 5 · 1 min</div>
+<div style="font-weight:600;margin-top:4px">Pergunta ao assistente</div>
+</a>
+</div>
+</section>
+
+<!-- 1. Métricas -->
+<section id="metricas" style="max-width:1120px;margin:0 auto;padding:64px 24px 8px">
+<h2 style="margin:0 0 8px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:30px">1. Quatro números para ler o trabalho</h2>
+<p style="margin:0 0 28px;color:#3D4F61;max-width:640px">Antes de mexer no fluxo, é preciso medi-lo. Estes quatro números contam a história de qualquer tarefa.</p>
+
+<div style="background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:24px;margin-bottom:20px">
+<div style="font-weight:600;margin-bottom:14px">A vida de uma tarefa (exemplo)</div>
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#3D4F61;margin-bottom:6px">
+<span>Pedido entra</span><span>Começamos</span><span>Entregue</span>
+</div>
+<div style="display:flex;height:44px;border-radius:8px;overflow:hidden">
+<div style="flex:3;background:#C9D3DD;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500">Espera: 3 dias</div>
+<div style="flex:5;background:#F2B33D;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Cycle time: 5 dias</div>
+</div>
+<div style="display:flex;height:16px;margin-top:6px;border-left:2px solid #12202F;border-right:2px solid #12202F;border-bottom:2px solid #12202F"></div>
+<div style="text-align:center;font-size:14px;font-weight:600;margin-top:4px">Lead time: 8 dias</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:16px">
+<div style="flex:1 1 240px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:20px">
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:18px;margin-bottom:6px">Lead time</div>
+<p style="margin:0 0 12px;color:#3D4F61">Tempo desde que o pedido entra até ser entregue.</p>
+<div style="font-size:14px;color:#0B6E62;font-weight:600">Exemplo: 8 dias</div>
+</div>
+<div style="flex:1 1 240px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:20px">
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:18px;margin-bottom:6px">Cycle time</div>
+<p style="margin:0 0 12px;color:#3D4F61">Tempo desde que começamos a trabalhar na tarefa até a concluir.</p>
+<div style="font-size:14px;color:#0B6E62;font-weight:600">Exemplo: 5 dias</div>
+</div>
+<div style="flex:1 1 240px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:20px">
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:18px;margin-bottom:6px">Throughput</div>
+<p style="margin:0 0 12px;color:#3D4F61">Quantas tarefas ficam concluídas por período de tempo.</p>
+<div style="font-size:14px;color:#0B6E62;font-weight:600">Exemplo: 4 tarefas por semana</div>
+</div>
+<div style="flex:1 1 240px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:20px">
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:18px;margin-bottom:6px">WIP (trabalho em curso)</div>
+<p style="margin:0 0 12px;color:#3D4F61">Quantas tarefas estão a meio ao mesmo tempo.</p>
+<div style="font-size:14px;color:#0B6E62;font-weight:600">Exemplo: 6 tarefas em curso</div>
+</div>
+</div>
+</section>
+
+<!-- 2. Gráfico cumulativo -->
+<section id="grafico" style="max-width:1120px;margin:0 auto;padding:64px 24px 8px">
+<h2 style="margin:0 0 8px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:30px">2. Ler o gráfico cumulativo</h2>
+<p style="margin:0 0 28px;color:#3D4F61;max-width:640px">Mostra quantas tarefas estão em cada estado ao longo do tempo. Com três regras de leitura, consegues apanhar um estrangulamento sozinho.</p>
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+<div style="flex:1 1 560px;min-width:0;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:20px">
+<div style="font-weight:600;margin-bottom:8px">Fluxo cumulativo de uma equipa (exemplo)</div>
+<svg viewBox="0 0 640 290" width="100%" role="img" aria-label="Gráfico de fluxo cumulativo de exemplo ao longo de 10 dias: a banda Em curso alarga de dia para dia, sinal de que o trabalho em curso está a crescer">
+<polygon points="50,239 100,228 150,211.5 200,195 250,173 300,156.5 350,140 400,123.5 450,107 500,90.5 550,74 550,30 500,30 450,35.5 400,46.5 350,63 300,85 250,107 200,129 150,151 100,173 50,195" fill="#C9D3DD"></polygon>
+<polygon points="50,250 100,244.5 150,239 200,228 250,217 300,211.5 350,200.5 400,189.5 450,184 500,178.5 550,167.5 550,74 500,90.5 450,107 400,123.5 350,140 300,156.5 250,173 200,195 150,211.5 100,228 50,239" fill="#F2B33D"></polygon>
+<polygon points="50,250 100,244.5 150,239 200,228 250,217 300,211.5 350,200.5 400,189.5 450,184 500,178.5 550,167.5 550,250" fill="#0B6E62"></polygon>
+<line x1="50" y1="250" x2="550" y2="250" stroke="#12202F" stroke-width="2"></line>
+<line x1="50" y1="30" x2="50" y2="250" stroke="#12202F" stroke-width="2"></line>
+<text x="400" y="88" text-anchor="middle" font-size="14" font-weight="600" fill="#12202F">Por fazer</text>
+<text x="400" y="162" text-anchor="middle" font-size="14" font-weight="600" fill="#12202F">Em curso</text>
+<text x="400" y="224" text-anchor="middle" font-size="14" font-weight="600" fill="#FFFFFF">Concluído</text>
+<line x1="590" y1="74" x2="590" y2="167.5" stroke="#12202F" stroke-width="2"></line>
+<line x1="584" y1="74" x2="596" y2="74" stroke="#12202F" stroke-width="2"></line>
+<line x1="584" y1="167.5" x2="596" y2="167.5" stroke="#12202F" stroke-width="2"></line>
+<text x="610" y="124" text-anchor="start" font-size="13" font-weight="600" fill="#12202F">WIP</text>
+<text x="50" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">0</text>
+<text x="150" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">2</text>
+<text x="250" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">4</text>
+<text x="350" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">6</text>
+<text x="450" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">8</text>
+<text x="550" y="274" text-anchor="middle" font-size="12" fill="#3D4F61">10</text>
+<text x="600" y="274" text-anchor="start" font-size="12" fill="#3D4F61">dias</text>
+<text x="56" y="22" font-size="12" fill="#3D4F61">Tarefas (acumulado)</text>
+</svg>
+<p style="margin:8px 0 0;font-size:14px;color:#3D4F61">A banda amarela alarga de dia para dia: entram mais tarefas em curso do que as que saem concluídas.</p>
+</div>
+<div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:12px">
+<div style="background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:18px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62;margin-bottom:4px">REGRA 1</div>
+<div style="font-weight:600;margin-bottom:4px">A largura da banda amarela é o WIP</div>
+<div style="color:#3D4F61">Quanto mais larga, mais tarefas estão a meio.</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:18px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62;margin-bottom:4px">REGRA 2</div>
+<div style="font-weight:600;margin-bottom:4px">A distância horizontal é o tempo</div>
+<div style="color:#3D4F61">Medida entre duas linhas, mostra quanto tempo uma tarefa demora.</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #D5DDE5;border-radius:12px;padding:18px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62;margin-bottom:4px">REGRA 3</div>
+<div style="font-weight:600;margin-bottom:4px">Uma banda que alarga é um alerta</div>
+<div style="color:#3D4F61">Entra mais do que sai: há um estrangulamento.</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 3. Simulador -->
+<section id="simulador" style="max-width:1120px;margin:0 auto;padding:64px 24px 8px">
+<h2 style="margin:0 0 8px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:30px">3. O que acontece se aumentarmos o WIP?</h2>
+<p style="margin:0 0 28px;color:#3D4F61;max-width:640px">Mexe no número de tarefas em simultâneo e vê o que acontece ao tempo que cada uma demora.</p>
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
+<div style="flex:1 1 320px;min-width:0;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:20px">
+<div>
+<div style="font-weight:600;margin-bottom:10px">Trabalhos em simultâneo (WIP)</div>
+<div style="display:flex;align-items:center;gap:16px">
+<button type="button" aria-label="Reduzir WIP" onClick="{{dec}}" style="width:48px;height:48px;border-radius:10px;border:2px solid #12202F;background:#FFFFFF;color:#12202F;font-size:24px;font-weight:600;line-height:1">−</button>
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:700;font-size:48px;min-width:64px;text-align:center">{{wip}}</div>
+<button type="button" aria-label="Aumentar WIP" onClick="{{inc}}" style="width:48px;height:48px;border-radius:10px;border:0;background:{{accent}};color:#FFFFFF;font-size:24px;font-weight:600;line-height:1">+</button>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<div style="flex:1 1 120px;background:#F4F6F8;border-radius:10px;padding:14px">
+<div style="font-size:13px;color:#3D4F61">Throughput</div>
+<div style="font-weight:600">4 tarefas/semana</div>
+</div>
+<div style="flex:1 1 120px;background:#F4F6F8;border-radius:10px;padding:14px">
+<div style="font-size:13px;color:#3D4F61">Lead time médio</div>
+<div style="font-weight:600">{{leadTime}} dias úteis</div>
+</div>
+</div>
+<div style="border-radius:10px;padding:14px;font-weight:600;background:{{toneBg}};color:{{toneColor}}">{{toneText}}</div>
+<p style="margin:0;font-size:13px;color:#3D4F61">Lead time = WIP ÷ throughput (lei de Little). Exemplo simplificado: throughput fixo de 4 tarefas por semana e 5 dias úteis por semana.</p>
+</div>
+<div style="flex:1 1 480px;min-width:0;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:24px">
+<div style="display:flex;flex-wrap:wrap;gap:16px">
+<div style="flex:1 1 120px;min-width:0">
+<div style="font-size:14px;font-weight:600;margin-bottom:10px">Por fazer</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="padding:10px 12px;border-radius:8px;background:#E6EBF0;font-size:14px">Tarefa 13</div>
+<div style="padding:10px 12px;border-radius:8px;background:#E6EBF0;font-size:14px">Tarefa 14</div>
+<div style="padding:10px 12px;border-radius:8px;background:#E6EBF0;font-size:14px">Tarefa 15</div>
+</div>
+</div>
+<div style="flex:1 1 140px;min-width:0">
+<div style="font-size:14px;font-weight:600;margin-bottom:10px">Em curso · limite {{wip}}</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{cards}}" as="card" hint-placeholder-count="6">
+<div style="padding:10px 12px;border-radius:8px;background:#FDF0D0;border:1px solid #E0B24A;font-size:14px">{{card.label}}</div>
+</sc-for>
+</div>
+</div>
+<div style="flex:1 1 120px;min-width:0">
+<div style="font-size:14px;font-weight:600;margin-bottom:10px">Concluído</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="padding:10px 12px;border-radius:8px;background:#DDF3EC;border:1px solid #7CC9B9;font-size:14px">Tarefa 11</div>
+<div style="padding:10px 12px;border-radius:8px;background:#DDF3EC;border:1px solid #7CC9B9;font-size:14px">Tarefa 12</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 4. Quiz -->
+<section id="quiz" style="max-width:1120px;margin:0 auto;padding:64px 24px 8px">
+<h2 style="margin:0 0 8px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:30px">4. Testa o que aprendeste</h2>
+<p style="margin:0 0 28px;color:#3D4F61;max-width:640px">Perguntas curtas, com resposta imediata.</p>
+<div style="max-width:720px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:24px">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<div style="font-size:13px;font-weight:600;color:#0B6E62">PERGUNTA 1 DE 3</div>
+<div aria-hidden="true" style="display:flex;gap:6px">
+<div style="width:28px;height:6px;border-radius:3px;background:#0B6E62"></div>
+<div style="width:28px;height:6px;border-radius:3px;background:#D5DDE5"></div>
+<div style="width:28px;height:6px;border-radius:3px;background:#D5DDE5"></div>
+</div>
+</div>
+<div style="font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:20px;margin-bottom:16px">No gráfico cumulativo, a banda "Em curso" está cada vez mais larga. O que significa?</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{options}}" as="opt" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{opt.pressed}}" onClick="{{opt.pick}}" style="text-align:left;font-size:16px;color:#12202F;padding:14px 16px;border-radius:10px;border:2px solid {{opt.border}};background:{{opt.bg}}">
+<span style="font-weight:600;margin-right:8px">{{opt.letter}}</span>{{opt.label}}
+</button>
+</sc-for>
+</div>
+<sc-if value="{{answered}}" hint-placeholder-val="{{true}}">
+<div style="margin-top:16px;border-radius:10px;padding:14px 16px;background:{{fbBg}};color:{{fbColor}}">{{fbText}}</div>
+</sc-if>
+</div>
+</section>
+
+<!-- 5. Assistente -->
+<section id="assistente" style="max-width:1120px;margin:0 auto;padding:64px 24px 72px">
+<h2 style="margin:0 0 8px;font-family:Sora,system-ui,sans-serif;font-weight:600;font-size:30px">5. Tens dúvidas? Pergunta ao assistente</h2>
+<p style="margin:0 0 28px;color:#3D4F61;max-width:640px">Responde com base no que o professor Ricardo ensinou e nas fontes desta página.</p>
+<div style="max-width:720px;background:#FFFFFF;border:1px solid #D5DDE5;border-radius:16px;padding:24px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+<button type="button" style="padding:8px 14px;border-radius:999px;border:1px solid #9FB0C0;background:#FFFFFF;color:#12202F;font-size:14px">O que é um limite WIP?</button>
+<button type="button" style="padding:8px 14px;border-radius:999px;border:1px solid #9FB0C0;background:#FFFFFF;color:#12202F;font-size:14px">Lead time ou cycle time?</button>
+<button type="button" style="padding:8px 14px;border-radius:999px;border:1px solid #9FB0C0;background:#FFFFFF;color:#12202F;font-size:14px">Como leio o gráfico?</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+<div style="align-self:flex-end;max-width:80%;background:#12202F;color:#FFFFFF;border-radius:14px;padding:12px 16px">O que é um limite WIP?</div>
+<div style="align-self:flex-start;max-width:90%;background:#F4F6F8;border-radius:14px;padding:12px 16px">
+<div>Um limite WIP é o número máximo de tarefas que podem estar em curso ao mesmo tempo. Quando o limite é atingido, a equipa termina algo antes de começar outra tarefa.</div>
+<div style="margin-top:8px;font-size:13px;color:#3D4F61">Fonte: Kanban Guide (2020)</div>
+</div>
+</div>
+<div style="display:flex;gap:10px">
+<input type="text" aria-label="Escreve a tua pergunta" placeholder="Escreve a tua pergunta" style="flex:1;min-width:0;padding:12px 14px;border-radius:10px;border:2px solid #9FB0C0;font-size:16px;font-family:inherit">
+<button type="button" style="padding:12px 22px;border-radius:10px;border:0;background:{{accent}};color:#FFFFFF;font-weight:600;font-size:16px">Enviar</button>
+</div>
+</div>
+</section>
+
+<!-- Rodapé -->
+<footer style="background:#12202F;color:#C9D6E2">
+<div style="max-width:1120px;margin:0 auto;padding:24px;font-size:14px">Proposta visual (mockup) para discussão com o cliente · Sprint 0</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0B6E62"},"$preview":{"width":1280,"height":3700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { wip: 6, answer: null };
+  }
+  renderVals() {
+    const wip = this.state.wip;
+    const answer = this.state.answer;
+    const leadRaw = Math.round((wip / 4) * 5 * 10) / 10;
+    const leadTime = String(leadRaw).replace('.', ',');
+    let toneText = 'Equilíbrio razoável: o trabalho vai saindo.';
+    let toneBg = '#FDF0D0';
+    let toneColor = '#6B4700';
+    if (wip <= 3) {
+      toneText = 'Foco alto: poucas tarefas em curso, entregas rápidas.';
+      toneBg = '#DDF3EC';
+      toneColor = '#0B4F46';
+    } else if (wip > 6) {
+      toneText = 'Dispersão: muitas tarefas começadas e poucas acabadas.';
+      toneBg = '#FBE4E0';
+      toneColor = '#8A2B1F';
+    }
+    const cards = [];
+    for (let i = 0; i < wip; i++) {
+      cards.push({ label: 'Tarefa ' + (i + 1) });
+    }
+    const defs = [
+      { key: 'a', letter: 'A.', label: 'A equipa está a ficar mais rápida.' },
+      { key: 'b', letter: 'B.', label: 'O WIP está a crescer: há um estrangulamento.' },
+      { key: 'c', letter: 'C.', label: 'O throughput duplicou.' }
+    ];
+    const options = defs.map((d) => {
+      const picked = answer === d.key;
+      const correct = d.key === 'b';
+      let bg = '#FFFFFF';
+      let border = '#9FB0C0';
+      if (picked && correct) { bg = '#DDF3EC'; border = '#0B6E62'; }
+      if (picked && !correct) { bg = '#FBE4E0'; border = '#A83A2B'; }
+      return {
+        letter: d.letter,
+        label: d.label,
+        pressed: picked,
+        bg: bg,
+        border: border,
+        pick: () => this.setState({ answer: d.key })
+      };
+    });
+    const isCorrect = answer === 'b';
+    return {
+      accent: this.props.accent ?? '#0B6E62',
+      wip: wip,
+      leadTime: leadTime,
+      toneText: toneText,
+      toneBg: toneBg,
+      toneColor: toneColor,
+      cards: cards,
+      dec: () => this.setState({ wip: Math.max(1, this.state.wip - 1) }),
+      inc: () => this.setState({ wip: Math.min(12, this.state.wip + 1) }),
+      options: options,
+      answered: answer !== null,
+      fbBg: isCorrect ? '#DDF3EC' : '#FBE4E0',
+      fbColor: isCorrect ? '#0B4F46' : '#8A2B1F',
+      fbText: isCorrect
+        ? 'Certo. Uma banda que alarga significa que entram mais tarefas em curso do que as que saem concluídas: o WIP cresce e há um estrangulamento.'
+        : 'Ainda não. Repara na largura da banda amarela: se alarga, o trabalho em curso acumula-se em vez de ser concluído. Tenta outra vez.'
+    };
+  }
+}
+</script>
+</body>
+</html>
