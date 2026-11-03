@@ -1,6 +1,6 @@
 --------HEADER (LADO)--------------
 
-SIMULADOR
+SIMULADOR (cumulative flow - grafico)
 
 DECISÃO DE CONHECE OU NÃO KANBAN
 
@@ -9,5 +9,7 @@ DILEMA
 O QUE É KANBAN
 
 AS TRÊS MÉTRICAS
+
+SIMULADOR DA EQUIPA
 
 QUIZ
