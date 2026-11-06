@@ -1,0 +1,206 @@
+/* Shell do site (T2): cabeçalho, menu do percurso à esquerda (abre e
+   fecha) e título do passo. Tema claro com coral como cor principal e
+   pêssego nos detalhes (logótipo, fio do topo, sublinhado do título).
+   Carregado depois de style.css, que traz os estilos do protótipo v1. */
+
+:root {
+  --papel: #FFFFFF;
+  --superficie: #FFFFFF;
+  --lateral: #FFF9F6;
+  --texto: #1F1A17;
+  --texto-suave: #5C504A;
+  --texto-fraco: #7A6E68;
+  --divisor: #F3E9E4;
+  --divisor-forte: #E8D8D0;
+  --pairar: #FFF1EA;
+  --acento: #F2643A;          /* coral: só em barras, ícones e fundos */
+  --acento-escuro: #B23A14;   /* coral escuro para texto: contraste 5,9:1 */
+  --acento-fundo: #FFEDE5;
+  --acento-linha: #FFC9B3;
+  --pessego: #FFB38A;
+  --verde: #047857;
+  --gradiente: linear-gradient(90deg, #F2643A, #FFB38A);
+  --sombra: 0 1px 2px rgba(178, 58, 20, .06), 0 8px 24px rgba(178, 58, 20, .06);
+  --ease: cubic-bezier(.22, .8, .24, 1);
+}
+
+html { background: var(--papel); }
+body { color: var(--texto); background: transparent; }
+/* Manchas de cor suaves no fundo, a mexer devagar */
+body::before {
+  content: ""; position: fixed; inset: -10%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(520px 320px at 80% 8%, rgba(255, 179, 138, .16), transparent 70%),
+    radial-gradient(640px 380px at 30% 0%, rgba(242, 100, 58, .09), transparent 70%),
+    radial-gradient(520px 360px at 70% 95%, rgba(255, 179, 138, .10), transparent 70%);
+  animation: deriva 22s ease-in-out infinite alternate;
+}
+@keyframes deriva {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-4%, 3%, 0) scale(1.06); }
+}
+.site-largura { width: 100%; max-width: 1200px; margin: 0 auto; padding-inline: 32px; }
+:focus-visible { outline: 2px solid var(--acento-escuro); outline-offset: 2px; border-radius: 4px; }
+main:focus, h1[tabindex="-1"]:focus { outline: none; }
+
+/* Saltar para o conteúdo (só aparece com o teclado) */
+.saltar {
+  position: absolute; left: 16px; top: -48px; z-index: 50;
+  padding: 10px 14px; border-radius: 8px;
+  background: var(--texto); color: #fff; font-weight: 600; text-decoration: none;
+}
+.saltar:focus { top: 12px; }
+
+/* ---------- Cabeçalho do site ---------- */
+.site-topo {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--divisor);
+}
+/* Fio colorido no topo da página */
+.site-topo::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 3px;
+  background: linear-gradient(90deg, #F2643A, #FFB38A, #FF8A65, #F2643A);
+  background-size: 300% 100%;
+  animation: fio 8s linear infinite;
+}
+@keyframes fio { to { background-position: 300% 0; } }
+
+/* Barras do logótipo a crescer e encolher, como tarefas num quadro */
+.logo__icone i { animation: barra 2.8s ease-in-out infinite alternate; transform-origin: top; }
+.logo__icone i:nth-child(2) { animation-delay: .4s; }
+.logo__icone i:nth-child(3) { animation-delay: .8s; }
+@keyframes barra { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
+.logo:hover .logo__icone { transform: rotate(-6deg) scale(1.06); }
+.logo__icone { transition: transform .25s var(--ease); }
+:root { --altura-topo: 56px; }
+.site-topo .site-largura { max-width: none; padding-inline: 16px; }
+.site-topo__linha { display: flex; align-items: center; gap: 8px; min-height: var(--altura-topo); }
+.site-topo .logo { font-size: 18px; color: var(--texto); }
+.site-topo .logo__icone { width: 26px; height: 26px; padding: 6px 5px; border-radius: 6px; }
+.logo__icone { background: linear-gradient(135deg, var(--acento), var(--pessego)); box-shadow: 0 4px 10px rgba(242, 100, 58, .3); }
+
+/* ---------- Página ---------- */
+:root { --largura-painel: 320px; }
+.pagina { padding-top: 48px; padding-bottom: 64px; }
+#app { max-width: 760px; }
+
+/* Botão de menu (☰) no cabeçalho */
+.botao-menu {
+  display: grid; place-items: center; width: 40px; height: 40px;
+  border: 0; border-radius: 8px; background: transparent; color: var(--texto-suave);
+  transition: background .15s;
+}
+.botao-menu:hover { background: var(--pairar); color: var(--acento-escuro); }
+.botao-menu[aria-expanded="true"] { color: var(--acento-escuro); }
+
+/* ---------- Menu do percurso (esquerda, por baixo do cabeçalho) ---------- */
+.lateral {
+  position: fixed; top: var(--altura-topo); left: 0; bottom: 0; z-index: 15;
+  width: var(--largura-painel); max-width: 88vw; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 24px 16px;
+  background: var(--lateral);
+  border-right: 1px solid var(--divisor);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform .3s var(--ease), visibility 0s linear .3s;
+}
+.percurso-aberto .lateral { transform: none; visibility: visible; transition: transform .3s var(--ease); }
+.lateral__titulo { padding: 0 12px; font: 600 12px Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-fraco); }
+.lateral__painel { display: flex; flex-direction: column; gap: 20px; }
+
+/* Passos */
+.jornada {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.etapa__botao {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  min-height: 48px; padding: 6px 12px;
+  border: 0; border-radius: 8px; background: transparent;
+  color: var(--texto-suave); text-align: left;
+  transition: background .15s, color .15s;
+}
+.etapa__botao:hover { background: var(--pairar); color: var(--texto); }
+.etapa__icone { flex: none; display: grid; place-items: center; color: var(--texto-fraco); }
+.etapa__texto { flex: 1; display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.etapa__nome { font-size: 15px; font-weight: 500; }
+.etapa__info { font-size: 12px; color: var(--texto-fraco); }
+.etapa__info:empty { display: none; }
+
+.etapa--concluida .etapa__botao { color: var(--texto); }
+.etapa--concluida .etapa__icone { color: var(--texto-suave); }
+.etapa--concluida .etapa__info { color: var(--verde); font-weight: 500; }
+
+.etapa--atual .etapa__botao { background: var(--acento-fundo); color: var(--acento-escuro); box-shadow: inset 3px 0 0 var(--acento); }
+.etapa--atual .etapa__nome { font-weight: 600; }
+.etapa--atual .etapa__icone { color: var(--acento); }
+.etapa--atual .etapa__info { color: var(--acento-escuro); }
+
+/* Animação discreta quando um passo fica concluído */
+.etapa--celebrar .etapa__info { animation: concluir .45s var(--ease); }
+@keyframes concluir { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Conteúdo do passo ---------- */
+.ecra { display: flex; flex-direction: column; gap: 24px; }
+.ecra h1 { font: 700 clamp(26px, 3vw, 34px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.02em; color: var(--texto); }
+/* Sublinhado colorido por baixo do título, que cresce ao mudar de passo */
+.ecra h1::after { content: ""; display: block; width: 56px; height: 4px; margin-top: 16px; border-radius: 999px; background: var(--gradiente); }
+.ecra--entrar h1::after { animation: sublinhar .7s .15s var(--ease) both; }
+@keyframes sublinhar { from { width: 0; opacity: 0; } to { width: 56px; opacity: 1; } }
+
+/* Transição entre passos */
+.ecra--entrar { animation: entrar .35s var(--ease) both; }
+@keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Menu aberto: o conteúdo encosta-se a ele, nunca fica tapado */
+@media (min-width: 601px) {
+  body.percurso-aberto .pagina { width: auto; max-width: none; margin-left: var(--largura-painel); }
+}
+/* Janela média: menu mais estreito */
+@media (max-width: 960px) {
+  :root { --largura-painel: 248px; }
+  .site-largura { padding-inline: 16px; }
+  .pagina { padding-top: 24px; }
+}
+/* Telemóvel: o menu abre por baixo do cabeçalho e empurra o título */
+@media (max-width: 600px) {
+  .lateral {
+    position: static; width: auto; max-width: none; overflow: visible;
+    display: none; padding: 16px; gap: 12px;
+    border-right: 0; border-bottom: 1px solid var(--divisor);
+    transform: none; transition: none;
+  }
+  .percurso-aberto .lateral { display: flex; }
+}
+
+/* ---------- Animações do menu ---------- */
+/* Os passos entram um a um quando o menu abre */
+.percurso-aberto .etapa { animation: item .4s var(--ease) both; }
+.percurso-aberto .etapa:nth-child(2) { animation-delay: .05s; }
+.percurso-aberto .etapa:nth-child(3) { animation-delay: .1s; }
+.percurso-aberto .etapa:nth-child(4) { animation-delay: .15s; }
+.percurso-aberto .etapa:nth-child(5) { animation-delay: .2s; }
+@keyframes item { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+
+/* Ao passar o rato, o ícone dá um pequeno salto */
+.etapa__icone { transition: transform .25s var(--ease), color .2s; }
+.etapa__botao:hover .etapa__icone { transform: translateY(-2px) scale(1.12); color: var(--acento); }
+.etapa__botao:active { transform: scale(.98); }
+
+/* O passo que passa a ser o atual acende-se */
+.etapa--atual .etapa__botao { animation: acender .45s var(--ease); }
+@keyframes acender {
+  from { background: transparent; box-shadow: inset 0 0 0 var(--acento); }
+  to { background: var(--acento-fundo); box-shadow: inset 3px 0 0 var(--acento); }
+}
+
+/* O ☰ roda um pouco ao abrir e fechar */
+.botao-menu svg { transition: transform .35s var(--ease); }
+.botao-menu[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* Movimento reduzido: sem animações */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

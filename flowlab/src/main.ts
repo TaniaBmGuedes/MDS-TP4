@@ -1,23 +1,66 @@
-// Ponto de entrada da aplicação. Por agora só mostra uma página provisória que
-// prova que o TypeScript, o CSS e o modelo funcionam em conjunto. A estrutura
-// real da página (cabeçalho e passos) chega com o T2 e os tickets dos ecrãs.
+// Ponto de entrada: cria o store do percurso e monta a shell da app (T2),
+// com o menu do percurso à esquerda e o título do passo atual. Muda-se de
+// passo pelo menu.
 import './style.css';
-import { EQUIPA_INICIAL } from './data/simulacao';
-import { simular } from './model/simulador';
+import './shell.css';
+import { criarMenuLateral } from './components/menuLateral';
+import { PASSOS } from './data/passos';
+import { PERGUNTAS } from './data/perguntas';
+import { criarPercurso, type EstadoPercurso } from './model/percurso';
+import { ECRAS } from './steps';
 
 // Com o modo strict, querySelector pode devolver null: é preciso tratar esse
 // caso em vez de assumir que o elemento existe.
 const app = document.querySelector<HTMLElement>('#app');
 if (!app) throw new Error('Falta o elemento #app no index.html');
 
-const formatar = (valor: number): string => valor.toFixed(1).replace('.', ',');
-const resultado = simular(EQUIPA_INICIAL.pessoas, EQUIPA_INICIAL);
+const percurso = criarPercurso(PASSOS.length, PERGUNTAS.length);
 
-app.innerHTML = `
-  <section class="seccao">
-    <p class="etiqueta">Base do projeto · Sprint 1</p>
-    <h1>FlowLab</h1>
-    <p class="lead">Página interativa sobre Kanban e métricas de fluxo. Os passos do percurso são acrescentados nos tickets seguintes.</p>
-    <p class="suave">Verificação do modelo: com ${EQUIPA_INICIAL.pessoas} pessoas e limite de ${EQUIPA_INICIAL.pessoas} tarefas em curso, o throughput é ${formatar(resultado.throughput)} por dia e o lead time é ${formatar(resultado.leadTime)} dias.</p>
-  </section>
-`;
+// O cabeçalho e o rodapé do site estão no index.html. O menu do percurso
+// abre e fecha pela esquerda, só com o botão de menu antes do logótipo.
+const menu = criarMenuLateral(PASSOS, percurso);
+document.querySelector('.site-topo__linha')?.prepend(menu.botao);
+// Fica antes da página no HTML: no telemóvel aparece por cima do título.
+document.querySelector('.pagina')?.before(menu.painel);
+
+const seccao = document.createElement('section');
+seccao.className = 'ecra';
+app.append(seccao);
+
+let passoDesenhado = -1;
+
+function desenharPasso(estado: EstadoPercurso): void {
+  // Os ouvintes são chamados a cada mudança (por ex., uma resposta do quiz);
+  // só se volta a desenhar o ecrã quando o passo muda.
+  if (estado.passoAtual === passoDesenhado) return;
+  const primeiraVez = passoDesenhado === -1;
+  passoDesenhado = estado.passoAtual;
+
+  const passo = PASSOS[estado.passoAtual];
+  seccao.replaceChildren();
+  seccao.setAttribute('aria-labelledby', 'titulo-passo');
+
+  const titulo = document.createElement('h1');
+  titulo.id = 'titulo-passo';
+  titulo.tabIndex = -1;
+  titulo.textContent = passo.titulo;
+
+  seccao.append(titulo);
+
+  // Reinicia a animação de entrada do ecrã (o CSS desliga-a com
+  // prefers-reduced-motion).
+  seccao.classList.remove('ecra--entrar');
+  void seccao.offsetWidth;
+  seccao.classList.add('ecra--entrar');
+  ECRAS[passo.id](seccao, passo, percurso);
+
+  // Ao mudar de passo, o foco vai para o título: quem usa teclado ou leitor de
+  // ecrã continua a partir do início do novo passo, e não do botão clicado.
+  if (!primeiraVez) {
+    window.scrollTo({ top: 0 });
+    titulo.focus({ preventScroll: true });
+  }
+}
+
+desenharPasso(percurso.estado());
+percurso.subscrever(desenharPasso);

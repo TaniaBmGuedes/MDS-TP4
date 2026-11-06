@@ -1,4 +1,4 @@
-// Estado do percurso (T2): passo atual, passos vistos, resposta ao dilema e
+// Estado do percurso (T2): passo atual, passos vistos e concluídos, resposta ao dilema e
 // respostas do quiz. Fica num store criado por criarPercurso(), em vez de
 // variáveis globais soltas: os ecrãs recebem o store e só mudam o estado
 // pelas funções dele. Não toca no DOM, por isso é testado com o Vitest.
@@ -10,6 +10,11 @@ export interface EstadoPercurso {
   readonly passoAtual: number;
   /** vistos[i] é true se a pessoa já abriu o passo i. */
   readonly vistos: readonly boolean[];
+  /**
+   * concluidos[i] é true se a pessoa saiu do passo i para a frente. Voltar
+   * atrás ou saltar para um passo anterior não conclui o passo.
+   */
+  readonly concluidos: readonly boolean[];
   readonly respostaDilema: EscolhaDilema | null;
   /** Índice da opção escolhida em cada pergunta, ou null se ainda não respondeu. */
   readonly respostasQuiz: readonly (number | null)[];
@@ -34,6 +39,7 @@ export function criarPercurso(totalPassos: number, totalPerguntas: number): Perc
   let estado: EstadoPercurso = {
     passoAtual: 0,
     vistos: Array.from({ length: totalPassos }, (_, i) => i === 0),
+    concluidos: Array.from({ length: totalPassos }, () => false),
     respostaDilema: null,
     respostasQuiz: Array.from({ length: totalPerguntas }, () => null),
   };
@@ -48,11 +54,14 @@ export function criarPercurso(totalPassos: number, totalPerguntas: number): Perc
 
   function irPara(passo: number): void {
     const destino = Math.min(Math.max(Math.trunc(passo), 0), totalPassos - 1);
-    if (destino === estado.passoAtual) return;
+    const origem = estado.passoAtual;
+    if (destino === origem) return;
+    const paraAFrente = destino > origem;
     mudar({
       ...estado,
       passoAtual: destino,
       vistos: estado.vistos.map((visto, i) => visto || i === destino),
+      concluidos: estado.concluidos.map((feito, i) => feito || (paraAFrente && i === origem)),
     });
   }
 
