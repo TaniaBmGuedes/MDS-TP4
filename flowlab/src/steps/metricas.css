@@ -1,0 +1,123 @@
+/* Ecrã das métricas (T16). Cores do tema em shell.css: creme, branco,
+   carvão, verde-floresta; o amarelo só marca o trabalho em curso e avisos. */
+
+.metricas__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); }
+
+/* ---------- Diapositivos ---------- */
+.licao { display: flex; flex-direction: column; gap: 16px; }
+.licao__janela { overflow: hidden; transition: height .5s var(--ease); }
+.licao__pista { display: flex; align-items: flex-start; transition: transform .7s var(--ease); }
+.cenario {
+  flex: 0 0 100%; min-width: 0;
+  display: flex; flex-direction: column; gap: 20px;
+  opacity: 0; transition: opacity .6s var(--ease);
+}
+.cenario--ativo { opacity: 1; }
+
+.cenario__cabeca { display: flex; flex-direction: column; gap: 6px; }
+.cenario__passo { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
+.cenario__titulo {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  font: 700 clamp(24px, 3vw, 34px)/1.15 Inter, system-ui, sans-serif; letter-spacing: -.02em; color: var(--texto);
+}
+.cenario__aviso {
+  padding: 3px 10px; border-radius: 4px;
+  background: var(--amarelo-fundo); color: #5A4614;
+  font-size: 13px; font-weight: 600; letter-spacing: 0;
+}
+.cenario__situacao { font-size: 17px; color: var(--texto-suave); }
+
+/* ---------- Palco: a animação ---------- */
+.palco-envolta { display: flex; flex-direction: column; gap: 8px; }
+.palco__topo { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+.palco__relogio { font: 700 15px/1.2 Inter, system-ui, sans-serif; color: var(--texto); font-variant-numeric: tabular-nums; }
+.palco__nota { font-size: 12px; color: var(--texto-fraco); }
+
+.palco {
+  --t: 16px; --g: 5px;
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+  background: var(--superficie);
+  border-block: 1px solid var(--divisor);
+}
+.palco__coluna { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 16px 20px 20px; }
+.palco__coluna + .palco__coluna { border-left: 1px solid var(--divisor); }
+.palco__titulo {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--texto-suave);
+}
+.palco__chegam { font-weight: 500; color: var(--texto-fraco); }
+.palco__conta { font-variant-numeric: tabular-nums; color: var(--texto); }
+/* Altura fixa: 5 linhas de tarefas, igual em todos os cenários. */
+.palco__area { min-height: calc(5 * (var(--t) + var(--g))); }
+
+.palco__pessoas { display: flex; flex-direction: column; gap: 10px; }
+.pessoa { display: flex; align-items: center; gap: 12px; min-height: 30px; }
+.pessoa__avatar {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--acento-fundo); color: var(--acento);
+  transition: background .4s, color .4s;
+}
+.pessoa__mesa { flex: 1; min-width: 0; height: var(--t); }
+.pessoa__estado { font-size: 12px; color: var(--texto-fraco); opacity: 0; transition: opacity .4s; white-space: nowrap; }
+.pessoa--parada .pessoa__avatar { background: var(--pairar); color: var(--texto-fraco); }
+.pessoa--parada .pessoa__estado { opacity: 1; }
+
+.palco__camada { position: absolute; inset: 0; pointer-events: none; transition: opacity .6s; }
+.ficha {
+  position: absolute; left: 0; top: 0;
+  width: var(--t); height: var(--t); border-radius: 3px;
+  transition: transform .9s var(--ease), background-color .5s, border-color .5s, opacity .6s;
+}
+.ficha--espera { background: var(--superficie); border: 1.5px solid var(--divisor-forte); }
+.ficha--curso { background: var(--amarelo-fundo); border: 1.5px solid var(--amarelo); }
+.ficha--ativa { background: var(--amarelo); border-color: #B99A3D; }
+.ficha--feita { background: var(--acento); border: 1.5px solid var(--acento); }
+.ficha--nova { opacity: 0; }
+.palco--sem-transicao .ficha, .palco--sem-transicao .palco__camada { transition: none; }
+
+/* ---------- Faixa das métricas ---------- */
+.faixa { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+.faixa__item { display: flex; flex-direction: column; gap: 4px; padding: 2px 20px; }
+.faixa__item:first-child { padding-left: 0; }
+.faixa__item + .faixa__item { border-left: 1px solid var(--divisor); }
+.faixa__nome { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; font-size: 14px; font-weight: 700; color: var(--texto); }
+.faixa__significado { font-size: 13px; font-weight: 500; color: var(--texto-fraco); }
+.faixa__definicao { margin: 2px 0 0; font-size: 13px; color: var(--texto-suave); }
+.faixa__valor { margin: 0; font-size: 15px; color: var(--texto-suave); }
+.faixa__valor strong {
+  font: 700 32px/1 Inter, system-ui, sans-serif; letter-spacing: -.02em;
+  color: var(--acento); font-variant-numeric: tabular-nums;
+}
+.cenario__conclusao { font-size: 17px; font-weight: 500; color: var(--texto); }
+
+/* ---------- Número do WIP editável (duplo clique) ---------- */
+.cenario__wip {
+  cursor: text; border-radius: 6px; padding: 0 4px; margin: 0 -4px;
+  transition: background .15s, box-shadow .15s;
+}
+.cenario__wip:hover { background: var(--amarelo-fundo); box-shadow: inset 0 -2px 0 var(--amarelo); }
+.cenario__wip:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.cenario__campo {
+  width: 2.6em; padding: 0 6px; margin: 0 -2px;
+  border: 0; border-radius: 6px; box-shadow: inset 0 -3px 0 var(--acento);
+  background: var(--superficie); color: var(--texto); font: inherit; letter-spacing: inherit;
+}
+.cenario__campo:focus { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+/* ---------- Ecrãs mais pequenos ---------- */
+@media (max-width: 700px) {
+  .palco { --t: 11px; --g: 3px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, .9fr); }
+  .palco__coluna { gap: 10px; padding: 12px 8px 14px; }
+  .palco__titulo { flex-direction: column; gap: 2px; font-size: 12px; }
+  .palco__chegam { font-size: 11px; }
+  .pessoa { gap: 6px; min-height: 24px; }
+  .pessoa__avatar { width: 24px; height: 24px; }
+  .pessoa__estado { display: none; }
+  .faixa__item { padding: 2px 10px; }
+  .faixa__valor { font-size: 13px; }
+  .faixa__valor strong { font-size: 24px; }
+  .faixa__nome { font-size: 12px; flex-direction: column; }
+  .faixa__significado, .faixa__definicao { font-size: 12px; }
+  .cenario__situacao, .cenario__conclusao { font-size: 16px; }
+}

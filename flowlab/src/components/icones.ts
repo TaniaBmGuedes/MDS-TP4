@@ -27,4 +27,8 @@ export const ICONES = {
   seta: svg('<path d="M5 12h14M13 6l6 6-6 6"/>', 18),
   setaAtras: svg('<path d="M19 12H5M11 6l-6 6 6 6"/>', 18),
   menu: svg('<path d="M4 7h16M4 12h16M4 17h16"/>', 22),
+  pausa: svg('<path d="M9 5v14M15 5v14"/>', 18),
+  continuar: svg('<path d="M7 5l12 7-12 7z"/>', 18),
+  anterior: svg('<path d="M15 6l-6 6 6 6"/>', 18),
+  seguinte: svg('<path d="M9 6l6 6-6 6"/>', 18),
 };

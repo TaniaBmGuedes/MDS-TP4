@@ -45,6 +45,12 @@ function desenharPasso(estado: EstadoPercurso): void {
   titulo.tabIndex = -1;
   titulo.textContent = passo.titulo;
 
+  if (passo.etiqueta) {
+    const etiqueta = document.createElement('p');
+    etiqueta.className = 'ecra__etiqueta';
+    etiqueta.textContent = passo.etiqueta;
+    seccao.append(etiqueta);
+  }
   seccao.append(titulo);
 
   // Reinicia a animação de entrada do ecrã (o CSS desliga-a com
