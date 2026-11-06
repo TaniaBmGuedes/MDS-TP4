@@ -1,43 +1,85 @@
 /* Shell do site (T2): cabeçalho, menu do percurso à esquerda (abre e
-   fecha) e título do passo. Tema claro com coral como cor principal e
-   pêssego nos detalhes (logótipo, fio do topo, sublinhado do título).
+   fecha) e título do passo. Paleta contida: fundo creme, superfícies
+   brancas, texto carvão, verde-floresta como cor da marca e amarelo
+   apagado só para realces. Sem gradientes, brilhos nem animações em ciclo.
    Carregado depois de style.css, que traz os estilos do protótipo v1. */
 
 :root {
-  --papel: #FFFFFF;
+  --papel: #F4F7F3;
+  --papel-fim: #E3ECE4;
   --superficie: #FFFFFF;
-  --lateral: #FFF9F6;
-  --texto: #1F1A17;
-  --texto-suave: #5C504A;
-  --texto-fraco: #7A6E68;
-  --divisor: #F3E9E4;
-  --divisor-forte: #E8D8D0;
-  --pairar: #FFF1EA;
-  --acento: #F2643A;          /* coral: só em barras, ícones e fundos */
-  --acento-escuro: #B23A14;   /* coral escuro para texto: contraste 5,9:1 */
-  --acento-fundo: #FFEDE5;
-  --acento-linha: #FFC9B3;
-  --pessego: #FFB38A;
-  --verde: #047857;
-  --gradiente: linear-gradient(90deg, #F2643A, #FFB38A);
-  --sombra: 0 1px 2px rgba(178, 58, 20, .06), 0 8px 24px rgba(178, 58, 20, .06);
+  --lateral: #FFFFFF;
+  --texto: #202522;
+  --texto-suave: #4A524D;
+  --texto-fraco: #626A65;     /* contraste 5,1:1 sobre o creme */
+  --divisor: #DDE1DA;
+  --divisor-forte: #C7CDC4;
+  --pairar: #F0F2EC;
+  --acento: #245C49;          /* verde-floresta: contraste 7,6:1 com branco */
+  --acento-escuro: #1A4537;
+  --acento-fundo: #E6EEE9;
+  --acento-linha: #B7CBBF;
+  --amarelo: #E6C66A;         /* só realces, sempre com texto escuro */
+  --amarelo-fundo: #F7EDCB;
+  --verde: var(--acento);
+  --sombra: none;
   --ease: cubic-bezier(.22, .8, .24, 1);
 }
 
-html { background: var(--papel); }
-body { color: var(--texto); background: transparent; }
-/* Manchas de cor suaves no fundo, a mexer devagar */
-body::before {
-  content: ""; position: fixed; inset: -10%; z-index: -1; pointer-events: none;
-  background:
-    radial-gradient(520px 320px at 80% 8%, rgba(255, 179, 138, .16), transparent 70%),
-    radial-gradient(640px 380px at 30% 0%, rgba(242, 100, 58, .09), transparent 70%),
-    radial-gradient(520px 360px at 70% 95%, rgba(255, 179, 138, .10), transparent 70%);
-  animation: deriva 22s ease-in-out infinite alternate;
+/* Fundo em degradê suave, de creme no topo para verde-salva em baixo.
+   Fica fixo ao ecrã, por isso não muda de tom com o tamanho da página.
+   Está no html para as manchas animadas (body::before e ::after) ficarem
+   por cima do degradê e por baixo do conteúdo. */
+html { background: linear-gradient(180deg, var(--papel) 0%, var(--papel-fim) 100%) fixed var(--papel); }
+body { min-height: 100vh; color: var(--texto); background: transparent; }
+
+/* Duas manchas de luz muito suaves que flutuam devagar atrás do conteúdo.
+   Sem «reduzir movimento» ficam paradas (regra geral no fim do ficheiro). */
+body::before, body::after {
+  content: ""; position: fixed; z-index: -1; pointer-events: none;
+  width: 60vmax; height: 60vmax; border-radius: 50%;
 }
-@keyframes deriva {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(-4%, 3%, 0) scale(1.06); }
+body::before {
+  top: -20vmax; right: -15vmax;
+  background: radial-gradient(circle, rgba(120, 170, 145, .20) 0%, rgba(120, 170, 145, 0) 65%);
+  animation: flutuar-a 18s ease-in-out infinite alternate;
+}
+body::after {
+  bottom: -25vmax; left: -10vmax;
+  background: radial-gradient(circle, rgba(36, 92, 73, .18) 0%, rgba(36, 92, 73, 0) 65%);
+  animation: flutuar-b 24s ease-in-out infinite alternate;
+}
+@keyframes flutuar-a { to { transform: translate(-18vmax, 22vmax) scale(1.15); } }
+@keyframes flutuar-b { to { transform: translate(22vmax, -16vmax) scale(.9); } }
+
+/* Fichas de tarefas a subir devagar pelo fundo, a rodar um pouco: lembram
+   o trabalho a fluir no quadro. Paradas, ficam espalhadas pelo ecrã. */
+.fundo { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.fundo i {
+  position: absolute; top: var(--y); left: var(--x);
+  width: var(--s); height: var(--s); border-radius: 22%;
+  background: var(--c); opacity: .85;
+  animation: subir var(--d) linear infinite;
+  animation-delay: var(--a);
+}
+.fundo i:nth-child(1)  { --x: 6%;  --y: 20vh; --s: 18px; --c: #CFE0D5; --d: 34s; --a: -4s; }
+.fundo i:nth-child(2)  { --x: 15%; --y: 70vh; --s: 12px; --c: #C3D8CB; --d: 28s; --a: -18s; }
+.fundo i:nth-child(3)  { --x: 24%; --y: 40vh; --s: 22px; --c: #DCE8DF; --d: 40s; --a: -9s; }
+.fundo i:nth-child(4)  { --x: 33%; --y: 85vh; --s: 10px; --c: #B7CBBF; --d: 26s; --a: -2s; }
+.fundo i:nth-child(5)  { --x: 42%; --y: 12vh; --s: 16px; --c: #C3D8CB; --d: 36s; --a: -25s; }
+.fundo i:nth-child(6)  { --x: 51%; --y: 55vh; --s: 20px; --c: #CFE0D5; --d: 31s; --a: -12s; }
+.fundo i:nth-child(7)  { --x: 60%; --y: 30vh; --s: 11px; --c: #B7CBBF; --d: 24s; --a: -7s; }
+.fundo i:nth-child(8)  { --x: 68%; --y: 78vh; --s: 24px; --c: #DCE8DF; --d: 42s; --a: -30s; }
+.fundo i:nth-child(9)  { --x: 76%; --y: 45vh; --s: 14px; --c: #C3D8CB; --d: 29s; --a: -15s; }
+.fundo i:nth-child(10) { --x: 84%; --y: 15vh; --s: 19px; --c: #CFE0D5; --d: 37s; --a: -21s; }
+.fundo i:nth-child(11) { --x: 92%; --y: 62vh; --s: 12px; --c: #B7CBBF; --d: 27s; --a: -5s; }
+.fundo i:nth-child(12) { --x: 97%; --y: 35vh; --s: 17px; --c: #DCE8DF; --d: 33s; --a: -27s; }
+.fundo i:nth-child(13) { --x: 38%; --y: 95vh; --s: 15px; --c: #CFE0D5; --d: 30s; --a: -10s; }
+.fundo i:nth-child(14) { --x: 72%; --y: 5vh;  --s: 13px; --c: #C3D8CB; --d: 25s; --a: -20s; }
+/* Sobe de baixo do ecrã até acima dele; a posição em --y só conta parada. */
+@keyframes subir {
+  from { transform: translateY(calc(110vh - var(--y))) rotate(0deg); }
+  to   { transform: translateY(calc(-10vh - var(--y) - 40px)) rotate(240deg); }
 }
 .site-largura { width: 100%; max-width: 1200px; margin: 0 auto; padding-inline: 32px; }
 :focus-visible { outline: 2px solid var(--acento-escuro); outline-offset: 2px; border-radius: 4px; }
@@ -57,33 +99,17 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
   background: var(--superficie);
   border-bottom: 1px solid var(--divisor);
 }
-/* Fio colorido no topo da página */
-.site-topo::before {
-  content: ""; position: absolute; inset: 0 0 auto; height: 3px;
-  background: linear-gradient(90deg, #F2643A, #FFB38A, #FF8A65, #F2643A);
-  background-size: 300% 100%;
-  animation: fio 8s linear infinite;
-}
-@keyframes fio { to { background-position: 300% 0; } }
-
-/* Barras do logótipo a crescer e encolher, como tarefas num quadro */
-.logo__icone i { animation: barra 2.8s ease-in-out infinite alternate; transform-origin: top; }
-.logo__icone i:nth-child(2) { animation-delay: .4s; }
-.logo__icone i:nth-child(3) { animation-delay: .8s; }
-@keyframes barra { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
-.logo:hover .logo__icone { transform: rotate(-6deg) scale(1.06); }
-.logo__icone { transition: transform .25s var(--ease); }
 :root { --altura-topo: 56px; }
 .site-topo .site-largura { max-width: none; padding-inline: 16px; }
 .site-topo__linha { display: flex; align-items: center; gap: 8px; min-height: var(--altura-topo); }
 .site-topo .logo { font-size: 18px; color: var(--texto); }
 .site-topo .logo__icone { width: 26px; height: 26px; padding: 6px 5px; border-radius: 6px; }
-.logo__icone { background: linear-gradient(135deg, var(--acento), var(--pessego)); box-shadow: 0 4px 10px rgba(242, 100, 58, .3); }
+.logo__icone { background: var(--acento); }
 
 /* ---------- Página ---------- */
 :root { --largura-painel: 320px; }
 .pagina { padding-top: 48px; padding-bottom: 64px; }
-#app { max-width: 760px; }
+#app { max-width: none; }
 
 /* Botão de menu (☰) no cabeçalho */
 .botao-menu {
@@ -144,12 +170,9 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 
 /* ---------- Conteúdo do passo ---------- */
 .ecra { display: flex; flex-direction: column; gap: 24px; }
-.ecra h1 { font: 700 clamp(26px, 3vw, 34px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.02em; color: var(--texto); }
-/* Sublinhado colorido por baixo do título, que cresce ao mudar de passo */
-.ecra h1::after { content: ""; display: block; width: 56px; height: 4px; margin-top: 16px; border-radius: 999px; background: var(--gradiente); }
-.ecra--entrar h1::after { animation: sublinhar .7s .15s var(--ease) both; }
-@keyframes sublinhar { from { width: 0; opacity: 0; } to { width: 56px; opacity: 1; } }
-
+.ecra h1 { font: 700 clamp(26px, 3vw, 32px)/1.15 Inter, system-ui, sans-serif; letter-spacing: -.02em; color: var(--texto); }
+/* Etiqueta pequena por cima do título (ex.: «APRENDER • MÉTRICAS») */
+.ecra__etiqueta { margin-bottom: -16px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
 /* Transição entre passos */
 .ecra--entrar { animation: entrar .35s var(--ease) both; }
 @keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -184,9 +207,9 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .percurso-aberto .etapa:nth-child(5) { animation-delay: .2s; }
 @keyframes item { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
 
-/* Ao passar o rato, o ícone dá um pequeno salto */
+/* Ao passar o rato, o ícone ganha a cor da marca */
 .etapa__icone { transition: transform .25s var(--ease), color .2s; }
-.etapa__botao:hover .etapa__icone { transform: translateY(-2px) scale(1.12); color: var(--acento); }
+.etapa__botao:hover .etapa__icone { color: var(--acento); }
 .etapa__botao:active { transform: scale(.98); }
 
 /* O passo que passa a ser o atual acende-se */
