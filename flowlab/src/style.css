@@ -1,5 +1,5 @@
 :root {
-  --fundo: #F4F5F7;
+  --fundo: #FAF9F6;
   --branco: #FFFFFF;
   --tinta: #0F172A;
   --suave: #475569;
@@ -35,19 +35,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .escondido { display: none !important; }
 .escondido-visual { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-/* Topo */
-.topo { position: sticky; top: 0; z-index: 10; background: var(--branco); border-bottom: 1px solid var(--linha); }
-.topo__linha { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
 .logo { display: flex; align-items: center; gap: 10px; font: 700 20px "Space Grotesk", sans-serif; color: var(--tinta); text-decoration: none; }
 .logo__icone { display: flex; align-items: flex-start; gap: 2px; width: 28px; height: 28px; padding: 7px 6px; border-radius: 7px; background: var(--azul); }
 .logo__icone i { width: 4px; background: #fff; border-radius: 2px; }
 .logo__icone i:nth-child(1) { height: 13px; }
 .logo__icone i:nth-child(2) { height: 9px; }
 .logo__icone i:nth-child(3) { height: 5px; }
-.passos { display: flex; flex-wrap: wrap; gap: 6px; }
-.passos a { padding: 6px 12px; border-radius: 999px; background: var(--azul-claro); color: var(--azul-escuro); font-size: 13px; font-weight: 600; text-decoration: none; }
-.passos a.ativo { background: var(--azul); color: #fff; }
-.tempo { font-size: 13px; color: var(--suave); }
 
 /* Secções */
 .seccao { padding: 56px 0 8px; display: flex; flex-direction: column; gap: 18px; }
@@ -69,6 +62,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .cartao p { color: #334155; }
 
 .botao { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 10px; border: 0; background: var(--azul); color: #fff; font-weight: 600; text-decoration: none; }
+.botao[hidden] { display: none; }
 .botao--escuro { background: var(--escuro); }
 .botao--contorno { background: var(--branco); color: var(--tinta); border: 1px solid var(--borda); }
 
@@ -169,5 +163,4 @@ input[type=range] { width: 220px; max-width: 100%; margin-top: 8px; accent-color
 
 @media (max-width: 600px) {
   .caixa { padding: 22px; }
-  .tempo { display: none; }
 }

@@ -20,6 +20,18 @@ describe('criarPercurso', () => {
     expect(p.estado().vistos).toEqual([true, true, true, false, false]);
   });
 
+  it('só conclui um passo quando se sai dele para a frente', () => {
+    const p = criarPercurso(5, 0);
+    expect(p.estado().concluidos).toEqual([false, false, false, false, false]);
+    p.avancar(); // conclui o 0
+    p.irPara(3); // conclui o 1; o 2 foi saltado
+    p.voltar(); // voltar não conclui o 3
+    expect(p.estado().concluidos).toEqual([true, true, false, false, false]);
+    p.avancar(); // conclui o 2
+    p.voltar();
+    expect(p.estado().concluidos).toEqual([true, true, true, false, false]);
+  });
+
   it('não sai dos limites do percurso', () => {
     const p = criarPercurso(3, 0);
     p.voltar();
