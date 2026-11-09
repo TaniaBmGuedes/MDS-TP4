@@ -16,7 +16,7 @@ export interface Passo {
 }
 
 export const PASSOS: readonly Passo[] = [
-  { id: 'simular', nome: 'Simular', titulo: 'Quantas tarefas ao mesmo tempo? Experimenta.', minutosRestantes: 10 },
+  { id: 'simular', nome: 'Simular', titulo: 'Quantas tarefas ao mesmo tempo? Experimenta.', etiqueta: 'Experimentar • Simulador', minutosRestantes: 10 },
   { id: 'grafico', nome: 'Ler o gráfico', titulo: 'Como se lê o gráfico cumulativo', minutosRestantes: 8 },
   { id: 'fazes', nome: 'O que fazes?', titulo: 'Neste gráfico, o que fazes?', minutosRestantes: 6 },
   { id: 'metricas', nome: 'Métricas', titulo: 'As três métricas do fluxo', etiqueta: 'Aprender • Métricas', minutosRestantes: 4 },

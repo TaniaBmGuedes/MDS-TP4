@@ -1,3 +1,6 @@
 # src/components
 
-Peças de interface usadas em mais do que um ecrã (por exemplo, o gráfico cumulativo). Vazia até aos tickets dos ecrãs.
+Peças de interface usadas em mais do que um ecrã.
+
+- `graficoCumulativo.ts`: gráfico de fluxo cumulativo (T05), com legenda, destaque das 3 regras de leitura e tabela com os valores de cada dia.
+- `menuLateral.ts` e `icones.ts`: menu do percurso e ícones (T2).
