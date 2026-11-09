@@ -22,3 +22,20 @@ export const PASSOS: readonly Passo[] = [
   { id: 'metricas', nome: 'Métricas', titulo: 'As três métricas do fluxo', etiqueta: 'Aprender • Métricas', minutosRestantes: 4 },
   { id: 'quiz', nome: 'Quiz', titulo: 'Quiz final', minutosRestantes: 1 },
 ];
+
+/**
+ * Índice do passo a partir da âncora do endereço (ex.: «#metricas» → 3), para
+ * se poder ligar diretamente a um passo e usar o botão «voltar» do browser
+ * (H01). Devolve null se a âncora não for de nenhum passo.
+ */
+export function indicePorAncora(ancora: string): number | null {
+  const id = ancora.replace(/^#/, '');
+  const i = PASSOS.findIndex((p) => p.id === id);
+  return i === -1 ? null : i;
+}
+
+/** Texto do progresso no menu: «Passo 2 de 5 · faltam ~8 min». */
+export function textoProgresso(indice: number): string {
+  const passo = PASSOS[indice];
+  return `Passo ${indice + 1} de ${PASSOS.length} · faltam ~${passo.minutosRestantes} min`;
+}
