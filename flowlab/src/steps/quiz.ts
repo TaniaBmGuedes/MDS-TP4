@@ -11,8 +11,10 @@
 // com aria-disabled (e não disabled, para o foco não se perder). A explicação
 // é anunciada (role="status") e, ao mudar de pergunta, o foco vai para ela.
 import './quiz.css';
+import './resumo.css';
 import { PASSOS } from '../data/passos';
 import { PERGUNTAS, PREFIXO, textoDilema, textoPontuacao, type PerguntaQuiz } from '../data/quiz';
+import { badgePara, estadoConceitos } from '../data/resumo';
 import type { EstadoPercurso, Percurso } from '../model/percurso';
 import type { Ecra } from './index';
 
@@ -139,7 +141,56 @@ function abrirSimulador(percurso: Percurso, pergunta: PerguntaQuiz, indice: numb
   percurso.irPara(PASSOS.findIndex((p) => p.id === 'simular'));
 }
 
-/** O ecrã final: pontuação, escolha do dilema e revisão. Devolve o título. */
+/**
+ * O badge (H19): um selo com o nível, o nome e a pontuação. O nível também
+ * está escrito, para não depender só da cor.
+ */
+function desenharBadge(certas: number): HTMLElement {
+  const badge = badgePara(certas, PERGUNTAS.length);
+  const caixa = el('div', `resumo__badge resumo__badge--${badge.nivel}`);
+  const selo = el('div', 'resumo__selo');
+  selo.setAttribute('aria-hidden', 'true');
+  selo.append(el('span', 'resumo__selo-num', `${certas}/${PERGUNTAS.length}`));
+  const texto = el('div', 'resumo__badge-texto');
+  const nivel = { ouro: 'Ouro', prata: 'Prata', bronze: 'Bronze' }[badge.nivel];
+  texto.append(
+    el('p', 'resumo__badge-nivel', `Badge ${nivel}`),
+    el('p', 'resumo__badge-nome', badge.nome),
+    el('p', 'resumo__badge-desc', badge.descricao),
+  );
+  caixa.append(selo, texto);
+  return caixa;
+}
+
+/** Os conceitos do percurso (H19), cada um dominado ou a rever. */
+function desenharConceitos(percurso: Percurso, respostas: readonly (number | null)[]): HTMLElement {
+  const seccao = el('section', 'resumo__conceitos');
+  const titulo = el('h3', 'resumo__subtitulo', 'Os conceitos que levas');
+  titulo.id = 'resumo-conceitos';
+  seccao.setAttribute('aria-labelledby', titulo.id);
+  const lista = el('ul', 'resumo__lista');
+  for (const { conceito, dominado } of estadoConceitos(respostas)) {
+    const item = el('li', dominado ? 'resumo__conceito resumo__conceito--dominado' : 'resumo__conceito resumo__conceito--rever');
+    const icone = el('span', 'resumo__icone', dominado ? '✓' : '↺');
+    icone.setAttribute('aria-hidden', 'true');
+    const corpo = el('div', 'resumo__corpo');
+    const nome = el('p', 'resumo__nome');
+    nome.append(el('strong', undefined, conceito.nome), el('span', 'resumo__estado', dominado ? 'Dominado' : 'A rever'));
+    corpo.append(nome, el('p', 'resumo__frase', conceito.resumo));
+    item.append(icone, corpo);
+    if (!dominado) {
+      const indice = PASSOS.findIndex((p) => p.id === conceito.passo);
+      const rever = botao(`Rever em «${PASSOS[indice].nome}»`, 'resumo__rever', () => percurso.irPara(indice));
+      rever.setAttribute('aria-label', `Rever ${conceito.nome} no passo ${PASSOS[indice].nome}`);
+      item.append(rever);
+    }
+    lista.append(item);
+  }
+  seccao.append(titulo, lista);
+  return seccao;
+}
+
+/** O ecrã final: pontuação, badge, conceitos, escolha do dilema e revisão. Devolve o título. */
 function desenharResultado(caixa: HTMLElement, percurso: Percurso, aoMudar: () => void): HTMLElement {
   const estado = percurso.estado();
   const certas = contarCertas(estado);
@@ -165,6 +216,8 @@ function desenharResultado(caixa: HTMLElement, percurso: Percurso, aoMudar: () =
     aoMudar();
   });
 
-  caixa.append(etiqueta, titulo, dilema, revisao, repetir);
+  const subRevisao = el('h3', 'resumo__subtitulo', 'As tuas respostas');
+
+  caixa.append(etiqueta, titulo, desenharBadge(certas), dilema, desenharConceitos(percurso, estado.respostasQuiz), subRevisao, revisao, repetir);
   return titulo;
 }
