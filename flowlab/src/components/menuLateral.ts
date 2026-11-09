@@ -4,11 +4,14 @@
 // lugar ao lado; no telemóvel o menu abre por cima do título e empurra-o
 // para baixo. Nunca tapa o conteúdo.
 //
+// Por cima dos passos, o progresso: «Passo 2 de 5 · faltam ~8 min» e uma
+// barra com os passos concluídos (H01).
+//
 // Cada passo mostra o ícone e o nome e tem três estados: concluído (diz
 // «Concluído»), atual (em destaque, diz «Estás aqui») e por fazer. Um passo
 // fica concluído quando a pessoa sai dele para a frente. Os passos são
 // botões (Tab, Enter, Espaço) e o atual tem aria-current="step".
-import type { Passo } from '../data/passos';
+import { textoProgresso, type Passo } from '../data/passos';
 import type { EstadoPercurso, Percurso } from '../model/percurso';
 import { ICONES, iconePasso } from './icones';
 
@@ -29,6 +32,10 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
   painel.setAttribute('aria-labelledby', 'titulo-percurso');
   painel.innerHTML = `
     <h2 class="lateral__titulo" id="titulo-percurso">O teu percurso</h2>
+    <div class="progresso">
+      <p class="progresso__texto"></p>
+      <div class="progresso__barra" aria-hidden="true"><span></span></div>
+    </div>
     <div class="lateral__painel">
       <nav aria-label="Passos do percurso">
         <ol class="jornada"></ol>
@@ -44,6 +51,8 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
   botao.innerHTML = ICONES.menu;
 
   const lista = obter<HTMLOListElement>(painel, '.jornada');
+  const progressoTexto = obter<HTMLElement>(painel, '.progresso__texto');
+  const progressoBarra = obter<HTMLElement>(painel, '.progresso__barra span');
 
   // ---------- Abrir e fechar ----------
   // Quem decide é a pessoa, com o ☰: o menu fica aberto ou fechado como o
@@ -89,6 +98,12 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
   let concluidosAntes: readonly boolean[] = [];
 
   function atualizar(estado: EstadoPercurso): void {
+    // Progresso (H01): passo atual, tempo que falta e barra com os passos
+    // concluídos. A barra é só visual; o texto diz o mesmo.
+    progressoTexto.textContent = textoProgresso(estado.passoAtual);
+    const feitos = estado.concluidos.filter(Boolean).length;
+    progressoBarra.style.width = `${(feitos / passos.length) * 100}%`;
+
     for (const [i, e] of itens.entries()) {
       const atual = i === estado.passoAtual;
       const concluido = estado.concluidos[i];

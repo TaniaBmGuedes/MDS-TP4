@@ -227,3 +227,10 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- Progresso no menu (H01) ---------- */
+.progresso { padding: 0 12px; display: flex; flex-direction: column; gap: 8px; margin-top: -8px; }
+.progresso__texto { font-size: 13px; color: var(--texto-suave); }
+.progresso__barra { height: 6px; border-radius: 999px; background: var(--divisor); overflow: hidden; }
+.progresso__barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--acento); transition: width .4s var(--ease); }
+@media (prefers-reduced-motion: reduce) { .progresso__barra span { transition: none; } }

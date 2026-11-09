@@ -4,7 +4,7 @@
 import './style.css';
 import './shell.css';
 import { criarMenuLateral } from './components/menuLateral';
-import { PASSOS } from './data/passos';
+import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/perguntas';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
 import { ECRAS } from './steps';
@@ -74,5 +74,26 @@ function desenharPasso(estado: EstadoPercurso): void {
   }
 }
 
+// Âncoras (H01): cada passo tem o seu endereço (#simular, #metricas, …).
+// Abrir um endereço com âncora vai para esse passo, e o botão «voltar» do
+// browser volta ao passo anterior.
+const inicial = indicePorAncora(location.hash);
+if (inicial !== null) percurso.irPara(inicial);
+
+function atualizarAncora(estado: EstadoPercurso): void {
+  const ancora = `#${PASSOS[estado.passoAtual].id}`;
+  if (location.hash === ancora) return;
+  // Na primeira vez substitui, para o «voltar» não ficar preso no endereço sem âncora.
+  if (location.hash === '') history.replaceState(null, '', ancora);
+  else history.pushState(null, '', ancora);
+}
+
+window.addEventListener('popstate', () => {
+  const i = indicePorAncora(location.hash);
+  if (i !== null && i !== percurso.estado().passoAtual) percurso.irPara(i);
+});
+
 desenharPasso(percurso.estado());
+atualizarAncora(percurso.estado());
 percurso.subscrever(desenharPasso);
+percurso.subscrever(atualizarAncora);
