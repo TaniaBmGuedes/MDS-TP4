@@ -1,0 +1,73 @@
+/*
+ * Tokens de design do FlowLab (T26 · SCRUM-26).
+ *
+ * Valores tirados do Sketch 2 do Miguel
+ * (Registos/Sprint 0/Miguel/Sketch FlowLab Kanban 2.pdf e o HTML do Passo 4).
+ * Porquê um ficheiro só para isto: as cores, letras, raios e espaços passam a
+ * estar num único sítio. Se o grupo mudar o azul primário, muda-se aqui e o
+ * site inteiro acompanha, em vez de procurar hexadecimais por vários CSS.
+ *
+ * Regra: os outros CSS usam estes tokens (diretamente ou pelos nomes curtos
+ * do :root de style.css) e não escrevem cores à mão.
+ *
+ * Modo escuro: escuro.css (T29) troca os nomes curtos de style.css dentro de
+ * prefers-color-scheme: dark, por isso continua a funcionar sem alterações.
+ *
+ * Os pares de cor usados em texto estão verificados contra o nível AA da WCAG
+ * (contraste >= 4,5:1) em tokens.test.ts.
+ */
+:root {
+  /* Cor: superfícies */
+  --cor-fundo: #F6F7F9;            /* fundo da página */
+  --cor-superficie: #FFFFFF;       /* cartões, caixas, botões de contorno */
+  --cor-superficie-suave: #F2F4F7; /* caixas de destaque discretas */
+  --cor-trilho: #EEF2F7;           /* fundo de barras de progresso e pílulas */
+
+  /* Cor: texto */
+  --cor-texto: #13212F;            /* texto principal */
+  --cor-texto-medio: #344054;      /* texto de apoio com mais peso */
+  --cor-texto-suave: #475467;      /* texto secundário (ainda passa AA) */
+  --cor-texto-invertido: #FFFFFF;        /* texto sobre azul ou escuro */
+  --cor-texto-invertido-suave: #DCE1E8;  /* texto secundário sobre escuro */
+
+  /* Cor: linhas e bordas */
+  --cor-linha: #DCE1E8;            /* separadores e bordas de cartões */
+  --cor-borda-controlo: #848E9F;   /* bordas de botões e campos. O Sketch 2 usa
+                                      #98A2B3, mas só dá 2,6:1 sobre branco e a
+                                      WCAG 1.4.11 pede 3:1 para componentes de
+                                      interface. Escureceu-se o mínimo para
+                                      passar (3,3:1). Não serve para texto. */
+
+  /* Cor: azul primário (ações, ligações, WIP em curso) */
+  --cor-primaria: #2557D6;
+  --cor-primaria-escura: #163C9E;  /* hover e texto sobre azul claro */
+  --cor-primaria-clara: #DCE6FB;   /* fundos de destaque */
+  --cor-primaria-borda: #9DB3EE;   /* borda da coluna "em curso" (vem do v1,
+                                      não existe no Sketch 2) */
+
+  /* Cor: laranja do throughput (só preenchimentos, não texto) */
+  --cor-throughput: #E8742A;
+  --cor-throughput-texto: #8A2C0D; /* quando o laranja tem de ser texto */
+  --cor-throughput-clara: #FDECE3;
+
+  /* Cor: neutro escuro (faixas e botões escuros) */
+  --cor-escura: #13212F;
+
+  /* Tipografia */
+  --letra-titulos: "Space Grotesk", system-ui, sans-serif;
+  --letra-texto: Inter, system-ui, sans-serif;
+
+  /* Raios: os quatro tamanhos que o Sketch 2 usa */
+  --raio-pequeno: 5px;   /* barras finas */
+  --raio-medio: 10px;    /* botões, campos */
+  --raio-grande: 16px;   /* cartões */
+  --raio-caixa: 20px;    /* caixas de secção, pílulas */
+
+  /* Espaçamentos: escala de 4 em 4, como no Sketch 2 */
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 12px;
+  --espaco-4: 16px;
+  --espaco-5: 20px;
+  --espaco-6: 24px;
+}

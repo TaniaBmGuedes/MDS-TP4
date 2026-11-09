@@ -6,6 +6,7 @@ import type { IdPasso, Passo } from '../data/passos';
 import type { Percurso } from '../model/percurso';
 import { ecraEquipa } from './equipa';
 import { ecraMetricas } from './metricas';
+import { ecraQuiz } from './quiz';
 import { ecraSimular } from './simular';
 
 export type Ecra = (contentor: HTMLElement, passo: Passo, percurso: Percurso) => void;
@@ -19,5 +20,5 @@ export const ECRAS: Record<IdPasso, Ecra> = {
   fazes: provisorio,
   metricas: ecraMetricas,
   equipa: ecraEquipa,
-  quiz: provisorio,
+  quiz: ecraQuiz,
 };

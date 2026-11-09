@@ -1,0 +1,63 @@
+/* Resumo final (H19): badge e conceitos no ecrã de resultado do quiz.
+   O nível do badge também está escrito, para não depender só da cor. */
+
+.resumo__badge {
+  --metal: #8A6D1F; --metal-fundo: #FBF3DC;
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px; border: 1px solid var(--divisor); border-radius: 12px;
+  background: var(--metal-fundo);
+}
+.resumo__badge--prata { --metal: #5B6670; --metal-fundo: #EEF1F3; }
+.resumo__badge--bronze { --metal: #8C4F2B; --metal-fundo: #F8ECE4; }
+
+.resumo__selo {
+  flex: none; display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%;
+  border: 4px solid var(--metal); background: var(--superficie);
+  box-shadow: 0 0 0 4px var(--metal-fundo), 0 0 0 6px var(--metal);
+}
+.resumo__selo-num { font: 800 20px/1 Inter, system-ui, sans-serif; color: var(--metal); font-variant-numeric: tabular-nums; }
+.resumo__badge-texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.resumo__badge-nivel { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--metal); }
+.resumo__badge-nome { font-size: 20px; font-weight: 700; color: var(--texto); }
+.resumo__badge-desc { font-size: 15px; color: var(--texto-suave); }
+
+.resumo__subtitulo { font-size: 16px; font-weight: 700; color: var(--texto); margin-bottom: -6px; }
+
+.resumo__conceitos { display: flex; flex-direction: column; gap: 14px; }
+.resumo__lista { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.resumo__conceito {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;
+  border: 1px solid var(--divisor); border-radius: 10px; background: var(--superficie);
+}
+.resumo__conceito--dominado { border-color: var(--acento-linha); background: var(--acento-fundo); }
+.resumo__icone {
+  flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  font-size: 13px; font-weight: 700; background: var(--pairar); color: var(--texto-suave);
+}
+.resumo__conceito--dominado .resumo__icone { background: var(--acento); color: var(--superficie); }
+.resumo__corpo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.resumo__nome { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-size: 16px; color: var(--texto); }
+.resumo__estado { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave); }
+.resumo__conceito--dominado .resumo__estado { color: var(--acento-escuro); }
+.resumo__frase { font-size: 15px; color: var(--texto-suave); }
+.resumo__rever {
+  flex: none; align-self: center; min-height: 44px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid var(--acento); background: var(--superficie); color: var(--acento-escuro);
+  font-size: 14px; font-weight: 600; transition: background .15s;
+}
+.resumo__rever:hover { background: var(--pairar); }
+
+@media (prefers-color-scheme: dark) {
+  .resumo__badge { --metal: #E3C46A; --metal-fundo: #33291A; }
+  .resumo__badge--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
+  .resumo__badge--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
+}
+
+/* Telemóvel: o botão «Rever» passa para baixo do texto, a toda a largura */
+@media (max-width: 600px) {
+  .resumo__badge { padding: 12px; gap: 12px; }
+  .resumo__selo { width: 60px; height: 60px; }
+  .resumo__selo-num { font-size: 17px; }
+  .resumo__conceito { flex-wrap: wrap; }
+  .resumo__rever { flex-basis: 100%; }
+}
