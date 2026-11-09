@@ -9,6 +9,8 @@ import { PERGUNTAS } from './data/perguntas';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
 import { ECRAS } from './steps';
 import { seccaoCafe } from './steps/cafe';
+// O modo escuro fica em último, para se sobrepor a todos os outros estilos.
+import './escuro.css';
 
 // Com o modo strict, querySelector pode devolver null: é preciso tratar esse
 // caso em vez de assumir que o elemento existe.
