@@ -8,6 +8,8 @@ import { PASSOS } from './data/passos';
 import { PERGUNTAS } from './data/perguntas';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
 import { ECRAS } from './steps';
+import { seccaoCafe } from './steps/cafe';
+// O modo escuro fica em último, para se sobrepor a todos os outros estilos.
 import './escuro.css';
 
 // Com o modo strict, querySelector pode devolver null: é preciso tratar esse
@@ -60,6 +62,9 @@ function desenharPasso(estado: EstadoPercurso): void {
   void seccao.offsetWidth;
   seccao.classList.add('ecra--entrar');
   ECRAS[passo.id](seccao, passo, percurso);
+  // H18: no último passo, a secção «Do café ao software» fica por baixo do
+  // ecrã, sem mudar a ordem nem o número de passos.
+  if (estado.passoAtual === PASSOS.length - 1) seccao.append(seccaoCafe());
 
   // Ao mudar de passo, o foco vai para o título: quem usa teclado ou leitor de
   // ecrã continua a partir do início do novo passo, e não do botão clicado.
