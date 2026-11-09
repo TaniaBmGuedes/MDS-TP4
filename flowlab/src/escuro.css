@@ -1,0 +1,73 @@
+/* Modo escuro (T29, SCRUM-44). Segue a preferência do sistema
+   (prefers-color-scheme), sem botão. Só troca as variáveis de cor de
+   style.css (protótipo v1) e de shell.css, mais as poucas cores escritas
+   à mão. Todos os pares de texto e fundo têm contraste de pelo menos 4,5:1
+   (valores medidos no comentário de cada variável).
+   Carregado depois de todos os outros estilos, em main.ts. */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* shell.css */
+    --papel: #121613;
+    --papel-fim: #0D110F;
+    --superficie: #1B201D;
+    --lateral: #1B201D;
+    --texto: #E6EBE7;           /* 13,7:1 sobre a superfície */
+    --texto-suave: #BAC3BD;     /* 9,1:1 */
+    --texto-fraco: #97A19A;     /* 6,2:1 */
+    --divisor: #2C332F;
+    --divisor-forte: #3C4540;
+    --pairar: #242A26;
+    --acento: #7CC4A6;          /* 8,1:1 sobre a superfície */
+    --acento-escuro: #A6DCC4;   /* 8,0:1 sobre o fundo do acento */
+    --acento-fundo: #1F3A30;
+    --acento-linha: #34584A;
+    --amarelo: #D9B95C;         /* só realces, com texto escuro por cima */
+    --amarelo-fundo: #3A3220;
+
+    /* style.css (protótipo v1) */
+    --fundo: #121613;
+    --branco: #1B201D;
+    --tinta: #E6EBE7;
+    --suave: #A7B0AA;           /* 7,4:1 */
+    --linha: #2C332F;
+    --borda: #3C4540;
+    --azul: #8FB0FF;            /* 7,7:1 */
+    --azul-escuro: #B5CBFF;
+    --azul-claro: #1E2A4A;
+    --laranja: #F5A25D;
+    --laranja-texto: #FFC9A3;   /* 9,6:1 sobre o laranja-claro */
+    --laranja-claro: #3B2618;
+    --escuro: #2A3330;
+  }
+
+  /* Texto escrito à mão em style.css, pensado para fundo claro */
+  .lead, .cartao p, .legenda { color: var(--texto-suave); }
+  .aviso--azul, .mini__caixa--azul { color: #C9D7FF; }
+  .aviso--verde { background: #173826; color: #B6E5C8; }
+  .aviso--vermelho { background: #3D1A17; color: #FFC2BB; }
+  .opcao.certa { border-color: #5FBF8A; background: #173826; }
+  .opcao.errada { border-color: #F08A80; background: #3D1A17; }
+  .tarefa--feita, .mini__caixa--cinza, .msg--bot { background: #242A26; }
+  .mini__caixa--laranja { background: var(--laranja-claro); }
+  .coluna--meio, .tarefa--curso { border-color: #3F5590; }
+  .botao { color: #0D110F; }
+  .botao--escuro, .pilula.ativa, .pessoas span, .chat-botao, .chat__topo { color: #F3F5F4; }
+  .msg--eu, .chat__form button { color: #0D110F; }
+  .chat__form input { background: var(--superficie); color: var(--texto); }
+
+  /* shell.css: «Saltar para o conteúdo» tinha texto branco sobre a cor do texto */
+  .saltar { color: var(--papel); }
+
+  /* Fichas a flutuar no fundo: tons de verde escuro, mais apagados */
+  .fundo i { opacity: .5; }
+  .fundo i:nth-child(3n)   { --c: #1F3A30; }
+  .fundo i:nth-child(3n+1) { --c: #24443A; }
+  .fundo i:nth-child(3n+2) { --c: #1A3129; }
+
+  /* metricas.css: texto escrito à mão sobre o amarelo */
+  .cenario__aviso { color: #F2DFA6; }
+  .ficha--ativa { border-color: #8C7530; }
+}
