@@ -1,5 +1,9 @@
 # FlowLab
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6435c463-e483-4973-9c81-6c1636a5ba8d/deploy-status)](https://app.netlify.com/projects/delicate-quokka-e180ac/deploys)
+
+Site público: https://delicate-quokka-e180ac.netlify.app
+
 Página interativa sobre Kanban e métricas de fluxo (MDS 2026/2027, TP4, tema 2), em TypeScript.
 
 ## Requisitos
@@ -34,7 +38,7 @@ npm install
 
 ## Publicar no Netlify
 
-Site público: **(URL por preencher depois de ligar o site no Netlify)**
+Site público: https://delicate-quokka-e180ac.netlify.app
 
 O deploy é automático: cada push para `main` faz o Netlify correr `npm run build` (verificação de tipos com `tsc --noEmit` e depois `vite build`) e publicar a pasta `dist`. Se houver erros de tipos, o build falha e o site fica na versão anterior.
 
