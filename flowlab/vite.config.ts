@@ -4,8 +4,11 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    // Só os módulos de src/model e src/data têm testes, e não usam o DOM.
+    // Os testes (src/model, src/data e src/theme) não usam o DOM.
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    // Por omissão o Vitest troca os .css por texto vazio. O teste de contraste
+    // (src/theme/tokens.test.ts) precisa de ler os tokens a sério.
+    css: { include: [/theme\/tokens\.css/] },
   },
 });
