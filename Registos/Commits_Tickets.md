@@ -29,6 +29,14 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 | P05 Backlog e quadro | | [bad306a](https://github.com/TaniaBmGuedes/MDS-TP4/commit/bad306ac83afc809632f83048a5d8ff36fa7b02e) | 02/11 | Tânia | Proposta conjunta final |
 | P05 Backlog e quadro | | [149697f](https://github.com/TaniaBmGuedes/MDS-TP4/commit/149697f8b4a3a07e320025fd0dd9b2020a4bb95c) | 03/11 | Tiago | Screenshots da criação dos tickets e da board no Jira |
 
+## Sprint 1
+
+| Ticket | Jira | Commit | Data | Autor | O que entrou |
+|---|---|---|---|---|---|
+| T01 Deploy no Netlify | SCRUM-16 | [f0e88f3](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f0e88f3a07519b997cb9134237dea736868b7c9a) | 09/11 | Tânia | `netlify.toml` na raiz com base `flowlab`; build com `tsc --noEmit` + `vite build` |
+| T01 Deploy no Netlify | SCRUM-16 | [77e7152](https://github.com/TaniaBmGuedes/MDS-TP4/commit/77e7152a98f8a7980227cde6b55934de24e3c911) | 09/11 | Tânia | URL público (https://delicate-quokka-e180ac.netlify.app) e badge no README |
+| T01 Deploy no Netlify | SCRUM-16 | [c38e08b](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c38e08bb71416d2cdec4df8f70dfa8d066b1b092) | 09/11 | Tânia | Merge do PR #3 para `main`, primeiro deploy automático |
+
 ## Registos contínuos (C01–C08)
 
 | Ticket | Jira | Commit | Data | Autor | O que entrou |
@@ -46,4 +54,4 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 
 ## Por associar
 
-Os tickets T01–T29 do Sprint 1 ainda não têm commits.
+Os restantes tickets do Sprint 1 (T02–T29) ainda não estão associados aqui.
