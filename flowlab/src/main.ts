@@ -5,7 +5,7 @@ import './style.css';
 import './shell.css';
 import { criarMenuLateral } from './components/menuLateral';
 import { PASSOS, indicePorAncora } from './data/passos';
-import { PERGUNTAS } from './data/perguntas';
+import { PERGUNTAS } from './data/quiz';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
 import { ECRAS } from './steps';
 import { seccaoCafe } from './steps/cafe';
