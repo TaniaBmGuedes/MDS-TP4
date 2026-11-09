@@ -8,6 +8,7 @@ import { PASSOS } from './data/passos';
 import { PERGUNTAS } from './data/perguntas';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
 import { ECRAS } from './steps';
+import './escuro.css';
 
 // Com o modo strict, querySelector pode devolver null: é preciso tratar esse
 // caso em vez de assumir que o elemento existe.
