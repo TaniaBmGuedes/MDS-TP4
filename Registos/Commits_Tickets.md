@@ -44,6 +44,7 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 | Ticket | Jira | Commit | Data | Autor | O que entrou |
 |---|---|---|---|---|---|
 | T17 Ecrã 7 · Quiz final | SCRUM-7 | [112dc76](https://github.com/TaniaBmGuedes/MDS-TP4/commit/112dc764a5d4cd64489ce56424696316912dd909) | 09/11 | Miguel | 5 perguntas tipadas em `data/quiz.ts`; contador e explicação; «Ver no simulador» abre o simulador com o WIP e a regra da pergunta; ecrã final com pontuação e escolha do dilema; pergunta atual guardada no store do percurso |
+| H19 Resumo final ou badge | | [746fd05](https://github.com/TaniaBmGuedes/MDS-TP4/commit/746fd05f89bf0282c3dc9e6b8bc9cfdd83380e5f) | 09/11 | Tânia | Badge ouro/prata/bronze com a pontuação e 5 conceitos (dominado ou a rever, com botão para o passo) no ecrã de resultado do quiz; `data/resumo.ts` com testes |
 
 ## Registos contínuos (C01–C08)
 
