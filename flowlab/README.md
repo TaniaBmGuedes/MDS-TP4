@@ -34,4 +34,8 @@ npm install
 
 ## Publicar no Netlify
 
-O `netlify.toml` define o comando (`npm run build`) e a pasta a publicar (`dist`). Como o projeto está numa subpasta do repositório, o site no Netlify tem de usar `flowlab` como diretório base.
+Site público: **(URL por preencher depois de ligar o site no Netlify)**
+
+O deploy é automático: cada push para `main` faz o Netlify correr `npm run build` (verificação de tipos com `tsc --noEmit` e depois `vite build`) e publicar a pasta `dist`. Se houver erros de tipos, o build falha e o site fica na versão anterior.
+
+A configuração está no `netlify.toml` da raiz do repositório, com `flowlab` como diretório base, por isso não é preciso mudar nada nas definições do site no Netlify. A versão do Node vem do `.nvmrc`.
