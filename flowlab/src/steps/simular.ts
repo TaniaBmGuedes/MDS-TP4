@@ -143,9 +143,11 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
       return;
     }
     const d = r.destaque(series);
-    grafico.destacar(d);
+    const texto = r.explicar(d);
+    // A mesma frase vai para o texto alternativo do gráfico (T25).
+    grafico.destacar(d, texto);
     explica.hidden = false;
-    explica.textContent = r.explicar(d);
+    explica.textContent = texto;
   }
 
   function escolherRegra(id: IdRegra | null): void {
