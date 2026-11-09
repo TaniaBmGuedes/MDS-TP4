@@ -1,0 +1,9 @@
+# Deploy automático do FlowLab (SCRUM-16 / T01).
+# O projeto está na subpasta flowlab; o Netlify corre o build a partir dela.
+# Cada push para main corre `npm run build` (tsc --noEmit + vite build) e publica dist/.
+# Se a verificação de tipos falhar, o build falha e o site não é atualizado.
+
+[build]
+  base = "flowlab"
+  command = "npm run build"
+  publish = "dist"
