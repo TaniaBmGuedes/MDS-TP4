@@ -296,7 +296,7 @@ function criarNumeroWip(valor: number, aoMudar: (wip: number) => void): HTMLElem
   const numeroWip = el('span', 'cenario__wip', String(valor));
   numeroWip.tabIndex = 0;
   numeroWip.setAttribute('role', 'button');
-  numeroWip.setAttribute('aria-label', `Limite de WIP ${valor}. Clica duas vezes para mudar.`);
+  numeroWip.setAttribute('aria-label', `Limite de WIP ${valor}. Clica duas vezes ou carrega em Enter para mudar.`);
   numeroWip.title = 'Clica duas vezes para mudar';
 
   const editar = (): void => {
@@ -342,7 +342,9 @@ function criarDiapositivo(
   id: string,
   aoMudarWip: (wip: number) => void,
 ): { elemento: HTMLElement; palco: Palco; passo: HTMLElement } {
-  const d = el('article', 'cenario');
+  // div e não article: o padrão de carrossel pede role="group", que não é
+  // permitido em article (auditoria de acessibilidade, H17).
+  const d = el('div', 'cenario');
   d.setAttribute('role', 'group');
   d.setAttribute('aria-roledescription', 'diapositivo');
   d.setAttribute('aria-labelledby', id);
