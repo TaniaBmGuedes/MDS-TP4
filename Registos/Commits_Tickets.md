@@ -36,6 +36,14 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 | T01 Deploy no Netlify | SCRUM-16 | [f0e88f3](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f0e88f3a07519b997cb9134237dea736868b7c9a) | 09/11 | Tânia | `netlify.toml` na raiz com base `flowlab`; build com `tsc --noEmit` + `vite build` |
 | T01 Deploy no Netlify | SCRUM-16 | [77e7152](https://github.com/TaniaBmGuedes/MDS-TP4/commit/77e7152a98f8a7980227cde6b55934de24e3c911) | 09/11 | Tânia | URL público (https://delicate-quokka-e180ac.netlify.app) e badge no README |
 | T01 Deploy no Netlify | SCRUM-16 | [c38e08b](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c38e08bb71416d2cdec4df8f70dfa8d066b1b092) | 09/11 | Tânia | Merge do PR #3 para `main`, primeiro deploy automático |
+| T05 Ecrã 1 · Simulador e gráfico cumulativo | SCRUM-23 | [c71082e](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c71082e0732c5a1021328544099b0b17c16e0519) | 09/11 | Miguel | Slider do WIP e cenários; gráfico de fluxo cumulativo (`components/graficoCumulativo.ts`) com legenda, 3 regras de leitura com destaque, texto alternativo e tabela por dia; contas em `model/cfd.ts`, com testes |
+| T05 Ecrã 1 · Simulador e gráfico cumulativo | SCRUM-23 | [a767d22](https://github.com/TaniaBmGuedes/MDS-TP4/commit/a767d2283dfb8df40a1cf81d46834aaa4dd22395) | 09/11 | Tânia | Merge do PR #11 para `main` |
+
+## Sprint 2
+
+| Ticket | Jira | Commit | Data | Autor | O que entrou |
+|---|---|---|---|---|---|
+| T17 Ecrã 7 · Quiz final | SCRUM-7 | [112dc76](https://github.com/TaniaBmGuedes/MDS-TP4/commit/112dc764a5d4cd64489ce56424696316912dd909) | 09/11 | Miguel | 5 perguntas tipadas em `data/quiz.ts`; contador e explicação; «Ver no simulador» abre o simulador com o WIP e a regra da pergunta; ecrã final com pontuação e escolha do dilema; pergunta atual guardada no store do percurso |
 
 ## Registos contínuos (C01–C08)
 
