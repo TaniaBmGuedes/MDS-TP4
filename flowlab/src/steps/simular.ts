@@ -6,10 +6,14 @@
 // Teclado: o slider usa as setas, Home e End; os cenários e as regras são
 // botões (Tab, Enter, Espaço), com aria-pressed. As mudanças de números e o
 // texto da regra são anunciados pelo leitor de ecrã (aria-live).
+//
+// Vindo do quiz («Ver no simulador», T17), abre com o WIP e a regra da
+// pergunta e mostra um aviso com o botão «Voltar ao quiz».
 import './simular.css';
 import { criarGraficoCumulativo } from '../components/graficoCumulativo';
 import { REGRAS, TEXTOS, WIP_SLIDER_MAX, WIP_SLIDER_MIN, type IdRegra } from '../data/grafico';
 import { cenarioPersonalizado, conclusao, numero, throughput } from '../data/metricas';
+import { PASSOS } from '../data/passos';
 import { CENARIOS_WIP, EQUIPA_INICIAL } from '../data/simulacao';
 import { alturaBanda } from '../model/cfd';
 import { simular } from '../model/simulador';
@@ -22,8 +26,19 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, text
   return elemento;
 }
 
-export const ecraSimular: Ecra = (contentor) => {
+export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
   contentor.append(el('p', 'sim__intro', TEXTOS.intro));
+
+  const pedido = percurso.tirarPedidoSimulador();
+  if (pedido) {
+    const aviso = el('div', 'sim__vindo');
+    aviso.append(el('p', undefined, `Vieste da pergunta ${pedido.pergunta + 1} do quiz: o simulador abriu com o limite de WIP dessa pergunta.`));
+    const voltar = el('button', 'sim__voltar', 'Voltar ao quiz');
+    voltar.type = 'button';
+    voltar.addEventListener('click', () => percurso.irPara(PASSOS.findIndex((p) => p.id === 'quiz')));
+    aviso.append(voltar);
+    contentor.append(aviso);
+  }
 
   const painel = el('div', 'sim');
 
@@ -114,8 +129,8 @@ export const ecraSimular: Ecra = (contentor) => {
   contentor.append(regras);
 
   // ---------- Estado ----------
-  let wip = EQUIPA_INICIAL.pessoas;
-  let regraAtiva: IdRegra | null = null;
+  let wip = pedido?.wip ?? EQUIPA_INICIAL.pessoas;
+  let regraAtiva: IdRegra | null = pedido?.regra ?? null;
   let series = simular(wip, EQUIPA_INICIAL);
 
   function mostrarRegra(): void {

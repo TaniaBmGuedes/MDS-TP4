@@ -1,0 +1,97 @@
+/* Ecrã 7 · Quiz final (T17). Cores do tema em shell.css (e no modo escuro,
+   em escuro.css); só o vermelho das respostas erradas é escrito aqui. */
+
+.quiz__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+
+.quiz {
+  --errada: #B42318;
+  --errada-fundo: #FDECEA;
+  display: flex; flex-direction: column; gap: 18px;
+  max-width: 760px; padding: 24px;
+  border: 1px solid var(--divisor); border-radius: 12px; background: var(--superficie);
+}
+
+/* Contador e barra */
+.quiz__topo { display: flex; flex-direction: column; gap: 8px; }
+.quiz__contador { font-size: 14px; font-weight: 600; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+.quiz__barra { height: 6px; border-radius: 999px; background: var(--divisor); overflow: hidden; }
+.quiz__barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--acento); transition: width .4s var(--ease); }
+
+.quiz__pergunta, .quiz__resultado { font: 700 clamp(21px, 2.4vw, 26px)/1.25 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.quiz__pergunta:focus, .quiz__resultado:focus { outline: none; }
+
+/* Opções */
+.quiz__opcoes { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.quiz__opcao {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 12px 16px; text-align: left;
+  border: 1px solid var(--divisor-forte); border-radius: 10px; background: var(--superficie);
+  font-size: 16px; color: var(--texto);
+  transition: border-color .15s, background .15s;
+}
+.quiz__opcao:not([aria-disabled]):hover { border-color: var(--acento); background: var(--pairar); }
+.quiz__opcao[aria-disabled] { cursor: default; }
+.quiz__letra {
+  flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--pairar); color: var(--texto-suave); font-size: 13px; font-weight: 700;
+}
+.quiz__texto { flex: 1; min-width: 0; }
+.quiz__marca { flex: none; font-size: 13px; font-weight: 600; }
+.quiz__marca:empty { display: none; }
+
+.quiz__opcao--certa { border: 2px solid var(--acento); background: var(--acento-fundo); }
+.quiz__opcao--certa .quiz__letra { background: var(--acento); color: var(--superficie); }
+.quiz__opcao--certa .quiz__marca { color: var(--acento-escuro); }
+.quiz__opcao--errada { border: 2px solid var(--errada); background: var(--errada-fundo); }
+.quiz__opcao--errada .quiz__letra { background: var(--errada); color: #fff; }
+.quiz__opcao--errada .quiz__marca { color: var(--errada); }
+.quiz__opcao--apagada { opacity: .6; }
+
+/* Explicação */
+.quiz__feedback {
+  padding: 14px 16px; border-left: 3px solid var(--acento); border-radius: 0 8px 8px 0;
+  background: var(--acento-fundo); color: var(--texto); font-size: 16px;
+}
+.quiz__feedback--errada { border-left-color: var(--errada); background: var(--errada-fundo); }
+.quiz__feedback[hidden], .quiz__acoes[hidden] { display: none; }
+
+/* Botões */
+.quiz__acoes { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+.quiz__botao {
+  min-height: 44px; padding: 0 20px; border-radius: 10px;
+  border: 1px solid var(--acento); background: var(--acento); color: var(--superficie);
+  font-size: 15px; font-weight: 600;
+  transition: background .15s, border-color .15s;
+}
+.quiz__botao:hover { background: var(--acento-escuro); border-color: var(--acento-escuro); }
+.quiz__botao--contorno { background: var(--superficie); color: var(--acento-escuro); align-self: flex-start; }
+.quiz__botao--contorno:hover { background: var(--pairar); border-color: var(--acento); }
+
+/* Resultado */
+.quiz__etiqueta { margin-bottom: -10px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
+.quiz__dilema { font-size: 17px; color: var(--texto-suave); }
+.quiz__revisao { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.quiz__item { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: var(--texto-suave); }
+.quiz__icone {
+  flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  font-size: 13px; font-weight: 700;
+}
+.quiz__item--certa .quiz__icone { background: var(--acento-fundo); color: var(--acento-escuro); }
+.quiz__item--errada .quiz__icone { background: var(--errada-fundo); color: var(--errada); }
+
+@media (prefers-color-scheme: dark) {
+  .quiz { --errada: #F08A80; --errada-fundo: #3D1A17; }
+  .quiz__opcao--errada .quiz__letra { color: #1B201D; }
+}
+
+/* Telemóvel: botões a toda a largura, a principal em cima */
+@media (max-width: 600px) {
+  .quiz { padding: 16px; gap: 16px; }
+  .quiz__intro { font-size: 16px; }
+  .quiz__acoes { flex-direction: column-reverse; }
+  .quiz__botao, .quiz__botao--contorno { width: 100%; align-self: stretch; }
+  .quiz__opcao { flex-wrap: wrap; font-size: 15px; padding: 10px 12px; }
+  /* A marca passa para baixo do texto, alinhada com ele: não se esconde,
+     senão a resposta certa ficava indicada só pela cor. */
+  .quiz__marca { flex-basis: 100%; padding-left: 40px; margin-top: -4px; }
+}
