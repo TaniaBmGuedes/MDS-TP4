@@ -12,7 +12,7 @@ const DESENHOS: Record<IdPasso, string> = {
   // Gráfico de áreas
   grafico: '<path d="M3 3v18h18"/><path d="M7 16l4-5 3 3 5-7"/>',
   // Lâmpada
-  fazes: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/>',
+  info: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/>',
   // Mostrador
   metricas: '<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1"/>',
   // Duas pessoas
