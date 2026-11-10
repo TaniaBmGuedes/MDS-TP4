@@ -123,6 +123,9 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 .cfd__tabela th, .cfd__tabela td { padding: 6px 10px; border-bottom: 1px solid var(--divisor); text-align: right; }
 .cfd__tabela thead th { color: var(--texto-suave); font-weight: 600; }
 .cfd__tabela th:first-child { text-align: left; }
+/* T25: células do destaque da regra escolhida. Fundo e contorno, além da
+   cor, para não depender só da cor (WCAG 1.4.1). */
+.cfd__tabela .cfd__celula--destaque { background: var(--amarelo-fundo); font-weight: 700; box-shadow: inset 0 0 0 2px var(--amarelo); }
 
 /* ---------- Regras de leitura ---------- */
 .regras { display: flex; flex-direction: column; gap: 12px; }

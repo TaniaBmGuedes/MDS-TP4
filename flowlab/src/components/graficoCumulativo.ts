@@ -10,6 +10,9 @@
 //
 // Para leitor de ecrã: o SVG tem um texto alternativo com os números do fim,
 // e a tabela com os valores de cada dia fica logo a seguir, num <details>.
+// Com uma regra escolhida (T25), o texto alternativo diz o que está
+// destacado e a tabela marca as mesmas células que o desenho.
+import { celulasDestacadas, estaDestacada } from '../data/destaqueTabela';
 import { NOMES_BANDAS, SIGNIFICADO_BANDAS, type Destaque } from '../data/grafico';
 import { numero } from '../data/metricas';
 import { BANDAS, limitesBanda, type IdBanda, type SeriesCumulativas } from '../model/cfd';
@@ -23,8 +26,12 @@ export interface GraficoCumulativo {
   elemento: HTMLElement;
   /** Desenha as séries de um cenário; `descricao` é o texto alternativo. */
   atualizar: (series: SeriesCumulativas, descricao: string) => void;
-  /** Destaca a zona de uma regra, ou tira o destaque com null. */
-  destacar: (destaque: Destaque | null) => void;
+  /**
+   * Destaca a zona de uma regra, ou tira o destaque com null.
+   * `explicacao` é a frase da regra; entra no texto alternativo do gráfico,
+   * para quem não vê o desenho saber o que está destacado.
+   */
+  destacar: (destaque: Destaque | null, explicacao?: string) => void;
 }
 
 let instancias = 0;
@@ -106,7 +113,9 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   rolar.setAttribute('role', 'region');
   rolar.setAttribute('aria-label', 'Tabela com os valores de cada dia');
   const tabela = el('table', 'cfd__tabela');
-  tabela.append(el('caption', undefined, 'Tarefas em cada banda no fim de cada dia'));
+  const LEGENDA_TABELA = 'Tarefas em cada banda no fim de cada dia';
+  const legendaTabela = el('caption', undefined, LEGENDA_TABELA);
+  tabela.append(legendaTabela);
   const cabeca = el('thead');
   const linhaCabeca = el('tr');
   for (const nome of ['Dia', ...BANDAS.map((b) => NOMES_BANDAS[b])]) {
@@ -124,6 +133,14 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
 
   let series: SeriesCumulativas | null = null;
   let destaque: Destaque | null = null;
+  let descricao = '';
+  let explicacaoDestaque = '';
+
+  /** Texto alternativo: os números do fim e, se houver, o destaque. */
+  function atualizarDescricao(): void {
+    const extra = destaque && explicacaoDestaque ? ` Destaque: ${explicacaoDestaque}` : '';
+    desenho.setAttribute('aria-label', descricao + extra);
+  }
 
   function desenhar(): void {
     const largura = Math.round(area.clientWidth);
@@ -246,6 +263,12 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   }
 
   function preencherTabela(s: SeriesCumulativas): void {
+    const marcadas = celulasDestacadas(destaque, s.entradas.length - 1);
+    // A legenda explica a marca; o texto escondido em cada célula faz o leitor
+    // de ecrã dizer «destacado» ao chegar lá, e não depende só da cor.
+    legendaTabela.textContent = marcadas.length > 0
+      ? `${LEGENDA_TABELA}. As células marcadas são as do destaque da regra escolhida.`
+      : LEGENDA_TABELA;
     corpo.replaceChildren(
       ...s.entradas.map((_, dia) => {
         const tr = el('tr');
@@ -253,7 +276,12 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
         th.scope = 'row';
         tr.append(th, ...BANDAS.map((b) => {
           const l = limitesBanda(s, b, dia);
-          return el('td', undefined, numero(l.cima - l.baixo));
+          const td = el('td', undefined, numero(l.cima - l.baixo));
+          if (estaDestacada(marcadas, dia, b)) {
+            td.classList.add('cfd__celula--destaque');
+            td.append(el('span', 'escondido-visual', ' (destacado)'));
+          }
+          return td;
         }));
         return tr;
       }),
@@ -278,14 +306,18 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
 
   return {
     elemento: figura,
-    atualizar(novas, descricao) {
+    atualizar(novas, novaDescricao) {
       series = novas;
-      desenho.setAttribute('aria-label', descricao);
+      descricao = novaDescricao;
+      atualizarDescricao();
       preencherTabela(novas);
       desenhar();
     },
-    destacar(novo) {
+    destacar(novo, explicacao = '') {
       destaque = novo;
+      explicacaoDestaque = explicacao;
+      atualizarDescricao();
+      if (series) preencherTabela(series);
       desenhar();
     },
   };
