@@ -7,6 +7,8 @@ import type { Percurso } from '../model/percurso';
 import { ecraEquipa } from './equipa';
 import { ecraMetricas } from './metricas';
 import { ecraInfo } from '../data/info';
+import { ecraQuiz } from './quiz';
+import { ecraSimular } from './simular';
 
 export type Ecra = (contentor: HTMLElement, passo: Passo, percurso: Percurso) => void;
 
