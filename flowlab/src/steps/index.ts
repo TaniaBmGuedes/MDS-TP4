@@ -5,6 +5,7 @@
 import type { IdPasso, Passo } from '../data/passos';
 import type { Percurso } from '../model/percurso';
 import { ecraMetricas } from './metricas';
+import { ecraInfo } from '../data/info';
 
 export type Ecra = (contentor: HTMLElement, passo: Passo, percurso: Percurso) => void;
 
@@ -14,7 +15,7 @@ const provisorio: Ecra = () => {};
 export const ECRAS: Record<IdPasso, Ecra> = {
   simular: provisorio,
   grafico: provisorio,
-  fazes: provisorio,
+  info: ecraInfo, // Substituído o ecrã provisório pelo ecraInfo
   metricas: ecraMetricas,
   quiz: provisorio,
 };
