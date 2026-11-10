@@ -51,6 +51,39 @@ describe('criarPercurso', () => {
     expect(() => p.responderQuiz(3, 0)).toThrow(RangeError);
   });
 
+  it('o quiz avança pergunta a pergunta e para no fim', () => {
+    const p = criarPercurso(5, 2);
+    expect(p.estado().perguntaAtual).toBe(0);
+    p.responderQuiz(0, 1);
+    p.proximaPergunta();
+    p.proximaPergunta();
+    p.proximaPergunta(); // já acabou: fica no total
+    expect(p.estado().perguntaAtual).toBe(2);
+  });
+
+  it('repetir o quiz apaga as respostas e volta à primeira pergunta', () => {
+    const p = criarPercurso(5, 2);
+    p.responderDilema('mais');
+    p.responderQuiz(0, 1);
+    p.proximaPergunta();
+    p.reiniciarQuiz();
+    expect(p.estado().respostasQuiz).toEqual([null, null]);
+    expect(p.estado().perguntaAtual).toBe(0);
+    // A resposta ao dilema não é do quiz: fica.
+    expect(p.estado().respostaDilema).toBe('mais');
+  });
+
+  it('o pedido ao simulador só se lê uma vez e não avisa os ouvintes', () => {
+    const p = criarPercurso(5, 2);
+    const ouvinte = vi.fn();
+    p.subscrever(ouvinte);
+    expect(p.tirarPedidoSimulador()).toBeNull();
+    p.pedirSimulador({ wip: 12, regra: 'alargar', pergunta: 2 });
+    expect(ouvinte).not.toHaveBeenCalled();
+    expect(p.tirarPedidoSimulador()).toEqual({ wip: 12, regra: 'alargar', pergunta: 2 });
+    expect(p.tirarPedidoSimulador()).toBeNull();
+  });
+
   it('avisa os ouvintes só quando o estado muda', () => {
     const p = criarPercurso(5, 0);
     const ouvinte = vi.fn();
@@ -73,8 +106,8 @@ describe('criarPercurso', () => {
 });
 
 describe('PASSOS', () => {
-  it('são 5 e o tempo restante ao avançar é ~8, ~6, ~4, ~1 min', () => {
-    expect(PASSOS).toHaveLength(5);
-    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 1]);
+  it('são 6 e o tempo restante ao avançar é ~8, ~6, ~4, ~3, ~1 min', () => {
+    expect(PASSOS).toHaveLength(6);
+    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 3, 1]);
   });
 });

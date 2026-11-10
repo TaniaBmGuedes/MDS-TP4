@@ -1,0 +1,165 @@
+/* Ecrã 1 · Simulador (T05). Cores do tema em shell.css. As bandas usam as
+   mesmas cores das fichas do ecrã das métricas: branco-cinza à espera,
+   amarelo em curso, verde-floresta feito. */
+
+.sim__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+
+/* Aviso quando se vem do quiz (T17) */
+.sim__vindo {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px;
+  padding: 12px 16px; border-left: 3px solid var(--acento); border-radius: 0 8px 8px 0;
+  background: var(--acento-fundo); color: var(--texto); font-size: 15px;
+}
+.sim__voltar {
+  min-height: 44px; padding: 0 16px; border-radius: 8px;
+  border: 1px solid var(--acento); background: var(--superficie); color: var(--acento-escuro); font-weight: 600;
+}
+.sim__voltar:hover { background: var(--pairar); }
+
+.sim {
+  display: grid; grid-template-columns: minmax(250px, 310px) minmax(0, 1fr);
+  gap: 20px; align-items: start;
+}
+.sim__controlos, .sim__grafico {
+  display: flex; flex-direction: column; gap: 16px; min-width: 0;
+  padding: 20px; border: 1px solid var(--divisor); border-radius: 12px;
+  background: var(--superficie);
+}
+
+/* ---------- Slider do WIP ---------- */
+.sim__campo { display: flex; flex-direction: column; gap: 6px; }
+.sim__campo-topo { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sim__rotulo { font-size: 15px; font-weight: 600; color: var(--texto); }
+.sim__valor {
+  font: 700 34px/1 Inter, system-ui, sans-serif; letter-spacing: -.02em;
+  color: var(--acento); font-variant-numeric: tabular-nums;
+}
+/* input[type=range] para ganhar à regra do protótipo v1 em style.css (azul, 220 px). */
+input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; margin: 0; accent-color: var(--acento); cursor: pointer; }
+.sim__ajuda { font-size: 13px; color: var(--texto-fraco); }
+
+/* ---------- Cenários ---------- */
+.sim__cenarios { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.sim__experimenta { width: 100%; font-size: 13px; font-weight: 600; color: var(--texto-suave); }
+.sim__pilula {
+  min-height: 44px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  font-size: 14px; font-weight: 600; color: var(--texto);
+  transition: background .15s, border-color .15s, color .15s;
+}
+.sim__pilula:hover { border-color: var(--acento); background: var(--pairar); }
+.sim__pilula[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: #fff; }
+
+/* ---------- Números do fim ---------- */
+.sim__quando { margin-bottom: -8px; font-size: 13px; font-weight: 600; color: var(--texto-suave); }
+.sim__resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.sim__caixa { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 8px; }
+.sim__caixa dt { font-size: 12px; font-weight: 600; }
+.sim__caixa dd { margin: 0; font: 700 24px/1.1 Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.sim__caixa--aFazer { background: var(--pairar); color: var(--texto); border: 1px solid var(--divisor-forte); }
+.sim__caixa--emCurso { background: var(--amarelo-fundo); color: #5A4614; border: 1px solid var(--amarelo); }
+.sim__caixa--feito { background: var(--acento-fundo); color: var(--acento-escuro); border: 1px solid var(--acento-linha); }
+.sim__metricas { font-size: 14px; color: var(--texto-suave); }
+.sim__metricas strong { color: var(--texto); font-variant-numeric: tabular-nums; }
+.sim__veredicto {
+  padding: 12px 14px; border-radius: 8px;
+  background: var(--acento-fundo); color: var(--acento-escuro);
+  font-size: 15px; font-weight: 500;
+}
+.sim__veredicto--alerta { background: var(--amarelo-fundo); color: #5A4614; }
+
+.sim__bandas { font-size: 15px; color: var(--texto-suave); }
+
+/* ---------- Gráfico (componente graficoCumulativo) ---------- */
+.cfd { display: flex; flex-direction: column; gap: 12px; margin: 0; min-width: 0; }
+.cfd__cabeca { display: flex; flex-direction: column; gap: 10px; }
+.cfd__titulo { font-size: 16px; font-weight: 700; color: var(--texto); }
+.cfd__legenda { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--texto-suave); }
+.cfd__chave { display: inline-flex; align-items: center; gap: 6px; }
+.cfd__chave strong { color: var(--texto); white-space: nowrap; }
+.cfd__cor { flex: none; width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid; }
+.cfd__chave--aFazer .cfd__cor { background: #ECEFE8; border-color: #7D857F; }
+.cfd__chave--emCurso .cfd__cor { background: var(--amarelo); border-color: #9C7B22; }
+.cfd__chave--feito .cfd__cor { background: var(--acento); border-color: var(--acento-escuro); }
+
+.cfd__area { width: 100%; min-width: 0; }
+/* Até o ResizeObserver voltar a desenhar à nova largura, encolhe em vez de
+   sair do ecrã. */
+.cfd__svg { display: block; overflow: visible; max-width: 100%; height: auto; }
+
+.cfd__linha { stroke: var(--divisor); stroke-width: 1; }
+.cfd__eixo { stroke: var(--divisor-forte); stroke-width: 1.5; }
+.cfd__valor { font: 12px Inter, system-ui, sans-serif; fill: var(--texto-fraco); font-variant-numeric: tabular-nums; }
+.cfd__rotulo { font: 600 12px Inter, system-ui, sans-serif; fill: var(--texto-suave); }
+
+.cfd__banda { stroke-width: 1.5; stroke-linejoin: round; transition: d .45s var(--ease), opacity .3s; }
+.cfd__banda--aFazer { fill: #ECEFE8; stroke: #7D857F; }
+.cfd__banda--emCurso { fill: var(--amarelo); stroke: #9C7B22; }
+.cfd__banda--feito { fill: var(--acento); stroke: var(--acento-escuro); }
+.cfd--sem-transicao .cfd__banda { transition: none; }
+/* Com uma regra escolhida, as bandas fora de foco ficam esbatidas. */
+.cfd--destaque .cfd__banda { opacity: .35; }
+.cfd--destaque .cfd__banda--alvo { opacity: 1; }
+/* «A fazer» é quase branca: em destaque escurece, senão perde para as esbatidas. */
+.cfd--destaque .cfd__banda--aFazer.cfd__banda--alvo { fill: #C3CABF; stroke: var(--texto-suave); }
+
+.cfd__chaveta line, .cfd__seta { stroke: var(--texto); stroke-width: 2; stroke-linecap: round; }
+.cfd__seta--aberta { stroke-dasharray: 6 5; }
+.cfd__ponto, .cfd__ponta { fill: var(--texto); }
+.cfd__rotulo-marca {
+  font: 700 13px Inter, system-ui, sans-serif; fill: var(--texto);
+  paint-order: stroke; stroke: var(--superficie); stroke-width: 4px; stroke-linejoin: round;
+}
+
+/* Tabela com os valores de cada dia */
+.cfd__dados summary {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 14px; font-weight: 600; color: var(--acento); cursor: pointer;
+}
+.cfd__dados summary:hover { color: var(--acento-escuro); text-decoration: underline; }
+.cfd__rolar { overflow-x: auto; max-width: 100%; }
+.cfd__tabela { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.cfd__tabela caption { padding-bottom: 6px; text-align: left; font-size: 13px; color: var(--texto-fraco); }
+.cfd__tabela th, .cfd__tabela td { padding: 6px 10px; border-bottom: 1px solid var(--divisor); text-align: right; }
+.cfd__tabela thead th { color: var(--texto-suave); font-weight: 600; }
+.cfd__tabela th:first-child { text-align: left; }
+/* T25: células do destaque da regra escolhida. Fundo e contorno, além da
+   cor, para não depender só da cor (WCAG 1.4.1). */
+.cfd__tabela .cfd__celula--destaque { background: var(--amarelo-fundo); font-weight: 700; box-shadow: inset 0 0 0 2px var(--amarelo); }
+
+/* ---------- Regras de leitura ---------- */
+.regras { display: flex; flex-direction: column; gap: 12px; }
+.regras__titulo { font: 700 22px/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.regras__ajuda { color: var(--texto-suave); }
+.regras__lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.regra {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-content: start;
+  min-height: 44px; padding: 16px; text-align: left;
+  border: 1px solid var(--divisor-forte); border-radius: 12px; background: var(--superficie);
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.regra:hover { border-color: var(--acento); }
+.regra[aria-pressed="true"] { border-color: var(--acento); background: var(--acento-fundo); box-shadow: inset 0 0 0 1px var(--acento); }
+.regra__numero {
+  grid-row: span 2; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--acento-fundo); color: var(--acento-escuro); font-size: 14px; font-weight: 700;
+}
+.regra[aria-pressed="true"] .regra__numero { background: var(--acento); color: #fff; }
+.regra__titulo { font-size: 16px; font-weight: 700; color: var(--texto); }
+.regra__resumo { font-size: 14px; color: var(--texto-suave); }
+.regras__explica {
+  padding: 14px 16px; border-left: 3px solid var(--acento); border-radius: 0 8px 8px 0;
+  background: var(--acento-fundo); color: var(--texto); font-size: 16px;
+}
+.regras__explica[hidden] { display: none; }
+
+/* ---------- Ecrãs mais pequenos ---------- */
+@media (max-width: 1100px) {
+  .sim { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .sim__controlos, .sim__grafico { padding: 16px; }
+  .sim__intro { font-size: 16px; }
+  .cfd__legenda { flex-direction: column; }
+  .regra { padding: 14px; }
+}
