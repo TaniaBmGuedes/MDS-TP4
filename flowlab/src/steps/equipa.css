@@ -1,0 +1,87 @@
+/* Ecrã 6 · Simulador da equipa (T03). Cores do tema em shell.css (e do modo
+   escuro em escuro.css): só se usam variáveis, sem cores escritas à mão. */
+
+.eq__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+
+/* ---------- Cenários ---------- */
+.eq__cenarios { display: flex; flex-wrap: wrap; gap: 10px; }
+.eq__pilula {
+  min-height: 44px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  font-size: 14px; font-weight: 600; color: var(--texto);
+  transition: background .15s, border-color .15s, color .15s;
+}
+.eq__pilula:hover { border-color: var(--acento); background: var(--pairar); }
+.eq__pilula[aria-pressed="true"] { background: var(--acento); border-color: var(--acento); color: #fff; }
+
+/* ---------- Painéis ---------- */
+.eq { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; align-items: start; }
+.eq__cartao {
+  display: flex; flex-direction: column; gap: 20px; min-width: 0;
+  padding: 20px; border: 1px solid var(--divisor); border-radius: 12px;
+  background: var(--superficie);
+}
+.eq__rotulo { font-size: 15px; font-weight: 600; color: var(--texto); }
+
+/* ---------- Steppers ---------- */
+.eq__stepper { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.eq__stepper-texto { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1 1 140px; }
+.eq__controlos { display: flex; align-items: center; gap: 8px; }
+.eq__botao {
+  width: 44px; height: 44px; border-radius: 10px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  font-size: 20px; line-height: 1; color: var(--texto);
+  transition: background .15s, border-color .15s;
+}
+.eq__botao:hover { border-color: var(--acento); background: var(--pairar); }
+.eq__botao[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+.eq__botao[aria-disabled="true"]:hover { border-color: var(--divisor-forte); background: var(--superficie); }
+.eq__valor { min-width: 32px; text-align: center; font: 700 26px/1 Inter, system-ui, sans-serif; color: var(--texto); font-variant-numeric: tabular-nums; }
+
+.eq__pecas { display: flex; flex-wrap: wrap; gap: 6px; }
+.eq__pessoa {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--acento-fundo); border: 1px solid var(--acento-linha);
+  color: var(--acento-escuro); font-size: 12px; font-weight: 700;
+}
+.eq__tarefa { width: 22px; height: 28px; border-radius: 5px; background: var(--amarelo-fundo); border: 1px solid var(--amarelo); }
+
+.eq__situacao { padding: 14px 16px; border-radius: 10px; background: var(--pairar); color: var(--texto); font-size: 15px; }
+.eq__nota { font-size: 13px; color: var(--texto-fraco); }
+
+/* ---------- Métricas ---------- */
+.eq__metrica { display: flex; flex-direction: column; gap: 6px; }
+.eq__metrica-linha { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.eq__metrica-valor { font: 700 26px/1.1 Inter, system-ui, sans-serif; color: var(--texto); font-variant-numeric: tabular-nums; }
+.eq__barra { height: 10px; border-radius: 5px; background: var(--pairar); overflow: hidden; }
+.eq__barra-cheia { height: 100%; border-radius: 5px; transition: width .4s var(--ease); }
+.eq__metrica--throughput .eq__barra-cheia { background: var(--acento); }
+.eq__metrica--lead .eq__barra-cheia { background: var(--amarelo); }
+.eq__diferenca { font-size: 13px; font-weight: 600; color: var(--texto-suave); }
+.eq__diferenca[data-estado="melhor"] { color: var(--acento-escuro); }
+.eq__diferenca[data-estado="pior"] { color: var(--laranja-texto); }
+
+.eq__little {
+  display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 10px;
+  background: var(--acento-fundo); border: 1px solid var(--acento-linha); color: var(--acento-escuro);
+}
+.eq__little-titulo { font-size: 14px; font-weight: 600; }
+.eq__little-conta { font: 700 20px/1.3 Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ---------- A resposta ao dilema ---------- */
+.eq__resposta {
+  display: flex; flex-direction: column; gap: 12px; padding: 24px;
+  border: 2px solid var(--acento); border-radius: 16px; background: var(--superficie);
+}
+.eq__resposta-etiqueta { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
+.eq__resposta-titulo { font: 700 clamp(22px, 3vw, 28px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.eq__resposta-texto { max-width: 820px; color: var(--texto-suave); font-size: 16px; }
+.eq__nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .eq__barra-cheia, .eq__pilula, .eq__botao { transition: none; }
+}
+
+@media (max-width: 420px) {
+  .eq__cartao, .eq__resposta { padding: 16px; }
+}

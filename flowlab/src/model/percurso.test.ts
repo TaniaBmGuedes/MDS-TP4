@@ -106,8 +106,8 @@ describe('criarPercurso', () => {
 });
 
 describe('PASSOS', () => {
-  it('são 5 e o tempo restante ao avançar é ~8, ~6, ~4, ~1 min', () => {
-    expect(PASSOS).toHaveLength(5);
-    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 1]);
+  it('são 6 e o tempo restante ao avançar é ~8, ~6, ~4, ~3, ~1 min', () => {
+    expect(PASSOS).toHaveLength(6);
+    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 3, 1]);
   });
 });

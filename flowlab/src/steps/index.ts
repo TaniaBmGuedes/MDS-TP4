@@ -4,6 +4,7 @@
 // (simulador, gráfico, «o que fazes?», métricas, quiz) substituem-no aqui.
 import type { IdPasso, Passo } from '../data/passos';
 import type { Percurso } from '../model/percurso';
+import { ecraEquipa } from './equipa';
 import { ecraMetricas } from './metricas';
 import { ecraQuiz } from './quiz';
 import { ecraSimular } from './simular';
@@ -18,5 +19,6 @@ export const ECRAS: Record<IdPasso, Ecra> = {
   grafico: provisorio,
   fazes: provisorio,
   metricas: ecraMetricas,
+  equipa: ecraEquipa,
   quiz: ecraQuiz,
 };
