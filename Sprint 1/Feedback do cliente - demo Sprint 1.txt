@@ -1,0 +1,73 @@
+FEEDBACK DO CLIENTE · DEMO DO SPRINT 1
+FlowLab · MDS TP4 · Review de 10/11/2026
+Site apresentado: https://delicate-quokka-e180ac.netlify.app
+
+Fontes: gravação da review (transcrição) e notas tiradas na reunião
+(«review sprint 1 - cliente.txt», nesta pasta).
+
+
+1. OBSERVAÇÕES DO CLIENTE SOBRE O SITE
+
+1.1 Falta uma introdução
+    Quem chega não sabe de que se está a falar. Falta «uma introduçãozita»
+    que diga qual é o tema e que o objetivo do site é explicar isto.
+
+1.2 Simulador: falta orientar a pessoa
+    Sugestão do cliente: abrir com uma pergunta, por exemplo «Fazer mais
+    coisas ao mesmo tempo é melhor?», sugerir valores e chamar a atenção
+    para o resultado («qual é a melhor opção? será esta, ou esta?»).
+    Trabalhar a parte pedagógica: «presta atenção a isto, tenta agora
+    assim, vê o resultado».
+
+1.3 «Conheces o Kanban?»
+    O título não corresponde ao que o ecrã faz: parece que vai explicar o
+    que é o Kanban e começa por uma pergunta. A explicação do Kanban deve
+    vir à cabeça, antes do simulador, e ser muito simples.
+
+1.4 Dilema («A tua equipa entrega tudo atrasado. O que fazes?»)
+    Clica-se nas opções e não há nenhum resultado. O cliente não percebe
+    a mensagem nem o que aprendeu ao escolher. O dilema tem de ter uma
+    conclusão.
+
+1.5 Navegação
+    Não há problema com o menu, mas, sendo uma lição, faz sentido poder
+    avançar com um «próximo»: «já vi esta parte, quero passar à seguinte».
+    Deve perceber-se que há uma sequência.
+
+1.6 Métricas
+    «Cenário 1 de 3» e depois «4 de 4»: não se percebe quantos cenários há
+    nem o que vem a seguir («é um bocado um mistério»). Falta dizer, por
+    exemplo, «explora quatro cenários». O cenário editável está escondido
+    (duplo clique) e não se sabe até que valor se pode ir (aceita até 15).
+    A conclusão existe, mas está «subtil demais»: tem de ser mais direta.
+
+1.7 Chatbot
+    Ainda não está no site. Fica para o Sprint 2.
+
+
+2. REQUISITOS QUE RESULTAM DO FEEDBACK (para o backlog do Sprint 2)
+
+R1  Ecrã de introdução com o tema e o objetivo do site.
+R2  Simulador com pergunta guia, valores sugeridos e chamadas de atenção.
+R3  «O que é Kanban» simples e no início, antes do simulador.
+R4  Dilema com resultado ao escolher e com conclusão.
+R5  Botões «Seguinte» e «Anterior» em todos os ecrãs.
+R6  Métricas: dizer quantos cenários há e corrigir o texto.
+R7  Métricas: «O teu cenário» visível, com o intervalo de valores (1 a 15).
+R8  Métricas: conclusão mais direta.
+R9  Reordenar o percurso: Introdução, O que é Kanban, Simulador, Dilema,
+    Métricas, Equipa (com a resposta ao dilema), Quiz.
+R10 Chatbot (BOTSchool.ai) integrado no site.
+
+
+3. OBSERVAÇÕES DO CLIENTE SOBRE O PROCESSO
+
+- Perguntou o que estava planeado, o que ficou concluído e como se mediu
+  o esforço. A equipa respondeu que não acabou tudo: duas tarefas ficaram
+  bloqueadas (dependiam do quiz e do chatbot) e perdeu-se tempo com o Git
+  e com a dependência de uma só pessoa para o merge e o Netlify.
+- Para o cliente, o ponto em que a equipa está é normal numa primeira
+  iteração, com complicações que não foram previstas.
+- Recomendou estimativas modestas nas primeiras iterações; no Sprint 2 a
+  equipa já tem experiência para estimar melhor.
+- Lembrou que é preciso continuar a documentar (Jira e repositório).
