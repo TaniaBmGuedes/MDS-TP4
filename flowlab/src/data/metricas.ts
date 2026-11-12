@@ -6,11 +6,8 @@
 // Todos os números vêm do modelo do simulador (mesma equipa, mesmos
 // cenários), por isso batem sempre certo com o que a pessoa vê lá.
 //
-// Fontes a confirmar pela equipa (critério de aceitação do T16):
-// - Little, J. D. C. (1961). A Proof for the Queuing Formula: L = λW.
-//   Operations Research, 9(3), 383–387.
-// - Vacanti, D. S. (2015). Actionable Agile Metrics for Predictability.
-// - Vacanti, D. S. e Coleman, Y. (2020). The Kanban Guide.
+// Fontes: Little (1961), Vacanti (2015) e The Kanban Guide (2020). A lista
+// completa, igual à do relatório, está em data/fontes.ts (T20).
 import { simular } from '../model/simulador';
 import { CENARIOS_WIP, EQUIPA_INICIAL } from './simulacao';
 
