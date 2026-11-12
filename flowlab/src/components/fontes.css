@@ -1,0 +1,20 @@
+/* Secção «Fontes» (T20): rodapé discreto, por baixo dos passos.
+   Usa as variáveis de shell.css, por isso o modo escuro já funciona. */
+
+.fontes {
+  margin-top: 64px; padding-top: 24px;
+  border-top: 1px solid var(--divisor);
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 820px;
+}
+.fontes__titulo { font: 700 18px 'Space Grotesk', Inter, sans-serif; color: var(--texto); }
+.fontes__intro { font-size: 14px; color: var(--texto-suave); }
+.fontes__lista { display: flex; flex-direction: column; gap: 12px; margin: 0; padding-left: 20px; }
+.fontes__item { font-size: 14px; color: var(--texto); }
+.fontes__item::marker { color: var(--texto-fraco); }
+.fontes__ref a { color: var(--acento-escuro); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.fontes__uso { margin-top: 2px; font-size: 13px; color: var(--texto-fraco); }
+
+@media (max-width: 600px) {
+  .fontes { margin-top: 40px; }
+}

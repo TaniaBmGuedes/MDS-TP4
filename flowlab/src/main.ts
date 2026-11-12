@@ -3,6 +3,7 @@
 // passo pelo menu.
 import './style.css';
 import './shell.css';
+import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
@@ -28,6 +29,9 @@ document.querySelector('.pagina')?.before(menu.painel);
 const seccao = document.createElement('section');
 seccao.className = 'ecra';
 app.append(seccao);
+
+// Fontes (T20): no fim da página, depois do ecrã do passo, em todos os passos.
+app.after(criarFontes());
 
 let passoDesenhado = -1;
 
