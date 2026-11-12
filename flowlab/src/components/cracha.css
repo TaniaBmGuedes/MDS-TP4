@@ -1,0 +1,43 @@
+/* Crachá do fim do percurso (T23): no menu do percurso e o botão «Guardar o
+   crachá» no resultado do quiz. As cores do metal são as de resumo.css. */
+
+.cracha-menu {
+  --metal: #8A6D1F; --metal-fundo: #FBF3DC;
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 0 4px; padding: 12px; border-radius: 12px;
+  border: 1px solid var(--divisor); background: var(--metal-fundo);
+}
+.cracha-menu[hidden] { display: none; }
+.cracha-menu--prata { --metal: #5B6670; --metal-fundo: #EEF1F3; }
+.cracha-menu--bronze { --metal: #8C4F2B; --metal-fundo: #F8ECE4; }
+.cracha-menu__titulo { font: 600 12px Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--metal); }
+.cracha-menu__linha { display: flex; align-items: center; gap: 10px; }
+.cracha-menu__selo {
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  border: 3px solid var(--metal); background: var(--superficie);
+  font: 800 13px/1 Inter, system-ui, sans-serif; color: var(--metal); font-variant-numeric: tabular-nums;
+}
+.cracha-menu__texto { font-size: 13px; color: var(--texto-suave); }
+.cracha-menu__texto strong { font-size: 15px; color: var(--texto); }
+.cracha-menu__acoes { display: flex; gap: 6px; }
+.cracha-menu__botao,
+.resumo__guardar {
+  min-height: 44px; padding: 0 12px; border-radius: 10px;
+  border: 1px solid var(--metal); background: var(--superficie); color: var(--texto);
+  font-size: 14px; font-weight: 600; transition: background .15s;
+}
+.cracha-menu__botao { flex: 1; }
+.cracha-menu__botao:hover, .resumo__guardar:hover { background: var(--pairar); }
+.resumo__guardar { flex: none; margin-left: auto; align-self: center; }
+
+@media (prefers-color-scheme: dark) {
+  .cracha-menu { --metal: #E3C46A; --metal-fundo: #33291A; }
+  .cracha-menu--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
+  .cracha-menu--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
+}
+
+/* Telemóvel: o botão «Guardar o crachá» passa para baixo, a toda a largura */
+@media (max-width: 600px) {
+  .resumo__badge { flex-wrap: wrap; }
+  .resumo__guardar { flex-basis: 100%; margin-left: 0; }
+}

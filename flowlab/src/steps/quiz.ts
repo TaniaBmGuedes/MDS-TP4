@@ -14,7 +14,9 @@ import './quiz.css';
 import './resumo.css';
 import { PASSOS } from '../data/passos';
 import { PERGUNTAS, PREFIXO, textoDilema, textoPontuacao, type PerguntaQuiz } from '../data/quiz';
-import { badgePara, estadoConceitos } from '../data/resumo';
+import { guardarCracha } from '../components/cracha';
+import { NOME_NIVEL, contarCertas as certasDe, crachaDoPercurso } from '../data/cracha';
+import { estadoConceitos } from '../data/resumo';
 import type { EstadoPercurso, Percurso } from '../model/percurso';
 import type { Ecra } from './index';
 
@@ -28,7 +30,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, text
 }
 
 function contarCertas(estado: EstadoPercurso): number {
-  return estado.respostasQuiz.filter((r, i) => r !== null && r === PERGUNTAS[i]?.certa).length;
+  return certasDe(estado.respostasQuiz);
 }
 
 function botao(texto: string, classe: string, aoCarregar: () => void): HTMLButtonElement {
@@ -142,23 +144,26 @@ function abrirSimulador(percurso: Percurso, pergunta: PerguntaQuiz, indice: numb
 }
 
 /**
- * O badge (H19): um selo com o nível, o nome e a pontuação. O nível também
- * está escrito, para não depender só da cor.
+ * O crachá (H19, T23): um selo com o nível, o nome e a pontuação. O nível
+ * também está escrito, para não depender só da cor. O botão guarda o crachá
+ * como imagem; o mesmo crachá aparece no menu do percurso.
  */
-function desenharBadge(certas: number): HTMLElement {
-  const badge = badgePara(certas, PERGUNTAS.length);
-  const caixa = el('div', `resumo__badge resumo__badge--${badge.nivel}`);
+function desenharBadge(estado: EstadoPercurso): HTMLElement {
+  const cracha = crachaDoPercurso(estado.perguntaAtual, estado.respostasQuiz);
+  if (!cracha) throw new Error('O crachá só existe depois da última pergunta');
+  const caixa = el('div', `resumo__badge resumo__badge--${cracha.nivel}`);
   const selo = el('div', 'resumo__selo');
   selo.setAttribute('aria-hidden', 'true');
-  selo.append(el('span', 'resumo__selo-num', `${certas}/${PERGUNTAS.length}`));
+  selo.append(el('span', 'resumo__selo-num', `${cracha.certas}/${cracha.total}`));
   const texto = el('div', 'resumo__badge-texto');
-  const nivel = { ouro: 'Ouro', prata: 'Prata', bronze: 'Bronze' }[badge.nivel];
   texto.append(
-    el('p', 'resumo__badge-nivel', `Badge ${nivel}`),
-    el('p', 'resumo__badge-nome', badge.nome),
-    el('p', 'resumo__badge-desc', badge.descricao),
+    el('p', 'resumo__badge-nivel', `Crachá ${NOME_NIVEL[cracha.nivel]}`),
+    el('p', 'resumo__badge-nome', cracha.nome),
+    el('p', 'resumo__badge-desc', cracha.descricao),
   );
-  caixa.append(selo, texto);
+  const guardar = botao('Guardar o crachá', 'resumo__guardar', () => guardarCracha(cracha));
+  guardar.setAttribute('aria-label', `Guardar o crachá ${NOME_NIVEL[cracha.nivel]} como imagem`);
+  caixa.append(selo, texto, guardar);
   return caixa;
 }
 
@@ -218,6 +223,6 @@ function desenharResultado(caixa: HTMLElement, percurso: Percurso, aoMudar: () =
 
   const subRevisao = el('h3', 'resumo__subtitulo', 'As tuas respostas');
 
-  caixa.append(etiqueta, titulo, desenharBadge(certas), dilema, desenharConceitos(percurso, estado.respostasQuiz), subRevisao, revisao, repetir);
+  caixa.append(etiqueta, titulo, desenharBadge(estado), dilema, desenharConceitos(percurso, estado.respostasQuiz), subRevisao, revisao, repetir);
   return titulo;
 }
