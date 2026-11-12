@@ -11,7 +11,10 @@
 // «Concluído»), atual (em destaque, diz «Estás aqui») e por fazer. Um passo
 // fica concluído quando a pessoa sai dele para a frente. Os passos são
 // botões (Tab, Enter, Espaço) e o atual tem aria-current="step".
+//
+// Por baixo dos passos, depois de acabar o quiz, o crachá ganho (T23).
 import { textoProgresso, type Passo } from '../data/passos';
+import { criarCrachaMenu } from './cracha';
 import type { EstadoPercurso, Percurso } from '../model/percurso';
 import { ICONES, iconePasso } from './icones';
 
@@ -53,6 +56,7 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
   const lista = obter<HTMLOListElement>(painel, '.jornada');
   const progressoTexto = obter<HTMLElement>(painel, '.progresso__texto');
   const progressoBarra = obter<HTMLElement>(painel, '.progresso__barra span');
+  obter<HTMLElement>(painel, '.lateral__painel').append(criarCrachaMenu(percurso));
 
   // ---------- Abrir e fechar ----------
   // Quem decide é a pessoa, com o ☰: o menu fica aberto ou fechado como o
