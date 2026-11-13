@@ -32,7 +32,6 @@ export const ecraInicio: Ecra = (seccao, _passo, percurso) => {
   for (const item of APRENDER) {
     const li = document.createElement('li');
     li.className = 'inicio__item';
-    li.dataset.passo = item.passo;
     const icone = document.createElement('span');
     icone.className = 'inicio__icone';
     icone.innerHTML = iconePasso(item.passo);

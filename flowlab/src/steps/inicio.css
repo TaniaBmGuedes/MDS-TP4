@@ -11,12 +11,12 @@
   display: flex; align-items: flex-start; gap: 14px;
   padding: 16px; border-radius: 14px;
   background: var(--superficie); border: 1px solid var(--divisor);
-  border-top: 4px solid var(--passo);
+  box-shadow: var(--sombra); border-radius: 8px;
   color: var(--texto);
 }
 .inicio__icone {
   flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
-  background: var(--passo-clara); color: var(--passo);
+  background: var(--acento-fundo); color: var(--acento);
 }
 
 .inicio__comecar {
@@ -24,12 +24,11 @@
   display: inline-flex; align-items: center; gap: 12px;
   min-height: 52px; padding: 0 24px;
   border: 0; border-radius: 12px;
-  background: var(--passo); color: var(--cor-texto-invertido);
   font-size: 17px; font-weight: 600;
   transition: transform .2s var(--ease);
 }
 .inicio__comecar:hover { transform: translateY(-2px); }
-.inicio__comecar:focus-visible { outline-color: var(--passo); outline-offset: 3px; }
+.inicio__comecar:focus-visible { outline-offset: 3px; }
 
 @media (max-width: 600px) {
   .inicio__comecar { align-self: stretch; justify-content: center; }

@@ -80,7 +80,10 @@ describe('criarPercurso', () => {
     expect(p.tirarPedidoSimulador()).toBeNull();
     p.pedirSimulador({ wip: 12, regra: 'alargar', pergunta: 2 });
     expect(ouvinte).not.toHaveBeenCalled();
+    expect(p.temPedidoSimulador()).toBe(true);
+    expect(p.temPedidoSimulador()).toBe(true);
     expect(p.tirarPedidoSimulador()).toEqual({ wip: 12, regra: 'alargar', pergunta: 2 });
+    expect(p.temPedidoSimulador()).toBe(false);
     expect(p.tirarPedidoSimulador()).toBeNull();
   });
 
