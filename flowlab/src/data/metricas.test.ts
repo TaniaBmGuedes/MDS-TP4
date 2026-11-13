@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
+import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, comparacao, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
 
 describe('METRICAS', () => {
   it('são as três do Sketch 2, cada uma com os textos todos', () => {
@@ -174,5 +174,23 @@ describe('conclusão final', () => {
       expect(igual.throughput).toBeGreaterThan(c.throughput);
       expect(igual.leadTime).toBeLessThan(c.leadTime);
     }
+  });
+});
+
+describe('comparação com uma tarefa por pessoa', () => {
+  const base = CENARIOS[CENARIO_INICIAL];
+
+  it('no cenário de uma tarefa por pessoa não há nada a comparar', () => {
+    expect(comparacao(base)).toBe('');
+  });
+
+  it('nos outros diz os números do cenário de uma tarefa por pessoa', () => {
+    for (const c of CENARIOS.filter((x) => x !== base)) {
+      const texto = comparacao(c);
+      expect(texto).toContain(`WIP ${PARAMETROS.pessoas}`);
+      expect(texto).toContain(throughput(base.throughput));
+      expect(texto).toContain(numero(base.leadTime));
+    }
+    expect(comparacao(cenarioPersonalizado(7))).toContain(throughput(base.throughput));
   });
 });

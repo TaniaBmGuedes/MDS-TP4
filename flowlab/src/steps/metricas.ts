@@ -19,6 +19,7 @@ import {
   WIP_MINIMO,
   WIP_PROPRIO_INICIAL,
   cenarioPersonalizado,
+  comparacao,
   indiceDoExemplo,
   conclusao,
   numero,
@@ -459,6 +460,8 @@ function criarDiapositivo(
   }
 
   d.append(cab, palco.elemento, faixa, el('p', 'cenario__conclusao', conclusao(c)));
+  const comparar = comparacao(c);
+  if (comparar) d.append(el('p', 'cenario__comparacao', comparar));
   return { elemento: d, palco, passo };
 }
 

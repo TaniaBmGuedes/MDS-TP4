@@ -90,6 +90,7 @@
   color: var(--acento); font-variant-numeric: tabular-nums;
 }
 .cenario__conclusao { font-size: 17px; font-weight: 500; color: var(--texto); }
+.cenario__comparacao { margin: -10px 0 0; font-size: 15px; color: var(--texto-suave); }
 
 /* ---------- Número do WIP editável (duplo clique) ---------- */
 .cenario__wip {

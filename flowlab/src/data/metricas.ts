@@ -139,6 +139,18 @@ export function conclusao(c: Cenario): string {
   return `Tarefas a mais: perde-se tempo a saltar entre elas, sai ${tarefasPorDia(c.throughput)} por dia e cada uma demora ${numero(c.leadTime)} dias.`;
 }
 
+/**
+ * Compara este cenário com o de uma tarefa por pessoa, para quem experimenta
+ * perceber se o valor é bom ou mau sem fazer contas. No próprio cenário de
+ * uma tarefa por pessoa não há nada a comparar: devolve «».
+ */
+export function comparacao(c: Cenario, cenarios: readonly Cenario[] = CENARIOS): string {
+  const { pessoas } = PARAMETROS;
+  const base = cenarios.find((x) => x.limiteWip === pessoas);
+  if (!base || c.limiteWip === pessoas) return '';
+  return `Para comparar, com uma tarefa por pessoa (WIP ${pessoas}) saem ${tarefasPorDia(base.throughput)} por dia e cada uma demora ${numero(base.leadTime)} dias.`;
+}
+
 /** A situação do cenário numa frase. */
 export function situacao(c: Cenario): string {
   const { pessoas } = PARAMETROS;
