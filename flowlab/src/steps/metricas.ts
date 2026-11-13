@@ -369,11 +369,8 @@ function criarExperimenta(aoEscolher: (wip: number) => void): {
   const mais = el('button', 'experimenta__passo', '+');
   mais.type = 'button';
   mais.setAttribute('aria-label', T.mais);
-  const ver = el('button', 'experimenta__ver', T.ver);
-  ver.type = 'submit';
-
   const linha = el('div', 'experimenta__linha');
-  linha.append(menos, campo, mais, ver);
+  linha.append(menos, campo, mais);
 
   const ajuda = el('p', 'experimenta__ajuda', T.ajuda);
   ajuda.id = 'wip-proprio-ajuda';
@@ -404,17 +401,22 @@ function criarExperimenta(aoEscolher: (wip: number) => void): {
   menos.addEventListener('click', () => passo(-1));
   mais.addEventListener('click', () => passo(1));
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  // Um número escrito aplica-se com Enter ou ao sair do campo.
+  function aplicarEscrito(): void {
     const n = Number(campo.value);
     if (campo.value.trim() === '' || !valido(n)) {
       campo.setAttribute('aria-invalid', 'true');
       erro.textContent = T.erro;
-      campo.focus();
       return;
     }
-    aoEscolher(n);
+    if (n !== atual) aoEscolher(n);
+  }
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    aplicarEscrito();
+    if (campo.getAttribute('aria-invalid') === 'true') campo.focus();
   });
+  campo.addEventListener('change', aplicarEscrito);
 
   sincronizar(atual);
   return { elemento: form, sincronizar };
@@ -508,7 +510,7 @@ export const ecraMetricas: Ecra = (contentor) => {
   function montar(): void {
     pista.replaceChildren(...diapositivos.map((d) => d.elemento));
     diapositivos.forEach((d, i) => {
-      d.passo.textContent = `Cenário ${i + 1} de ${diapositivos.length}`;
+      d.passo.textContent = i < CENARIOS.length ? TEXTOS.passoExemplo(i + 1, CENARIOS.length) : TEXTOS.passoTeu;
     });
   }
 

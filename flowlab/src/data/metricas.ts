@@ -83,15 +83,12 @@ export const CENARIOS: readonly Cenario[] = [...CENARIOS_WIP]
   .sort((a, b) => a.wip - b.wip)
   .map((c) => criarCenario(c.wip, c.nome));
 
-/** Limites aceites para o WIP que a pessoa escreve. */
+/** Limites aceites para o WIP que a pessoa escolhe (os mesmos do simulador). */
 export const WIP_MINIMO = 1;
-export const WIP_MAXIMO = 15;
+export const WIP_MAXIMO = 12;
 
 /** Limite de WIP com que abre «O teu cenário», até a pessoa escolher outro. */
 export const WIP_PROPRIO_INICIAL = 6;
-
-/** Quantos cenários há no ecrã: os do simulador mais «O teu cenário». */
-export const TOTAL_CENARIOS = CENARIOS.length + 1;
 
 /** Um cenário com o limite de WIP que a pessoa escolheu (fica entre o mínimo e o máximo). */
 export function cenarioPersonalizado(wip: number): Cenario {
@@ -207,11 +204,13 @@ function diasPorExtenso(valor: number): string {
 }
 
 export const TEXTOS = {
-  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${TOTAL_CENARIOS} cenários do simulador: ${CENARIOS.length} já preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e o cenário ${TOTAL_CENARIOS}, «O teu cenário», que crias tu. Quando a simulação de um cenário acaba, passa sozinho ao seguinte.`,
+  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${CENARIOS.length} exemplos preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e num cenário teu, em que mudas o limite de WIP de ${WIP_MINIMO} a ${WIP_MAXIMO}. Quando a simulação de um exemplo acaba, passa sozinho ao seguinte.`,
+  /** Etiqueta de cada diapositivo: «Exemplo 2 de 3» e, no último, o convite. */
+  passoExemplo: (i: number, n: number) => `Exemplo ${i} de ${n}`,
+  passoTeu: 'Agora tu: experimenta',
   experimenta: {
-    rotulo: 'Cria o teu cenário: limite de WIP',
-    ajuda: `Escolhe um valor de ${WIP_MINIMO} a ${WIP_MAXIMO}. O resultado aparece no cenário ${TOTAL_CENARIOS}.`,
-    ver: 'Ver o meu cenário',
+    rotulo: 'Agora tu: muda o limite de WIP',
+    ajuda: `Escolhe um valor de ${WIP_MINIMO} a ${WIP_MAXIMO} e vê o resultado logo abaixo.`,
     menos: 'Diminuir o limite de WIP',
     mais: 'Aumentar o limite de WIP',
     erro: `Escreve um número inteiro de ${WIP_MINIMO} a ${WIP_MAXIMO}.`,
