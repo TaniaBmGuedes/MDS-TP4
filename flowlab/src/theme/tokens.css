@@ -56,6 +56,8 @@
   /* Cor: uma cor por passo do percurso (fluxo contínuo e mais cor).
      A forte serve para texto, ícones e botões (>= 4,5:1 sobre branco e
      sobre a clara); a clara serve para fundos. */
+  --cor-passo-inicio: #0E6E86;
+  --cor-passo-inicio-clara: #DDF1F6;
   --cor-passo-simular: #1F6B52;
   --cor-passo-simular-clara: #DDF1E7;
   --cor-passo-info: #6B3FC4;

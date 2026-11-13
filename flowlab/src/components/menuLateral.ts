@@ -1,4 +1,4 @@
-// Menu do percurso (T2), à esquerda, com os 5 passos. Só abre e fecha com o
+// Menu do percurso (T2), à esquerda, com os passos (a começar pela introdução). Só abre e fecha com o
 // botão de menu (☰) do cabeçalho: fica como a pessoa o deixar, e a escolha
 // é guardada no browser. No computador o conteúdo encolhe para lhe dar
 // lugar ao lado; no telemóvel o menu abre por cima do título e empurra-o

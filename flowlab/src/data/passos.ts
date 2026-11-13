@@ -1,7 +1,8 @@
-// Os 6 passos do percurso, pela ordem da proposta conjunta (experimentar antes
-// de ler). O tempo restante de cada passo inclui o próprio passo, por isso o
-// cabeçalho mostra ~10 à entrada e ~8, ~6, ~4, ~1 ao avançar (T2).
-export type IdPasso = 'simular' | 'grafico' | 'metricas' | 'equipa' | 'quiz' | 'info';
+// Os passos do percurso: a introdução (H20) e depois a ordem da proposta
+// conjunta (experimentar antes de ler). O tempo restante de cada passo inclui
+// o próprio passo, por isso o menu mostra ~10 à entrada e ~9, ~6, ~4, ~3, ~1
+// ao avançar (T2).
+export type IdPasso = 'inicio' | 'simular' | 'grafico' | 'metricas' | 'equipa' | 'quiz' | 'info';
 
 export interface Passo {
   id: IdPasso;
@@ -16,7 +17,9 @@ export interface Passo {
 }
 
 export const PASSOS: readonly Passo[] = [
-  { id: 'simular', nome: 'Simular', titulo: 'Quantas tarefas ao mesmo tempo? Experimenta.', etiqueta: 'Experimentar • Simulador', minutosRestantes: 10 },
+  // Introdução (H20): tema e objetivo do site, antes de qualquer simulador.
+  { id: 'inicio', nome: 'Introdução', titulo: 'Menos trabalho a meio, mais trabalho acabado', etiqueta: 'Começar • Introdução', minutosRestantes: 10 },
+  { id: 'simular', nome: 'Simular', titulo: 'Quantas tarefas ao mesmo tempo? Experimenta.', etiqueta: 'Experimentar • Simulador', minutosRestantes: 9 },
   { id: 'info', nome: 'Conheces o Kanban?', titulo: 'A tua equipa entrega tudo atrasado. O que fazes?', minutosRestantes: 6 },
   { id: 'metricas', nome: 'Métricas', titulo: 'As três métricas do fluxo', etiqueta: 'Aprender • Métricas', minutosRestantes: 4 },
   { id: 'equipa', nome: 'Equipa', titulo: 'Mais gente ou mais trabalho? Experimenta.', etiqueta: 'Experimentar • Equipa', minutosRestantes: 3 },
