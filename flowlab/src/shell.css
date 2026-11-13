@@ -218,6 +218,15 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 }
 .ecra__etiqueta { color: var(--acento); }
 
+/* Títulos grandes, como no portefólio, com o número do passo em destaque. */
+.ecra .ecra__titulo { font: 700 clamp(30px, 4.4vw, 54px)/1.05 var(--letra-titulos); letter-spacing: -.03em; color: var(--texto); max-width: 20ch; }
+.ecra .ecra__etiqueta {
+  margin-bottom: -10px;
+  font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--texto-fraco);
+}
+.ecra__numero { color: var(--acento); font-weight: 700; }
+
 /* Botões principais: azul sólido (texto branco 5,2:1). */
 .botao, .inicio__comecar { background: var(--acento); color: #FFFFFF; }
 .botao:hover, .inicio__comecar:hover { background: var(--acento-escuro); }

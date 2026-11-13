@@ -6,6 +6,7 @@
 import './style.css';
 import './shell.css';
 import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
+import { ativarCursor, ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
 import { PASSOS, indicePorAncora } from './data/passos';
@@ -47,17 +48,23 @@ function desenharPasso(indice: number): void {
   const tituloId = `titulo-${passo.id}`;
   seccao.setAttribute('aria-labelledby', tituloId);
 
-  if (passo.etiqueta) {
-    const etiqueta = document.createElement('p');
-    etiqueta.className = 'ecra__etiqueta';
-    etiqueta.textContent = passo.etiqueta;
-    seccao.append(etiqueta);
-  }
+  // Etiqueta com o número do passo em destaque: «02 / 06 · Experimentar • Simulador».
+  const etiqueta = document.createElement('p');
+  etiqueta.className = 'ecra__etiqueta';
+  const numero = document.createElement('span');
+  numero.className = 'ecra__numero';
+  numero.textContent = String(indice + 1).padStart(2, '0');
+  const total = String(PASSOS.length).padStart(2, '0');
+  etiqueta.append(numero, ` / ${total}${passo.etiqueta ? ` · ${passo.etiqueta}` : ''}`);
+  seccao.append(etiqueta);
+
   const titulo = document.createElement('h1');
   titulo.id = tituloId;
   titulo.className = 'ecra__titulo';
   titulo.tabIndex = -1;
   titulo.textContent = passo.titulo;
+  // As palavras do título sobem uma a uma quando ele aparece (efeitos.ts).
+  dividirPalavras(titulo);
   seccao.append(titulo);
 
   ECRAS[passo.id](seccao, passo, percurso);
@@ -68,6 +75,11 @@ PASSOS.forEach((_, i) => desenharPasso(i));
 // Fontes (T20): no fim da página, depois do último passo.
 app.after(criarFontes());
 animarAoAparecer(seccoes);
+// Efeitos «wow» (H31): ecrã de carregamento, cursor e cartões com inclinação.
+// Nenhum corre com «reduzir movimento»; o cursor e a inclinação só com rato.
+mostrarCarregamento();
+ativarCursor();
+ativarInclinacao();
 atualizarLeitura();
 window.addEventListener('resize', atualizarLeitura);
 
