@@ -41,7 +41,25 @@
     --laranja-texto: #FFC9A3;   /* 9,6:1 sobre o laranja-claro */
     --laranja-claro: #3B2618;
     --escuro: #2A3330;
+
+    /* Cor de cada passo: tons claros sobre fundos escuros (>= 7:1) */
+    --cor-passo-simular: #7CC4A6;
+    --cor-passo-simular-clara: #1F3A30;
+    --cor-passo-info: #BFA6F5;
+    --cor-passo-info-clara: #2C2445;
+    --cor-passo-metricas: #F5A25D;
+    --cor-passo-metricas-clara: #3B2618;
+    --cor-passo-equipa: #8FB0FF;
+    --cor-passo-equipa-clara: #1E2A4A;
+    --cor-passo-quiz: #F28DBE;
+    --cor-passo-quiz-clara: #3E1D2E;
+    --cor-passo-grafico: #7DD3E8;
+    --cor-passo-grafico-clara: #173540;
   }
+
+  /* Botões com a cor do passo por fundo: texto escuro, porque a cor é clara */
+  .navegacao-passos__seguinte, .etapa--atual .etapa__icone { color: #0D110F; }
+  .navegacao-passos__icone { background: rgba(13, 17, 15, .14); }
 
   /* Texto escrito à mão em style.css, pensado para fundo claro */
   .lead, .cartao p, .legenda { color: var(--texto-suave); }

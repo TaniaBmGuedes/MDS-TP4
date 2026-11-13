@@ -53,6 +53,22 @@
   /* Cor: neutro escuro (faixas e botões escuros) */
   --cor-escura: #13212F;
 
+  /* Cor: uma cor por passo do percurso (fluxo contínuo e mais cor).
+     A forte serve para texto, ícones e botões (>= 4,5:1 sobre branco e
+     sobre a clara); a clara serve para fundos. */
+  --cor-passo-simular: #1F6B52;
+  --cor-passo-simular-clara: #DDF1E7;
+  --cor-passo-info: #6B3FC4;
+  --cor-passo-info-clara: #EEE7FC;
+  --cor-passo-metricas: #A3440E;
+  --cor-passo-metricas-clara: #FDEADD;
+  --cor-passo-equipa: #2557D6;
+  --cor-passo-equipa-clara: #DFE8FC;
+  --cor-passo-quiz: #B0246A;
+  --cor-passo-quiz-clara: #FCE5F0;
+  --cor-passo-grafico: #0E6E86;
+  --cor-passo-grafico-clara: #DDF1F6;
+
   /* Tipografia */
   --letra-titulos: "Space Grotesk", system-ui, sans-serif;
   --letra-texto: Inter, system-ui, sans-serif;

@@ -33,6 +33,13 @@ const TEXTO: [string, string][] = [
   ['cor-texto-invertido-suave', 'cor-escura'],
   ['cor-primaria-escura', 'cor-primaria-clara'],
   ['cor-throughput-texto', 'cor-throughput-clara'],
+  // Cor de cada passo: texto sobre branco, sobre o fundo claro do passo e
+  // branco sobre a cor do passo (botão «Seguinte»).
+  ...['simular', 'info', 'metricas', 'equipa', 'quiz', 'grafico'].flatMap((p): [string, string][] => [
+    [`cor-passo-${p}`, 'cor-superficie'],
+    [`cor-passo-${p}`, `cor-passo-${p}-clara`],
+    ['cor-texto-invertido', `cor-passo-${p}`],
+  ]),
 ];
 
 describe('tokens de cor: texto (AA, 4,5:1)', () => {
