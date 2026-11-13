@@ -6,3 +6,4 @@ Peças de interface usadas em mais do que um ecrã.
 - `menuLateral.ts` e `icones.ts`: menu do percurso e ícones (T2).
 - `fontes.ts`: secção «Fontes» no fim da página, com as referências do relatório (`data/fontes.ts`) (T20).
 - `cracha.ts`: crachá do fim do percurso no menu e «Guardar o crachá» em SVG (`data/cracha.ts`) (T23).
+- `animacoes.ts`: blocos dos passos a aparecer com o scroll, traço do título a crescer e fio de leitura no cabeçalho; nada se esconde com «reduzir movimento».
