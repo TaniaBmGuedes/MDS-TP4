@@ -67,7 +67,7 @@
 .ficha {
   position: absolute; left: 0; top: 0;
   width: var(--t); height: var(--t); border-radius: 3px;
-  transition: transform .9s var(--ease), background-color .5s, border-color .5s, opacity .6s;
+  transition: transform .4s var(--ease), background-color .3s, border-color .3s, opacity .4s;
 }
 .ficha--espera { background: var(--superficie); border: 1.5px solid var(--divisor-forte); }
 .ficha--curso { background: var(--amarelo-fundo); border: 1.5px solid var(--amarelo); }

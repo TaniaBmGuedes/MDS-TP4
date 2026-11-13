@@ -2,10 +2,10 @@
 // 1. Introdução numa frase (a etiqueta e o título vêm do main.ts).
 // 2. Diapositivos, um cenário de cada vez (WIP 2, 4 e 12). Cada um tem uma
 //    animação dos 15 dias do simulador com a mesma equipa de 4 pessoas, a
-//    faixa com as três métricas e a conclusão. Passam sozinhos ao fim de um
-//    minuto; param com o rato ou o foco lá dentro e com a aba escondida.
+//    faixa com as três métricas e a conclusão. Passam sozinhos ao fim de uns 20
+//    segundos; param com o rato ou o foco lá dentro e com a aba escondida.
 // 3. O último cenário, «O teu cenário», está sempre lá. Um controlo visível
-//    (− / + e um campo, de 1 a 15) escolhe o limite de WIP; o simulador
+//    (− / + e um campo, de 1 a 12) escolhe o limite de WIP; o simulador
 //    calcula o cenário e o limite fica guardado. O duplo clique no número do
 //    WIP, no título, continua a funcionar como atalho.
 // 4. Por baixo dos cenários, a conclusão final compara-os com os números.
@@ -28,15 +28,15 @@ import {
 import type { Ecra } from './index';
 
 /** Quando a simulação acaba, fica parada este tempo antes do cenário seguinte. */
-const PAUSA_FIM_MS = 4_000;
+const PAUSA_FIM_MS = 2_500;
 /** Com «reduzir movimento» não há animação: cada cenário fica este tempo. */
-const LEITURA_MS = 25_000;
+const LEITURA_MS = 12_000;
 /** Na animação: chegada das tarefas novas, depois o trabalho do dia. */
-const CHEGADA_MS = 1_300;
-const TRABALHO_MS = 2_300;
-const INICIO_MS = 1_500;
+const CHEGADA_MS = 450;
+const TRABALHO_MS = 750;
+const INICIO_MS = 600;
 /** De quanto em quanto tempo quem tem várias tarefas salta para outra. */
-const TROCA_MS = 1_400;
+const TROCA_MS = 600;
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, texto?: string): HTMLElementTagNameMap[K] {
   const elemento = document.createElement(tag);
