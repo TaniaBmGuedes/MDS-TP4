@@ -19,6 +19,7 @@ import {
   WIP_MINIMO,
   WIP_PROPRIO_INICIAL,
   cenarioPersonalizado,
+  indiceDoExemplo,
   conclusao,
   numero,
   situacao,
@@ -507,10 +508,14 @@ export const ecraMetricas: Ecra = (contentor) => {
     if (!licao.contains(e.relatedTarget as Node | null)) foco = false;
   });
 
+  // Etiqueta do último diapositivo: se o limite escolhido é o de um exemplo,
+  // diz qual; se é outro, diz que é um valor diferente dos exemplos.
+  let rotuloTeu: string = TEXTOS.passoTeu;
+
   function montar(): void {
     pista.replaceChildren(...diapositivos.map((d) => d.elemento));
     diapositivos.forEach((d, i) => {
-      d.passo.textContent = i < CENARIOS.length ? TEXTOS.passoExemplo(i + 1, CENARIOS.length) : TEXTOS.passoTeu;
+      d.passo.textContent = i < CENARIOS.length ? TEXTOS.passoExemplo(i + 1, CENARIOS.length) : rotuloTeu;
     });
   }
 
@@ -535,7 +540,11 @@ export const ecraMetricas: Ecra = (contentor) => {
   }
 
   function usarWip(wip: number, mostrarJa: boolean, guardar = true): void {
-    const c = cenarioPersonalizado(wip);
+    const calculado = cenarioPersonalizado(wip);
+    // Com o limite de um exemplo, mostra-se com o nome desse exemplo.
+    const exemplo = indiceDoExemplo(calculado.limiteWip);
+    const c = exemplo >= 0 ? { ...calculado, nome: CENARIOS[exemplo].nome } : calculado;
+    rotuloTeu = exemplo >= 0 ? TEXTOS.passoIgual(exemplo + 1, CENARIOS.length) : TEXTOS.passoTeu;
     if (guardar) guardarWip(c.limiteWip);
     experimenta.sincronizar(c.limiteWip);
     const novo = criarDiapositivo(c, 'cenario-teu', (n) => usarWip(n, true));

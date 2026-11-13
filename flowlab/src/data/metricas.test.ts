@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, conclusao, numero, situacao, throughput } from './metricas';
+import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
 
 describe('METRICAS', () => {
   it('são as três do Sketch 2, cada uma com os textos todos', () => {
@@ -132,6 +132,15 @@ describe('texto de abertura e controlo de «O teu cenário»', () => {
   it('as etiquetas dos diapositivos contam só os exemplos', () => {
     expect(TEXTOS.passoExemplo(1, CENARIOS.length)).toBe(`Exemplo 1 de ${CENARIOS.length}`);
     expect(TEXTOS.passoTeu).toContain('tu');
+  });
+
+  it('reconhece quando o WIP escolhido é o de um exemplo', () => {
+    expect(indiceDoExemplo(2)).toBe(0);
+    expect(indiceDoExemplo(4)).toBe(1);
+    expect(indiceDoExemplo(12)).toBe(2);
+    expect(indiceDoExemplo(6)).toBe(-1);
+    expect(TEXTOS.passoIgual(2, CENARIOS.length)).toContain('Exemplo 2 de 3');
+    expect(TEXTOS.passoTeu).toContain('diferente');
   });
 
   it('o máximo do teu cenário é o mesmo do simulador', () => {

@@ -90,6 +90,11 @@ export const WIP_MAXIMO = 12;
 /** Limite de WIP com que abre «O teu cenário», até a pessoa escolher outro. */
 export const WIP_PROPRIO_INICIAL = 6;
 
+/** Posição (de 0) do exemplo com este limite de WIP, ou -1 se nenhum o tem. */
+export function indiceDoExemplo(wip: number): number {
+  return CENARIOS.findIndex((c) => c.limiteWip === wip);
+}
+
 /** Um cenário com o limite de WIP que a pessoa escolheu (fica entre o mínimo e o máximo). */
 export function cenarioPersonalizado(wip: number): Cenario {
   const limite = Math.min(WIP_MAXIMO, Math.max(WIP_MINIMO, Math.round(wip)));
@@ -207,7 +212,10 @@ export const TEXTOS = {
   intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${CENARIOS.length} exemplos preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e num cenário teu, em que mudas o limite de WIP de ${WIP_MINIMO} a ${WIP_MAXIMO}. Quando a simulação de um exemplo acaba, passa sozinho ao seguinte.`,
   /** Etiqueta de cada diapositivo: «Exemplo 2 de 3» e, no último, o convite. */
   passoExemplo: (i: number, n: number) => `Exemplo ${i} de ${n}`,
-  passoTeu: 'Agora tu: experimenta',
+  /** O cenário da pessoa, com um limite de WIP que não é o de nenhum exemplo. */
+  passoTeu: 'O teu cenário: um valor diferente dos exemplos',
+  /** O cenário da pessoa, quando o limite escolhido é o de um dos exemplos. */
+  passoIgual: (i: number, n: number) => `Exemplo ${i} de ${n} · é o valor que escolheste`,
   experimenta: {
     rotulo: 'Agora tu: muda o limite de WIP',
     ajuda: `Escolhe um valor de ${WIP_MINIMO} a ${WIP_MAXIMO} e vê o resultado logo abaixo.`,
