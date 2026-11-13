@@ -5,6 +5,7 @@
 // passo do menu (ou num botão que leve a outro passo) desliza até ele.
 import './style.css';
 import './shell.css';
+import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
 import { PASSOS, indicePorAncora } from './data/passos';
@@ -66,6 +67,9 @@ PASSOS.forEach((_, i) => desenharPasso(i));
 
 // Fontes (T20): no fim da página, depois do último passo.
 app.after(criarFontes());
+animarAoAparecer(seccoes);
+atualizarLeitura();
+window.addEventListener('resize', atualizarLeitura);
 
 // ---------- Scroll → passo atual ----------
 // O passo atual é o último cuja secção já passou a linha a 40 % da altura
@@ -95,6 +99,7 @@ window.addEventListener(
     if (pedidoFrame) return;
     pedidoFrame = requestAnimationFrame(() => {
       pedidoFrame = 0;
+      atualizarLeitura();
       if (performance.now() < deslizarAte) return;
       const i = passoVisivel();
       if (i === percurso.estado().passoAtual) return;
