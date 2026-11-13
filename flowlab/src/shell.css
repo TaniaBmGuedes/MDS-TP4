@@ -234,3 +234,60 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .progresso__barra { height: 6px; border-radius: 999px; background: var(--divisor); overflow: hidden; }
 .progresso__barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--acento); transition: width .4s var(--ease); }
 @media (prefers-reduced-motion: reduce) { .progresso__barra span { transition: none; } }
+
+/* ---------- Cor de cada passo (fluxo contínuo e mais cor) ---------- */
+/* Cada passo tem a sua cor (theme/tokens.css). O body leva o passo atual em
+   data-passo (main.ts) e os itens do menu e o botão «Seguinte» levam o
+   passo a que se referem; aqui só se escolhem as variáveis --passo e
+   --passo-clara, que o resto do CSS usa. */
+:root, [data-passo="simular"] { --passo: var(--cor-passo-simular); --passo-clara: var(--cor-passo-simular-clara); }
+[data-passo="info"] { --passo: var(--cor-passo-info); --passo-clara: var(--cor-passo-info-clara); }
+[data-passo="metricas"] { --passo: var(--cor-passo-metricas); --passo-clara: var(--cor-passo-metricas-clara); }
+[data-passo="equipa"] { --passo: var(--cor-passo-equipa); --passo-clara: var(--cor-passo-equipa-clara); }
+[data-passo="quiz"] { --passo: var(--cor-passo-quiz); --passo-clara: var(--cor-passo-quiz-clara); }
+[data-passo="grafico"] { --passo: var(--cor-passo-grafico); --passo-clara: var(--cor-passo-grafico-clara); }
+
+/* A mancha de luz de cima ganha a cor do passo atual. */
+body::before { background: radial-gradient(circle, color-mix(in srgb, var(--passo) 24%, transparent) 0%, transparent 65%); }
+
+/* Fichas do fundo nas cores dos passos, em tons claros. */
+.fundo i:nth-child(5n+1) { --c: var(--cor-passo-simular-clara); }
+.fundo i:nth-child(5n+2) { --c: var(--cor-passo-info-clara); }
+.fundo i:nth-child(5n+3) { --c: var(--cor-passo-metricas-clara); }
+.fundo i:nth-child(5n+4) { --c: var(--cor-passo-equipa-clara); }
+.fundo i:nth-child(5n)   { --c: var(--cor-passo-quiz-clara); }
+
+/* Menu: cada passo com o ícone num quadrado da sua cor. */
+.etapa__icone {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: var(--passo-clara); color: var(--passo);
+}
+.etapa__botao:hover .etapa__icone { color: var(--passo); transform: scale(1.06); }
+.etapa--concluida .etapa__icone { color: var(--passo); }
+.etapa--atual .etapa__botao { background: var(--passo-clara); color: var(--texto); box-shadow: inset 3px 0 0 var(--passo); }
+.etapa--atual .etapa__icone { background: var(--passo); color: var(--cor-texto-invertido); }
+.etapa--atual .etapa__info { color: var(--passo); font-weight: 600; }
+@keyframes acender {
+  from { background: transparent; box-shadow: inset 0 0 0 var(--passo); }
+  to { background: var(--passo-clara); box-shadow: inset 3px 0 0 var(--passo); }
+}
+
+/* Barra de progresso com as cores do percurso todo. */
+.progresso__barra span {
+  background: linear-gradient(90deg, var(--cor-passo-simular), var(--cor-passo-info), var(--cor-passo-metricas), var(--cor-passo-equipa), var(--cor-passo-quiz));
+}
+
+/* Título do passo: etiqueta e traço na cor do passo. */
+.ecra__etiqueta { color: var(--passo); }
+#titulo-passo::after {
+  content: ""; display: block; width: 56px; height: 5px; margin-top: 14px;
+  border-radius: 999px; background: var(--passo);
+}
+
+/* Ecrã do dilema (style.css): os cartões e o quadro foram pensados para
+   fundo escuro e quase não se viam. Passam a usar a cor do passo. */
+.cartao-opcao { background: var(--superficie); border: 1px solid var(--divisor-forte); }
+.cartao-opcao:hover { background: var(--passo-clara); border-color: var(--passo); }
+.cartao-opcao--selecionado, .cartao-opcao--selecionado:hover { background: var(--passo-clara); border-color: var(--passo); box-shadow: 0 0 0 1px var(--passo); }
+.kanban-quadro { background: var(--superficie); border-color: var(--divisor); }
+.col-curso h3 { color: var(--cor-passo-equipa); }

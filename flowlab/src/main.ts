@@ -5,6 +5,7 @@ import './style.css';
 import './shell.css';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
+import { criarNavegacaoPassos } from './components/navegacaoPassos';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
@@ -65,6 +66,10 @@ function desenharPasso(estado: EstadoPercurso): void {
   void seccao.offsetWidth;
   seccao.classList.add('ecra--entrar');
   ECRAS[passo.id](seccao, passo, percurso);
+  // Fluxo contínuo: no fim do ecrã, ir para o passo anterior ou seguinte sem
+  // passar pelo menu. A cor do passo atual vai para o body (shell.css).
+  seccao.append(criarNavegacaoPassos(estado.passoAtual, percurso));
+  document.body.dataset.passo = passo.id;
 
   // Ao mudar de passo, o foco vai para o título: quem usa teclado ou leitor de
   // ecrã continua a partir do início do novo passo, e não do botão clicado.

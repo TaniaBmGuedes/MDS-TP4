@@ -34,6 +34,18 @@ export function indicePorAncora(ancora: string): number | null {
   return i === -1 ? null : i;
 }
 
+/**
+ * Passos antes e depois do passo `indice`, para os botões «Anterior» e
+ * «Seguinte» no fim de cada ecrã (fluxo contínuo, R5 do feedback do
+ * cliente). No primeiro passo não há anterior e no último não há seguinte.
+ */
+export function vizinhos(indice: number): { anterior: Passo | null; seguinte: Passo | null } {
+  return {
+    anterior: PASSOS[indice - 1] ?? null,
+    seguinte: PASSOS[indice + 1] ?? null,
+  };
+}
+
 /** Texto do progresso no menu: «Passo 2 de 5 · faltam ~8 min». */
 export function textoProgresso(indice: number): string {
   const passo = PASSOS[indice];

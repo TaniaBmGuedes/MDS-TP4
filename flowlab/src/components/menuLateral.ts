@@ -79,6 +79,7 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
   const itens = passos.map((passo, i) => {
     const item = document.createElement('li');
     item.className = 'etapa';
+    item.dataset.passo = passo.id;
     const botao = document.createElement('button');
     botao.type = 'button';
     botao.className = 'etapa__botao';
@@ -106,7 +107,11 @@ export function criarMenuLateral(passos: readonly Passo[], percurso: Percurso): 
     // concluídos. A barra é só visual; o texto diz o mesmo.
     progressoTexto.textContent = textoProgresso(estado.passoAtual);
     const feitos = estado.concluidos.filter(Boolean).length;
-    progressoBarra.style.width = `${(feitos / passos.length) * 100}%`;
+    const fracao = feitos / passos.length;
+    progressoBarra.style.width = `${fracao * 100}%`;
+    // O degradê das cores dos passos ocupa a barra inteira, não só a parte
+    // preenchida: cada passo concluído mostra a sua cor.
+    progressoBarra.style.backgroundSize = fracao > 0 ? `${100 / fracao}% 100%` : '';
 
     for (const [i, e] of itens.entries()) {
       const atual = i === estado.passoAtual;
