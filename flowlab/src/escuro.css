@@ -47,8 +47,10 @@
   }
 
   /* Botões com fundo azul claro: texto escuro */
-  .etapa--atual .etapa__icone, .inicio__comecar, .botao { color: #05080C; }
+  .etapa--atual .etapa__icone, .etapa--atual .etapa__botao:hover .etapa__icone, .inicio__comecar, .botao { color: #05080C; }
   .col-curso h3 { color: #85B8FF; }
+  /* simular.css: castanho escrito à mão sobre o amarelo, ilegível no escuro */
+  .sim__caixa--emCurso, .sim__veredicto--alerta { color: #F5CD47; }
   .quadro-vivo { box-shadow: none; }
   .inclinado { box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
 

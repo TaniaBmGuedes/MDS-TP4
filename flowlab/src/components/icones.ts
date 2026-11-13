@@ -35,4 +35,6 @@ export const ICONES = {
   continuar: svg('<path d="M7 5l12 7-12 7z"/>', 18),
   anterior: svg('<path d="M15 6l-6 6 6 6"/>', 18),
   seguinte: svg('<path d="M9 6l6 6-6 6"/>', 18),
+  livro: svg('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 7h6"/>', 18),
+  fechar: svg('<path d="M6 6l12 12M18 6L6 18"/>', 20),
 };

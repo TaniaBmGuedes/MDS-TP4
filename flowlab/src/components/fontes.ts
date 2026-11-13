@@ -1,13 +1,32 @@
-// Secção «Fontes» (T20), no fundo da página, por baixo de todos os passos.
-// Fica num rodapé com título próprio, para quem usa leitor de ecrã a
-// encontrar pela lista de regiões e de títulos.
+// «Fontes» (T20): as referências abrem numa janela (<dialog>) a partir do
+// botão «Fontes» no cabeçalho, em vez de ocuparem o fundo da página. O
+// <dialog> nativo prende o foco lá dentro, fecha com Esc e devolve o foco
+// ao botão que o abriu.
 import './fontes.css';
 import { FONTES, referencia } from '../data/fontes';
+import { ICONES } from './icones';
 
-export function criarFontes(): HTMLElement {
-  const rodape = document.createElement('footer');
-  rodape.className = 'fontes';
-  rodape.setAttribute('aria-labelledby', 'titulo-fontes');
+export interface FontesJanela {
+  /** Botão «Fontes», para pôr no cabeçalho. */
+  botao: HTMLButtonElement;
+  /** A janela, para pôr no body. */
+  janela: HTMLDialogElement;
+}
+
+export function criarFontes(): FontesJanela {
+  const janela = document.createElement('dialog');
+  janela.className = 'fontes';
+  janela.setAttribute('aria-labelledby', 'titulo-fontes');
+
+  const fechar = document.createElement('button');
+  fechar.type = 'button';
+  fechar.className = 'fontes__fechar';
+  fechar.innerHTML = `${ICONES.fechar}<span>Fechar</span>`;
+  fechar.addEventListener('click', () => janela.close());
+  // Clicar fora da caixa (no fundo escurecido) também fecha.
+  janela.addEventListener('click', (e) => {
+    if (e.target === janela) janela.close();
+  });
 
   const titulo = document.createElement('h2');
   titulo.id = 'titulo-fontes';
@@ -45,6 +64,20 @@ export function criarFontes(): HTMLElement {
     lista.append(item);
   }
 
-  rodape.append(titulo, intro, lista);
-  return rodape;
+  const corpo = document.createElement('div');
+  corpo.className = 'fontes__corpo';
+  const topo = document.createElement('div');
+  topo.className = 'fontes__topo';
+  topo.append(titulo, fechar);
+  corpo.append(topo, intro, lista);
+  janela.append(corpo);
+
+  const botao = document.createElement('button');
+  botao.type = 'button';
+  botao.className = 'botao-fontes';
+  botao.setAttribute('aria-haspopup', 'dialog');
+  botao.innerHTML = `${ICONES.livro}<span>Fontes</span>`;
+  botao.addEventListener('click', () => janela.showModal());
+
+  return { botao, janela };
 }

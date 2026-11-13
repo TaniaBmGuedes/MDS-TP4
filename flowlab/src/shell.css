@@ -196,7 +196,7 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .etapa__botao { border-radius: 4px; }
 .etapa__botao:hover .etapa__icone { color: var(--acento); }
 .etapa--atual .etapa__botao { background: var(--acento-fundo); color: var(--acento-escuro); box-shadow: inset 3px 0 0 var(--acento); }
-.etapa--atual .etapa__icone { background: var(--acento); color: #FFFFFF; }
+.etapa--atual .etapa__icone, .etapa--atual .etapa__botao:hover .etapa__icone { background: var(--acento); color: #FFFFFF; }
 .etapa--concluida .etapa__icone { background: var(--verde-fundo); color: var(--verde); }
 .etapa--concluida .etapa__info { color: var(--verde); }
 /* Estado como «lozenge» do Jira: maiúsculas pequenas num rótulo. */
@@ -219,7 +219,7 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .ecra__etiqueta { color: var(--acento); }
 
 /* Títulos grandes, como no portefólio, com o número do passo em destaque. */
-.ecra .ecra__titulo { font: 700 clamp(30px, 4.4vw, 54px)/1.05 var(--letra-titulos); letter-spacing: -.03em; color: var(--texto); max-width: 20ch; }
+.ecra .ecra__titulo { font: 700 clamp(28px, 3.2vw, 46px)/1.08 var(--letra-titulos); letter-spacing: -.03em; color: var(--texto); }
 .ecra .ecra__etiqueta {
   margin-bottom: -10px;
   font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase;
@@ -247,4 +247,24 @@ a { color: #0C66E4; }
 .ecra + .ecra { margin-top: 72px; padding-top: 72px; border-top: 1px solid var(--divisor); }
 @media (max-width: 600px) {
   .ecra + .ecra { margin-top: 48px; padding-top: 48px; }
+}
+
+/* Um ecrã por tema (SCRUM-135): em ecrãs de computador, cada passo ocupa a
+   altura do ecrã, com o conteúdo ao centro, e o scroll encaixa suavemente
+   no início de cada passo (proximity: só quando se para perto). Se um passo
+   não couber (ecrã baixo), cresce em vez de cortar. No telemóvel os passos
+   seguem uns atrás dos outros, sem altura fixa. */
+@media (min-width: 1024px) and (min-height: 700px) {
+  html { scroll-snap-type: y proximity; scroll-padding-top: var(--altura-topo); }
+  .pagina { padding-top: 0; padding-bottom: 0; }
+  .ecra {
+    min-height: calc(100vh - var(--altura-topo));
+    justify-content: center; gap: 14px;
+    padding-block: 24px;
+    scroll-snap-align: start; scroll-margin-top: 0;
+  }
+  .ecra + .ecra { margin-top: 0; padding-top: 24px; border-top: 1px solid var(--divisor); }
+  /* Simulador: no cartão da regra fica só o número e o título; a explicação
+     completa aparece por baixo quando se escolhe a regra. */
+  .regra__resumo { display: none; }
 }

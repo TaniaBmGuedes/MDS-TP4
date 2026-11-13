@@ -49,7 +49,6 @@ export const ecraInicio: Ecra = (seccao, _passo, percurso) => {
   comecar.addEventListener('click', () => percurso.avancar());
   tornarMagnetico(comecar);
 
-  texto.append(tema, objetivo, comecar);
   heroi.append(texto, criarQuadroVivo());
 
   // O título e a etiqueta (desenhados no main.ts) passam para o bloco de texto.
@@ -65,23 +64,25 @@ export const ecraInicio: Ecra = (seccao, _passo, percurso) => {
 
   const lista = document.createElement('ul');
   lista.className = 'inicio__lista';
-  APRENDER.forEach((item, i) => {
+  APRENDER.forEach((item) => {
     const li = document.createElement('li');
     li.className = 'inicio__item';
-    const numero = document.createElement('span');
-    numero.className = 'inicio__numero';
-    numero.textContent = String(i + 1).padStart(2, '0');
-    numero.setAttribute('aria-hidden', 'true');
     const icone = document.createElement('span');
     icone.className = 'inicio__icone';
     icone.innerHTML = iconePasso(item.passo);
     const frase = document.createElement('span');
     frase.textContent = item.texto;
-    li.append(numero, icone, frase);
+    li.append(icone, frase);
     lista.append(li);
   });
 
-  seccao.append(heroi, subtitulo, lista);
+  // Tudo num só ecrã: o que se vai aprender fica no bloco de texto, antes
+  // do botão.
+  const aprender = document.createElement('div');
+  aprender.className = 'inicio__aprender';
+  aprender.append(subtitulo, lista);
+  texto.append(tema, objetivo, aprender, comecar);
+  seccao.append(heroi);
 };
 
 // ---------- Quadro vivo ----------

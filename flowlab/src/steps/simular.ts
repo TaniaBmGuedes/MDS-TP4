@@ -126,7 +126,9 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
     return { botao: b, regra: r };
   });
   regras.append(tituloRegras, el('p', 'regras__ajuda', TEXTOS.ajudaRegras), lista, explica);
-  contentor.append(regras);
+  // As regras ficam por baixo do gráfico, no mesmo cartão: o passo cabe num
+  // ecrã e quem escolhe uma regra vê logo o destaque ao lado (SCRUM-135).
+  lado.append(regras);
 
   // ---------- Estado ----------
   let wip = pedido?.wip ?? EQUIPA_INICIAL.pessoas;
