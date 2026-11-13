@@ -30,7 +30,6 @@
   min-height: 56px; padding: 0 28px;
   border: 0; border-radius: 999px;
   font-size: 17px; font-weight: 600;
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--acento) 35%, transparent);
 }
 .inicio__comecar svg { transition: transform .25s var(--ease); }
 .inicio__comecar:hover svg { transform: translateX(4px); }
