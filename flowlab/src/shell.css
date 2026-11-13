@@ -1,14 +1,12 @@
 /* Shell do site (T2): cabeçalho, menu do percurso à esquerda (abre e
    fecha) e os passos do percurso seguidos, numa só página.
-   Tema: mistura de Jira e ClickUp. Do Jira vem a base calma (fundo
-   cinzento-claro liso, superfícies brancas, texto azul-ardósia, bordas
-   finas, etiquetas de estado); do ClickUp vem o violeta como cor de marca e
-   o degradê violeta → rosa, só em realces decorativos (nunca por trás de
-   texto). Os pares de texto passam AA (contraste no comentário).
+   Tema ao estilo do Jira: fundo branco, texto azul-ardósia, bordas finas,
+   etiquetas de estado e o azul como única cor de marca. Os pares de texto
+   passam AA (contraste no comentário).
    Carregado depois de style.css, que traz os estilos do protótipo v1. */
 
 :root {
-  --papel: #F7F8F9;           /* fundo da página (Jira) */
+  --papel: #FFFFFF;           /* fundo da página */
   --superficie: #FFFFFF;
   --lateral: #FFFFFF;
   --texto: #172B4D;           /* azul-ardósia do Jira: 14,7:1 sobre branco */
@@ -17,11 +15,11 @@
   --divisor: #DCDFE4;
   --divisor-forte: #C1C7D0;
   --pairar: #F1F2F4;
-  --acento: #5E44E0;          /* violeta (ClickUp), escurecido: 6,2:1 com branco */
-  --acento-escuro: #4C35C2;   /* 7,2:1 sobre o fundo do acento */
-  --acento-fundo: #F3F0FF;
-  --acento-linha: #CFC7FF;
-  --degrade: linear-gradient(90deg, #7B68EE 0%, #B36BE8 55%, #FD71AF 100%);
+  --acento: #0C66E4;          /* azul do Jira: 5,2:1 com branco */
+  --acento-escuro: #0055CC;   /* 5,9:1 sobre o fundo do acento */
+  --acento-fundo: #E9F2FF;
+  --acento-linha: #CCE0FF;
+  --degrade: linear-gradient(90deg, #0C66E4 0%, #388BFF 100%);
   --amarelo: #F5CD47;         /* só realces, sempre com texto escuro */
   --amarelo-fundo: #FFF7D6;
   --verde: #216E4E;           /* «Concluído», como o verde de estado do Jira */
@@ -185,14 +183,14 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .progresso__barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--acento); transition: width .4s var(--ease); }
 @media (prefers-reduced-motion: reduce) { .progresso__barra span { transition: none; } }
 
-/* ---------- Tema Jira + ClickUp ---------- */
-/* Cabeçalho: branco, com um fio do degradê ClickUp por baixo. */
+/* ---------- Tema Jira ---------- */
+/* Cabeçalho: branco, com um fio azul por baixo (fio de leitura). */
 .site-topo { border-bottom: 0; box-shadow: 0 1px 0 var(--divisor); }
 .site-topo::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 3px; background: var(--degrade); }
 .logo__icone { background: var(--degrade); }
 
 /* Menu: como a barra lateral do Jira. Ícones cinzentos num quadrado
-   discreto; o passo à vista fica violeta. */
+   discreto; o passo à vista fica azul. */
 .lateral { background: var(--lateral); }
 .etapa__icone { width: 32px; height: 32px; border-radius: 6px; background: var(--pairar); color: var(--texto-suave); }
 .etapa__botao { border-radius: 4px; }
@@ -213,14 +211,14 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .progresso__barra span { background: var(--degrade); }
 
 /* Passos: cada um é um cartão branco com sombra leve do Jira, seguidos
-   na página. A etiqueta é violeta e o título leva o fio do degradê. */
+   na página. A etiqueta é azul e o título leva um traço azul. */
 .ecra__titulo::after {
   content: ""; display: block; width: 48px; height: 4px; margin-top: 14px;
   border-radius: 999px; background: var(--degrade);
 }
 .ecra__etiqueta { color: var(--acento); }
 
-/* Botões principais: violeta sólido (texto branco 6,2:1). */
+/* Botões principais: azul sólido (texto branco 5,2:1). */
 .botao, .inicio__comecar { background: var(--acento); color: #FFFFFF; }
 .botao:hover, .inicio__comecar:hover { background: var(--acento-escuro); }
 a { color: #0C66E4; }
