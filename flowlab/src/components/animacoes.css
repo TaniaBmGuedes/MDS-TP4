@@ -9,8 +9,8 @@
 .animar .aparecer.revelado { opacity: 1; transform: none; }
 
 /* O traço por baixo do título cresce da esquerda quando o título aparece. */
-.animar .ecra__titulo::after { transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) .25s; }
-.animar .ecra__titulo.revelado::after { transform: scaleX(1); }
+.animar .ecra__titulo::after { transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) .45s; }
+.animar .ecra__titulo.revelado::after, .animar .revelado .ecra__titulo::after { transform: scaleX(1); }
 
 /* Fio do cabeçalho: um trilho cinzento e, por cima, o degradê que enche
    com a leitura (--leitura de 0 a 1, posto pelo scroll em main.ts). */
