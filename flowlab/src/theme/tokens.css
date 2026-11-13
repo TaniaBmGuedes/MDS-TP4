@@ -1,5 +1,7 @@
 /*
  * Tokens de design do FlowLab (T26 · SCRUM-26).
+ * Paleta revista no Sprint 2: base neutra ao estilo do Jira (azul #0C66E4,
+ * texto #172B4D, fundo #F7F8F9); o violeta do ClickUp está em shell.css.
  *
  * Valores tirados do Sketch 2 do Miguel
  * (Registos/Sprint 0/Miguel/Sketch FlowLab Kanban 2.pdf e o HTML do Passo 4).
@@ -18,20 +20,20 @@
  */
 :root {
   /* Cor: superfícies */
-  --cor-fundo: #F6F7F9;            /* fundo da página */
+  --cor-fundo: #F7F8F9;            /* fundo da página */
   --cor-superficie: #FFFFFF;       /* cartões, caixas, botões de contorno */
-  --cor-superficie-suave: #F2F4F7; /* caixas de destaque discretas */
-  --cor-trilho: #EEF2F7;           /* fundo de barras de progresso e pílulas */
+  --cor-superficie-suave: #F1F2F4; /* caixas de destaque discretas */
+  --cor-trilho: #F1F2F4;           /* fundo de barras de progresso e pílulas */
 
   /* Cor: texto */
-  --cor-texto: #13212F;            /* texto principal */
-  --cor-texto-medio: #344054;      /* texto de apoio com mais peso */
-  --cor-texto-suave: #475467;      /* texto secundário (ainda passa AA) */
+  --cor-texto: #172B4D;            /* texto principal */
+  --cor-texto-medio: #2C3E5D;      /* texto de apoio com mais peso */
+  --cor-texto-suave: #44546F;      /* texto secundário (ainda passa AA) */
   --cor-texto-invertido: #FFFFFF;        /* texto sobre azul ou escuro */
   --cor-texto-invertido-suave: #DCE1E8;  /* texto secundário sobre escuro */
 
   /* Cor: linhas e bordas */
-  --cor-linha: #DCE1E8;            /* separadores e bordas de cartões */
+  --cor-linha: #DCDFE4;            /* separadores e bordas de cartões */
   --cor-borda-controlo: #848E9F;   /* bordas de botões e campos. O Sketch 2 usa
                                       #98A2B3, mas só dá 2,6:1 sobre branco e a
                                       WCAG 1.4.11 pede 3:1 para componentes de
@@ -39,37 +41,19 @@
                                       passar (3,3:1). Não serve para texto. */
 
   /* Cor: azul primário (ações, ligações, WIP em curso) */
-  --cor-primaria: #2557D6;
-  --cor-primaria-escura: #163C9E;  /* hover e texto sobre azul claro */
-  --cor-primaria-clara: #DCE6FB;   /* fundos de destaque */
-  --cor-primaria-borda: #9DB3EE;   /* borda da coluna "em curso" (vem do v1,
+  --cor-primaria: #0C66E4;
+  --cor-primaria-escura: #0055CC;  /* hover e texto sobre azul claro */
+  --cor-primaria-clara: #E9F2FF;   /* fundos de destaque */
+  --cor-primaria-borda: #85B8FF;   /* borda da coluna "em curso" (vem do v1,
                                       não existe no Sketch 2) */
 
   /* Cor: laranja do throughput (só preenchimentos, não texto) */
-  --cor-throughput: #E8742A;
-  --cor-throughput-texto: #8A2C0D; /* quando o laranja tem de ser texto */
-  --cor-throughput-clara: #FDECE3;
+  --cor-throughput: #E56910;
+  --cor-throughput-texto: #A54800; /* quando o laranja tem de ser texto */
+  --cor-throughput-clara: #FFF3EB;
 
   /* Cor: neutro escuro (faixas e botões escuros) */
-  --cor-escura: #13212F;
-
-  /* Cor: uma cor por passo do percurso (fluxo contínuo e mais cor).
-     A forte serve para texto, ícones e botões (>= 4,5:1 sobre branco e
-     sobre a clara); a clara serve para fundos. */
-  --cor-passo-inicio: #0E6E86;
-  --cor-passo-inicio-clara: #DDF1F6;
-  --cor-passo-simular: #1F6B52;
-  --cor-passo-simular-clara: #DDF1E7;
-  --cor-passo-info: #6B3FC4;
-  --cor-passo-info-clara: #EEE7FC;
-  --cor-passo-metricas: #A3440E;
-  --cor-passo-metricas-clara: #FDEADD;
-  --cor-passo-equipa: #2557D6;
-  --cor-passo-equipa-clara: #DFE8FC;
-  --cor-passo-quiz: #B0246A;
-  --cor-passo-quiz-clara: #FCE5F0;
-  --cor-passo-grafico: #0E6E86;
-  --cor-passo-grafico-clara: #DDF1F6;
+  --cor-escura: #172B4D;
 
   /* Tipografia */
   --letra-titulos: "Space Grotesk", system-ui, sans-serif;

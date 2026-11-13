@@ -1,86 +1,37 @@
 /* Shell do site (T2): cabeçalho, menu do percurso à esquerda (abre e
-   fecha) e título do passo. Paleta contida: fundo creme, superfícies
-   brancas, texto carvão, verde-floresta como cor da marca e amarelo
-   apagado só para realces. Sem gradientes, brilhos nem animações em ciclo.
+   fecha) e os passos do percurso seguidos, numa só página.
+   Tema: mistura de Jira e ClickUp. Do Jira vem a base calma (fundo
+   cinzento-claro liso, superfícies brancas, texto azul-ardósia, bordas
+   finas, etiquetas de estado); do ClickUp vem o violeta como cor de marca e
+   o degradê violeta → rosa, só em realces decorativos (nunca por trás de
+   texto). Os pares de texto passam AA (contraste no comentário).
    Carregado depois de style.css, que traz os estilos do protótipo v1. */
 
 :root {
-  --papel: #F4F7F3;
-  --papel-fim: #E3ECE4;
+  --papel: #F7F8F9;           /* fundo da página (Jira) */
   --superficie: #FFFFFF;
   --lateral: #FFFFFF;
-  --texto: #202522;
-  --texto-suave: #4A524D;
-  --texto-fraco: #626A65;     /* contraste 5,1:1 sobre o creme */
-  --divisor: #DDE1DA;
-  --divisor-forte: #C7CDC4;
-  --pairar: #F0F2EC;
-  --acento: #245C49;          /* verde-floresta: contraste 7,6:1 com branco */
-  --acento-escuro: #1A4537;
-  --acento-fundo: #E6EEE9;
-  --acento-linha: #B7CBBF;
-  --amarelo: #E6C66A;         /* só realces, sempre com texto escuro */
-  --amarelo-fundo: #F7EDCB;
-  --verde: var(--acento);
-  --sombra: none;
+  --texto: #172B4D;           /* azul-ardósia do Jira: 14,7:1 sobre branco */
+  --texto-suave: #44546F;     /* 6,8:1 */
+  --texto-fraco: #626F86;     /* 4,8:1 sobre o fundo */
+  --divisor: #DCDFE4;
+  --divisor-forte: #C1C7D0;
+  --pairar: #F1F2F4;
+  --acento: #5E44E0;          /* violeta (ClickUp), escurecido: 6,2:1 com branco */
+  --acento-escuro: #4C35C2;   /* 7,2:1 sobre o fundo do acento */
+  --acento-fundo: #F3F0FF;
+  --acento-linha: #CFC7FF;
+  --degrade: linear-gradient(90deg, #7B68EE 0%, #B36BE8 55%, #FD71AF 100%);
+  --amarelo: #F5CD47;         /* só realces, sempre com texto escuro */
+  --amarelo-fundo: #FFF7D6;
+  --verde: #216E4E;           /* «Concluído», como o verde de estado do Jira */
+  --verde-fundo: #DCFFF1;
+  --sombra: 0 1px 1px rgba(9, 30, 66, .25), 0 0 1px rgba(9, 30, 66, .31);
   --ease: cubic-bezier(.22, .8, .24, 1);
 }
 
-/* Fundo em degradê suave, de creme no topo para verde-salva em baixo.
-   Fica fixo ao ecrã, por isso não muda de tom com o tamanho da página.
-   Está no html para as manchas animadas (body::before e ::after) ficarem
-   por cima do degradê e por baixo do conteúdo. */
-html { background: linear-gradient(180deg, var(--papel) 0%, var(--papel-fim) 100%) fixed var(--papel); }
-body { min-height: 100vh; color: var(--texto); background: transparent; }
-
-/* Duas manchas de luz muito suaves que flutuam devagar atrás do conteúdo.
-   Sem «reduzir movimento» ficam paradas (regra geral no fim do ficheiro). */
-body::before, body::after {
-  content: ""; position: fixed; z-index: -1; pointer-events: none;
-  width: 60vmax; height: 60vmax; border-radius: 50%;
-}
-body::before {
-  top: -20vmax; right: -15vmax;
-  background: radial-gradient(circle, rgba(120, 170, 145, .20) 0%, rgba(120, 170, 145, 0) 65%);
-  animation: flutuar-a 18s ease-in-out infinite alternate;
-}
-body::after {
-  bottom: -25vmax; left: -10vmax;
-  background: radial-gradient(circle, rgba(36, 92, 73, .18) 0%, rgba(36, 92, 73, 0) 65%);
-  animation: flutuar-b 24s ease-in-out infinite alternate;
-}
-@keyframes flutuar-a { to { transform: translate(-18vmax, 22vmax) scale(1.15); } }
-@keyframes flutuar-b { to { transform: translate(22vmax, -16vmax) scale(.9); } }
-
-/* Fichas de tarefas a subir devagar pelo fundo, a rodar um pouco: lembram
-   o trabalho a fluir no quadro. Paradas, ficam espalhadas pelo ecrã. */
-.fundo { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.fundo i {
-  position: absolute; top: var(--y); left: var(--x);
-  width: var(--s); height: var(--s); border-radius: 22%;
-  background: var(--c); opacity: .85;
-  animation: subir var(--d) linear infinite;
-  animation-delay: var(--a);
-}
-.fundo i:nth-child(1)  { --x: 6%;  --y: 20vh; --s: 18px; --c: #CFE0D5; --d: 34s; --a: -4s; }
-.fundo i:nth-child(2)  { --x: 15%; --y: 70vh; --s: 12px; --c: #C3D8CB; --d: 28s; --a: -18s; }
-.fundo i:nth-child(3)  { --x: 24%; --y: 40vh; --s: 22px; --c: #DCE8DF; --d: 40s; --a: -9s; }
-.fundo i:nth-child(4)  { --x: 33%; --y: 85vh; --s: 10px; --c: #B7CBBF; --d: 26s; --a: -2s; }
-.fundo i:nth-child(5)  { --x: 42%; --y: 12vh; --s: 16px; --c: #C3D8CB; --d: 36s; --a: -25s; }
-.fundo i:nth-child(6)  { --x: 51%; --y: 55vh; --s: 20px; --c: #CFE0D5; --d: 31s; --a: -12s; }
-.fundo i:nth-child(7)  { --x: 60%; --y: 30vh; --s: 11px; --c: #B7CBBF; --d: 24s; --a: -7s; }
-.fundo i:nth-child(8)  { --x: 68%; --y: 78vh; --s: 24px; --c: #DCE8DF; --d: 42s; --a: -30s; }
-.fundo i:nth-child(9)  { --x: 76%; --y: 45vh; --s: 14px; --c: #C3D8CB; --d: 29s; --a: -15s; }
-.fundo i:nth-child(10) { --x: 84%; --y: 15vh; --s: 19px; --c: #CFE0D5; --d: 37s; --a: -21s; }
-.fundo i:nth-child(11) { --x: 92%; --y: 62vh; --s: 12px; --c: #B7CBBF; --d: 27s; --a: -5s; }
-.fundo i:nth-child(12) { --x: 97%; --y: 35vh; --s: 17px; --c: #DCE8DF; --d: 33s; --a: -27s; }
-.fundo i:nth-child(13) { --x: 38%; --y: 95vh; --s: 15px; --c: #CFE0D5; --d: 30s; --a: -10s; }
-.fundo i:nth-child(14) { --x: 72%; --y: 5vh;  --s: 13px; --c: #C3D8CB; --d: 25s; --a: -20s; }
-/* Sobe de baixo do ecrã até acima dele; a posição em --y só conta parada. */
-@keyframes subir {
-  from { transform: translateY(calc(110vh - var(--y))) rotate(0deg); }
-  to   { transform: translateY(calc(-10vh - var(--y) - 40px)) rotate(240deg); }
-}
+html { background: var(--papel); }
+body { min-height: 100vh; color: var(--texto); background: var(--papel); }
 .site-largura { width: 100%; max-width: 1200px; margin: 0 auto; padding-inline: 32px; }
 :focus-visible { outline: 2px solid var(--acento-escuro); outline-offset: 2px; border-radius: 4px; }
 main:focus, h1[tabindex="-1"]:focus { outline: none; }
@@ -173,9 +124,7 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .ecra h1 { font: 700 clamp(26px, 3vw, 32px)/1.15 Inter, system-ui, sans-serif; letter-spacing: -.02em; color: var(--texto); }
 /* Etiqueta pequena por cima do título (ex.: «APRENDER • MÉTRICAS») */
 .ecra__etiqueta { margin-bottom: -16px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
-/* Transição entre passos */
-.ecra--entrar { animation: entrar .35s var(--ease) both; }
-@keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
 
 /* Menu aberto: o conteúdo encosta-se a ele, nunca fica tapado */
 @media (min-width: 601px) {
@@ -236,60 +185,59 @@ main:focus, h1[tabindex="-1"]:focus { outline: none; }
 .progresso__barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--acento); transition: width .4s var(--ease); }
 @media (prefers-reduced-motion: reduce) { .progresso__barra span { transition: none; } }
 
-/* ---------- Cor de cada passo (fluxo contínuo e mais cor) ---------- */
-/* Cada passo tem a sua cor (theme/tokens.css). O body leva o passo atual em
-   data-passo (main.ts) e os itens do menu e o botão «Seguinte» levam o
-   passo a que se referem; aqui só se escolhem as variáveis --passo e
-   --passo-clara, que o resto do CSS usa. */
-:root, [data-passo="simular"] { --passo: var(--cor-passo-simular); --passo-clara: var(--cor-passo-simular-clara); }
-[data-passo="inicio"] { --passo: var(--cor-passo-inicio); --passo-clara: var(--cor-passo-inicio-clara); }
-[data-passo="info"] { --passo: var(--cor-passo-info); --passo-clara: var(--cor-passo-info-clara); }
-[data-passo="metricas"] { --passo: var(--cor-passo-metricas); --passo-clara: var(--cor-passo-metricas-clara); }
-[data-passo="equipa"] { --passo: var(--cor-passo-equipa); --passo-clara: var(--cor-passo-equipa-clara); }
-[data-passo="quiz"] { --passo: var(--cor-passo-quiz); --passo-clara: var(--cor-passo-quiz-clara); }
-[data-passo="grafico"] { --passo: var(--cor-passo-grafico); --passo-clara: var(--cor-passo-grafico-clara); }
+/* ---------- Tema Jira + ClickUp ---------- */
+/* Cabeçalho: branco, com um fio do degradê ClickUp por baixo. */
+.site-topo { border-bottom: 0; box-shadow: 0 1px 0 var(--divisor); }
+.site-topo::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 3px; background: var(--degrade); }
+.logo__icone { background: var(--degrade); }
 
-/* A mancha de luz de cima ganha a cor do passo atual. */
-body::before { background: radial-gradient(circle, color-mix(in srgb, var(--passo) 24%, transparent) 0%, transparent 65%); }
-
-/* Fichas do fundo nas cores dos passos, em tons claros. */
-.fundo i:nth-child(5n+1) { --c: var(--cor-passo-simular-clara); }
-.fundo i:nth-child(5n+2) { --c: var(--cor-passo-info-clara); }
-.fundo i:nth-child(5n+3) { --c: var(--cor-passo-metricas-clara); }
-.fundo i:nth-child(5n+4) { --c: var(--cor-passo-equipa-clara); }
-.fundo i:nth-child(5n)   { --c: var(--cor-passo-quiz-clara); }
-
-/* Menu: cada passo com o ícone num quadrado da sua cor. */
-.etapa__icone {
-  width: 32px; height: 32px; border-radius: 9px;
-  background: var(--passo-clara); color: var(--passo);
+/* Menu: como a barra lateral do Jira. Ícones cinzentos num quadrado
+   discreto; o passo à vista fica violeta. */
+.lateral { background: var(--lateral); }
+.etapa__icone { width: 32px; height: 32px; border-radius: 6px; background: var(--pairar); color: var(--texto-suave); }
+.etapa__botao { border-radius: 4px; }
+.etapa__botao:hover .etapa__icone { color: var(--acento); }
+.etapa--atual .etapa__botao { background: var(--acento-fundo); color: var(--acento-escuro); box-shadow: inset 3px 0 0 var(--acento); }
+.etapa--atual .etapa__icone { background: var(--acento); color: #FFFFFF; }
+.etapa--concluida .etapa__icone { background: var(--verde-fundo); color: var(--verde); }
+.etapa--concluida .etapa__info { color: var(--verde); }
+/* Estado como «lozenge» do Jira: maiúsculas pequenas num rótulo. */
+.etapa__info:not(:empty) {
+  align-self: flex-start; margin-top: 2px; padding: 0 4px; border-radius: 3px;
+  font-size: 11px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase;
+  background: var(--pairar); color: var(--texto-suave);
 }
-.etapa__botao:hover .etapa__icone { color: var(--passo); transform: scale(1.06); }
-.etapa--concluida .etapa__icone { color: var(--passo); }
-.etapa--atual .etapa__botao { background: var(--passo-clara); color: var(--texto); box-shadow: inset 3px 0 0 var(--passo); }
-.etapa--atual .etapa__icone { background: var(--passo); color: var(--cor-texto-invertido); }
-.etapa--atual .etapa__info { color: var(--passo); font-weight: 600; }
-@keyframes acender {
-  from { background: transparent; box-shadow: inset 0 0 0 var(--passo); }
-  to { background: var(--passo-clara); box-shadow: inset 3px 0 0 var(--passo); }
-}
+.etapa--atual .etapa__info { background: var(--acento-linha); color: var(--acento-escuro); }
+.etapa--concluida .etapa__info { background: var(--verde-fundo); }
+.progresso__barra { background: var(--pairar); }
+.progresso__barra span { background: var(--degrade); }
 
-/* Barra de progresso com as cores do percurso todo. */
-.progresso__barra span {
-  background: linear-gradient(90deg, var(--cor-passo-inicio), var(--cor-passo-simular), var(--cor-passo-info), var(--cor-passo-metricas), var(--cor-passo-equipa), var(--cor-passo-quiz));
+/* Passos: cada um é um cartão branco com sombra leve do Jira, seguidos
+   na página. A etiqueta é violeta e o título leva o fio do degradê. */
+.ecra__titulo::after {
+  content: ""; display: block; width: 48px; height: 4px; margin-top: 14px;
+  border-radius: 999px; background: var(--degrade);
 }
+.ecra__etiqueta { color: var(--acento); }
 
-/* Título do passo: etiqueta e traço na cor do passo. */
-.ecra__etiqueta { color: var(--passo); }
-#titulo-passo::after {
-  content: ""; display: block; width: 56px; height: 5px; margin-top: 14px;
-  border-radius: 999px; background: var(--passo);
-}
+/* Botões principais: violeta sólido (texto branco 6,2:1). */
+.botao, .inicio__comecar { background: var(--acento); color: #FFFFFF; }
+.botao:hover, .inicio__comecar:hover { background: var(--acento-escuro); }
+a { color: #0C66E4; }
 
 /* Ecrã do dilema (style.css): os cartões e o quadro foram pensados para
-   fundo escuro e quase não se viam. Passam a usar a cor do passo. */
-.cartao-opcao { background: var(--superficie); border: 1px solid var(--divisor-forte); }
-.cartao-opcao:hover { background: var(--passo-clara); border-color: var(--passo); }
-.cartao-opcao--selecionado, .cartao-opcao--selecionado:hover { background: var(--passo-clara); border-color: var(--passo); box-shadow: 0 0 0 1px var(--passo); }
-.kanban-quadro { background: var(--superficie); border-color: var(--divisor); }
-.col-curso h3 { color: var(--cor-passo-equipa); }
+   fundo escuro e quase não se viam. */
+.cartao-opcao { background: var(--superficie); border: 1px solid var(--divisor-forte); border-radius: 8px; }
+.cartao-opcao:hover { background: var(--pairar); border-color: var(--acento); }
+.cartao-opcao--selecionado, .cartao-opcao--selecionado:hover { background: var(--acento-fundo); border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento); }
+.kanban-quadro { background: var(--pairar); border-color: var(--divisor); border-radius: 8px; }
+.col-curso h3 { color: #0055CC; }
+
+/* ---------- Passos seguidos (scroll contínuo) ---------- */
+/* Todos os passos estão na mesma página, separados por um fio e espaço.
+   Ao saltar para um passo, o título fica logo abaixo do cabeçalho. */
+.ecra { scroll-margin-top: -20px; } /* com o scroll-padding-top do html (80px) fica logo abaixo do cabeçalho */
+.ecra + .ecra { margin-top: 72px; padding-top: 72px; border-top: 1px solid var(--divisor); }
+@media (max-width: 600px) {
+  .ecra + .ecra { margin-top: 48px; padding-top: 48px; }
+}

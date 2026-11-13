@@ -9,59 +9,45 @@
   :root {
     color-scheme: dark;
 
-    /* shell.css */
-    --papel: #121613;
-    --papel-fim: #0D110F;
-    --superficie: #1B201D;
-    --lateral: #1B201D;
-    --texto: #E6EBE7;           /* 13,7:1 sobre a superfície */
-    --texto-suave: #BAC3BD;     /* 9,1:1 */
-    --texto-fraco: #97A19A;     /* 6,2:1 */
-    --divisor: #2C332F;
-    --divisor-forte: #3C4540;
-    --pairar: #242A26;
-    --acento: #7CC4A6;          /* 8,1:1 sobre a superfície */
-    --acento-escuro: #A6DCC4;   /* 8,0:1 sobre o fundo do acento */
-    --acento-fundo: #1F3A30;
-    --acento-linha: #34584A;
-    --amarelo: #D9B95C;         /* só realces, com texto escuro por cima */
-    --amarelo-fundo: #3A3220;
+    /* shell.css: modo escuro do Jira, com o violeta mais claro */
+    --papel: #1D2125;
+    --superficie: #22272B;
+    --lateral: #22272B;
+    --texto: #DEE4EA;           /* 12,3:1 sobre a superfície */
+    --texto-suave: #B6C2CF;     /* 8,3:1 */
+    --texto-fraco: #8C9BAB;     /* 5,7:1 sobre o fundo */
+    --divisor: #38414A;
+    --divisor-forte: #454F59;
+    --pairar: #2C333A;
+    --acento: #9F8FEF;          /* 5,5:1 sobre a superfície */
+    --acento-escuro: #B8ACF6;   /* 7,2:1 sobre o fundo do acento */
+    --acento-fundo: #2B2442;
+    --acento-linha: #3F3570;
+    --amarelo: #E2B203;
+    --amarelo-fundo: #3D3420;
+    --verde: #7EE2B8;
+    --verde-fundo: #1C3329;
+    --sombra: 0 0 0 1px #38414A;
 
     /* style.css (protótipo v1) */
-    --fundo: #121613;
-    --branco: #1B201D;
-    --tinta: #E6EBE7;
-    --suave: #A7B0AA;           /* 7,4:1 */
-    --linha: #2C332F;
-    --borda: #3C4540;
-    --azul: #8FB0FF;            /* 7,7:1 */
-    --azul-escuro: #B5CBFF;
-    --azul-claro: #1E2A4A;
-    --laranja: #F5A25D;
-    --laranja-texto: #FFC9A3;   /* 9,6:1 sobre o laranja-claro */
-    --laranja-claro: #3B2618;
-    --escuro: #2A3330;
-
-    /* Cor de cada passo: tons claros sobre fundos escuros (>= 7:1) */
-    --cor-passo-inicio: #7DD3E8;
-    --cor-passo-inicio-clara: #173540;
-    --cor-passo-simular: #7CC4A6;
-    --cor-passo-simular-clara: #1F3A30;
-    --cor-passo-info: #BFA6F5;
-    --cor-passo-info-clara: #2C2445;
-    --cor-passo-metricas: #F5A25D;
-    --cor-passo-metricas-clara: #3B2618;
-    --cor-passo-equipa: #8FB0FF;
-    --cor-passo-equipa-clara: #1E2A4A;
-    --cor-passo-quiz: #F28DBE;
-    --cor-passo-quiz-clara: #3E1D2E;
-    --cor-passo-grafico: #7DD3E8;
-    --cor-passo-grafico-clara: #173540;
+    --fundo: #1D2125;
+    --branco: #22272B;
+    --tinta: #DEE4EA;
+    --suave: #9FADBC;
+    --linha: #38414A;
+    --borda: #5D6B7A;
+    --azul: #579DFF;            /* 5,5:1 */
+    --azul-escuro: #85B8FF;
+    --azul-claro: #1C2B41;
+    --laranja: #FEA362;
+    --laranja-texto: #FEC195;
+    --laranja-claro: #3E2A1B;
+    --escuro: #2C333A;
   }
 
-  /* Botões com a cor do passo por fundo: texto escuro, porque a cor é clara */
-  .navegacao-passos__seguinte, .etapa--atual .etapa__icone, .inicio__comecar { color: #0D110F; }
-  .navegacao-passos__icone { background: rgba(13, 17, 15, .14); }
+  /* Botões com fundo violeta claro: texto escuro */
+  .etapa--atual .etapa__icone, .inicio__comecar, .botao { color: #1D2125; }
+  .col-curso h3 { color: #85B8FF; }
 
   /* Texto escrito à mão em style.css, pensado para fundo claro */
   .lead, .cartao p, .legenda { color: var(--texto-suave); }
@@ -73,7 +59,6 @@
   .tarefa--feita, .mini__caixa--cinza, .msg--bot { background: #242A26; }
   .mini__caixa--laranja { background: var(--laranja-claro); }
   .coluna--meio, .tarefa--curso { border-color: #3F5590; }
-  .botao { color: #0D110F; }
   .botao--escuro, .pilula.ativa, .pessoas span, .chat-botao, .chat__topo { color: #F3F5F4; }
   .msg--eu, .chat__form button { color: #0D110F; }
   .chat__form input { background: var(--superficie); color: var(--texto); }
@@ -81,11 +66,6 @@
   /* shell.css: «Saltar para o conteúdo» tinha texto branco sobre a cor do texto */
   .saltar { color: var(--papel); }
 
-  /* Fichas a flutuar no fundo: tons de verde escuro, mais apagados */
-  .fundo i { opacity: .5; }
-  .fundo i:nth-child(3n)   { --c: #1F3A30; }
-  .fundo i:nth-child(3n+1) { --c: #24443A; }
-  .fundo i:nth-child(3n+2) { --c: #1A3129; }
 
   /* metricas.css: texto escrito à mão sobre o amarelo */
   .cenario__aviso { color: #F2DFA6; }
