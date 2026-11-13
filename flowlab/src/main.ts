@@ -143,6 +143,9 @@ percurso.subscrever((estado: EstadoPercurso) => {
 function atualizarAncora(estado: EstadoPercurso): void {
   const ancora = `#${PASSOS[estado.passoAtual].id}`;
   if (location.hash === ancora) return;
+  // Ao abrir o site no início, o endereço fica sem âncora: com «#inicio» o
+  // browser descia até ela quando a página acabasse de carregar.
+  if (location.hash === '' && estado.passoAtual === 0) return;
   if (vemDoScroll || location.hash === '') history.replaceState(null, '', ancora);
   else history.pushState(null, '', ancora);
 }

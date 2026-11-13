@@ -9,7 +9,7 @@
   :root {
     color-scheme: dark;
 
-    /* shell.css: modo escuro do Jira, com o violeta mais claro */
+    /* shell.css: modo escuro do Jira */
     --papel: #1D2125;
     --superficie: #22272B;
     --lateral: #22272B;
@@ -19,10 +19,11 @@
     --divisor: #38414A;
     --divisor-forte: #454F59;
     --pairar: #2C333A;
-    --acento: #9F8FEF;          /* 5,5:1 sobre a superfície */
-    --acento-escuro: #B8ACF6;   /* 7,2:1 sobre o fundo do acento */
-    --acento-fundo: #2B2442;
-    --acento-linha: #3F3570;
+    --acento: #579DFF;          /* 5,5:1 sobre a superfície */
+    --acento-escuro: #85B8FF;   /* 6,7:1 sobre o fundo do acento */
+    --acento-fundo: #1C2B41;
+    --acento-linha: #09326C;
+    --degrade: linear-gradient(90deg, #579DFF 0%, #85B8FF 100%);
     --amarelo: #E2B203;
     --amarelo-fundo: #3D3420;
     --verde: #7EE2B8;
@@ -45,7 +46,7 @@
     --escuro: #2C333A;
   }
 
-  /* Botões com fundo violeta claro: texto escuro */
+  /* Botões com fundo azul claro: texto escuro */
   .etapa--atual .etapa__icone, .inicio__comecar, .botao { color: #1D2125; }
   .col-curso h3 { color: #85B8FF; }
 
