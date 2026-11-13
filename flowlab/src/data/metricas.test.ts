@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, cenarioPersonalizado, conclusao, numero, situacao, throughput } from './metricas';
+import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, TOTAL_CENARIOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, conclusao, numero, situacao, throughput } from './metricas';
 
 describe('METRICAS', () => {
   it('são as três do Sketch 2, cada uma com os textos todos', () => {
@@ -118,5 +118,43 @@ describe('numero', () => {
     expect(numero(13.27)).toBe('13,3');
     expect(throughput(1.0304)).toBe('1,03');
     expect(throughput(2)).toBe('2');
+  });
+});
+
+describe('texto de abertura e controlo de «O teu cenário»', () => {
+  it('o número de cenários do texto é o do contador «Cenário 1 de N»', () => {
+    expect(TOTAL_CENARIOS).toBe(CENARIOS.length + 1);
+    expect(TEXTOS.intro).toContain(`${TOTAL_CENARIOS} cenários`);
+    expect(TEXTOS.intro).not.toContain('três cenários');
+    for (const c of CENARIOS) expect(TEXTOS.intro).toContain(String(c.limiteWip));
+  });
+
+  it('o intervalo permitido está escrito e o valor inicial cabe nele', () => {
+    expect(TEXTOS.experimenta.ajuda).toContain(`${WIP_MINIMO} a ${WIP_MAXIMO}`);
+    expect(TEXTOS.experimenta.erro).toContain(`${WIP_MINIMO} a ${WIP_MAXIMO}`);
+    expect(WIP_PROPRIO_INICIAL).toBeGreaterThanOrEqual(WIP_MINIMO);
+    expect(WIP_PROPRIO_INICIAL).toBeLessThanOrEqual(WIP_MAXIMO);
+    // O cenário inicial não repete nenhum dos cenários já preparados.
+    expect(CENARIOS.map((c) => c.limiteWip)).not.toContain(WIP_PROPRIO_INICIAL);
+  });
+});
+
+describe('conclusão final', () => {
+  it('compara os três cenários com os números do simulador', () => {
+    const { destaque, detalhe } = TEXTOS.fecho(CENARIOS);
+    expect(destaque).toContain(`WIP ${PARAMETROS.pessoas}`);
+    for (const c of CENARIOS) {
+      expect(detalhe).toContain(`WIP ${c.limiteWip}:`);
+      expect(detalhe).toContain(`${throughput(c.throughput)} `);
+      expect(detalhe).toContain(numero(c.leadTime));
+    }
+  });
+
+  it('só afirma «entrega mais e mais depressa» se os números o mostrarem', () => {
+    const igual = CENARIOS.find((c) => c.limiteWip === PARAMETROS.pessoas)!;
+    for (const c of CENARIOS.filter((x) => x !== igual)) {
+      expect(igual.throughput).toBeGreaterThan(c.throughput);
+      expect(igual.leadTime).toBeLessThan(c.leadTime);
+    }
   });
 });

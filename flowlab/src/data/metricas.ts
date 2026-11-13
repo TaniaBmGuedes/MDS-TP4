@@ -87,6 +87,12 @@ export const CENARIOS: readonly Cenario[] = [...CENARIOS_WIP]
 export const WIP_MINIMO = 1;
 export const WIP_MAXIMO = 15;
 
+/** Limite de WIP com que abre «O teu cenário», até a pessoa escolher outro. */
+export const WIP_PROPRIO_INICIAL = 6;
+
+/** Quantos cenários há no ecrã: os do simulador mais «O teu cenário». */
+export const TOTAL_CENARIOS = CENARIOS.length + 1;
+
 /** Um cenário com o limite de WIP que a pessoa escolheu (fica entre o mínimo e o máximo). */
 export function cenarioPersonalizado(wip: number): Cenario {
   const limite = Math.min(WIP_MAXIMO, Math.max(WIP_MINIMO, Math.round(wip)));
@@ -190,8 +196,27 @@ export const METRICAS: readonly Metrica[] = [
   },
 ];
 
+/** «2, 4 e 12» */
+function listaPorExtenso(valores: number[]): string {
+  if (valores.length < 2) return valores.join('');
+  return `${valores.slice(0, -1).join(', ')} e ${valores[valores.length - 1]}`;
+}
+
+function diasPorExtenso(valor: number): string {
+  return `${numero(valor)} ${numero(valor) === '1' ? 'dia' : 'dias'}`;
+}
+
 export const TEXTOS = {
-  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas, em três cenários do simulador. Quando a simulação de um cenário acaba, passa sozinho ao seguinte.`,
+  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${TOTAL_CENARIOS} cenários do simulador: ${CENARIOS.length} já preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e o cenário ${TOTAL_CENARIOS}, «O teu cenário», que crias tu. Quando a simulação de um cenário acaba, passa sozinho ao seguinte.`,
+  experimenta: {
+    rotulo: 'Cria o teu cenário: limite de WIP',
+    ajuda: `Escolhe um valor de ${WIP_MINIMO} a ${WIP_MAXIMO}. O resultado aparece no cenário ${TOTAL_CENARIOS}.`,
+    ver: 'Ver o meu cenário',
+    menos: 'Diminuir o limite de WIP',
+    mais: 'Aumentar o limite de WIP',
+    erro: `Escreve um número inteiro de ${WIP_MINIMO} a ${WIP_MAXIMO}.`,
+  },
+  fechoTitulo: 'O que concluímos',
   ilustrativa: `Animação ilustrativa: os ${PARAMETROS.dias} dias do simulador, arredondados a tarefas inteiras.`,
   perceber: 'Perceber as métricas',
   littleRotulo: 'Lei de Little',
@@ -220,5 +245,26 @@ export const TEXTOS = {
     `Com a fronteira só em «Em curso», vale o mesmo: tempo a trabalhar ≈ WIP ÷ throughput, ou seja ${numero(c.tempoTrabalho)} dias ≈ ${numero(c.emCurso)} ÷ ${throughput(c.throughput)}.`,
   littleInstavel: (c: Cenario) =>
     `Atenção: entram ${PARAMETROS.chegadasPorDia} por dia e saem ${throughput(c.throughput)}. A fila não pára de crescer, por isso estes números são só médias dos ${PARAMETROS.dias} dias simulados.`,
-  fecho: 'Neste modelo, uma tarefa por pessoa deu mais entregas e menos espera.',
+  /**
+   * A conclusão final, depois dos cenários: compara os três do simulador com
+   * os números de cada um. Se o modelo mudar (T15), os números mudam com ele.
+   */
+  fecho: (cenarios: readonly Cenario[]): { destaque: string; detalhe: string } => {
+    const { pessoas } = PARAMETROS;
+    const igual = cenarios.find((c) => c.limiteWip === pessoas);
+    const baixo = cenarios.find((c) => c.limiteWip < pessoas);
+    const alto = [...cenarios].reverse().find((c) => c.limiteWip > pessoas);
+    if (!igual || !baixo || !alto) {
+      return {
+        destaque: 'Uma tarefa por pessoa entrega mais e mais depressa.',
+        detalhe: 'Limitar o WIP não é fazer menos: é acabar mais depressa.',
+      };
+    }
+    const linha = (c: Cenario): string =>
+      `WIP ${c.limiteWip}: ${tarefasPorDia(c.throughput)} por dia, ${diasPorExtenso(c.leadTime)} por tarefa`;
+    return {
+      destaque: `Uma tarefa por pessoa (WIP ${igual.limiteWip}) entrega mais e mais depressa.`,
+      detalhe: `${linha(igual)}. ${linha(baixo)}, com pessoas paradas. ${linha(alto)}, com tarefas a mais. Limitar o WIP não é fazer menos: é acabar mais depressa.`,
+    };
+  },
 };

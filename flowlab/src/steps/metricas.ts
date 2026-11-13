@@ -4,8 +4,11 @@
 //    animação dos 15 dias do simulador com a mesma equipa de 4 pessoas, a
 //    faixa com as três métricas e a conclusão. Passam sozinhos ao fim de um
 //    minuto; param com o rato ou o foco lá dentro e com a aba escondida.
-// 3. Duplo clique no número do WIP (no título) deixa escrever outro limite:
-//    vira mais um cenário, calculado pelo simulador, e fica guardado.
+// 3. O último cenário, «O teu cenário», está sempre lá. Um controlo visível
+//    (− / + e um campo, de 1 a 15) escolhe o limite de WIP; o simulador
+//    calcula o cenário e o limite fica guardado. O duplo clique no número do
+//    WIP, no título, continua a funcionar como atalho.
+// 4. Por baixo dos cenários, a conclusão final compara-os com os números.
 import './metricas.css';
 import {
   CENARIOS,
@@ -14,6 +17,7 @@ import {
   TEXTOS,
   WIP_MAXIMO,
   WIP_MINIMO,
+  WIP_PROPRIO_INICIAL,
   cenarioPersonalizado,
   conclusao,
   numero,
@@ -336,6 +340,86 @@ function criarNumeroWip(valor: number, aoMudar: (wip: number) => void): HTMLElem
   return numeroWip;
 }
 
+/**
+ * O controlo visível de «O teu cenário»: − / + e um campo com o limite de WIP,
+ * o intervalo escrito e um botão. Funciona com rato e com teclado (Enter).
+ */
+function criarExperimenta(aoEscolher: (wip: number) => void): {
+  elemento: HTMLFormElement;
+  sincronizar: (wip: number) => void;
+} {
+  const T = TEXTOS.experimenta;
+  const form = el('form', 'experimenta');
+  form.noValidate = true;
+
+  const rotulo = el('label', 'experimenta__rotulo', T.rotulo);
+  rotulo.htmlFor = 'wip-proprio';
+
+  const menos = el('button', 'experimenta__passo', '−');
+  menos.type = 'button';
+  menos.setAttribute('aria-label', T.menos);
+  const campo = el('input', 'experimenta__campo');
+  campo.id = 'wip-proprio';
+  campo.type = 'number';
+  campo.inputMode = 'numeric';
+  campo.min = String(WIP_MINIMO);
+  campo.max = String(WIP_MAXIMO);
+  campo.step = '1';
+  campo.setAttribute('aria-describedby', 'wip-proprio-ajuda');
+  const mais = el('button', 'experimenta__passo', '+');
+  mais.type = 'button';
+  mais.setAttribute('aria-label', T.mais);
+  const ver = el('button', 'experimenta__ver', T.ver);
+  ver.type = 'submit';
+
+  const linha = el('div', 'experimenta__linha');
+  linha.append(menos, campo, mais, ver);
+
+  const ajuda = el('p', 'experimenta__ajuda', T.ajuda);
+  ajuda.id = 'wip-proprio-ajuda';
+  const erro = el('p', 'experimenta__erro');
+  erro.setAttribute('role', 'status');
+  form.append(rotulo, linha, ajuda, erro);
+
+  let atual = WIP_PROPRIO_INICIAL;
+  const valido = (n: number): boolean => Number.isInteger(n) && n >= WIP_MINIMO && n <= WIP_MAXIMO;
+
+  function sincronizar(wip: number): void {
+    atual = wip;
+    campo.value = String(wip);
+    campo.removeAttribute('aria-invalid');
+    erro.textContent = '';
+    menos.setAttribute('aria-disabled', String(wip <= WIP_MINIMO));
+    mais.setAttribute('aria-disabled', String(wip >= WIP_MAXIMO));
+  }
+
+  // − e + partem do número que está no campo (se for válido) e aplicam logo.
+  function passo(delta: number): void {
+    const escrito = Number(campo.value);
+    const base = campo.value.trim() !== '' && valido(escrito) ? escrito : atual;
+    const novo = base + delta;
+    if (novo < WIP_MINIMO || novo > WIP_MAXIMO) return;
+    aoEscolher(novo);
+  }
+  menos.addEventListener('click', () => passo(-1));
+  mais.addEventListener('click', () => passo(1));
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const n = Number(campo.value);
+    if (campo.value.trim() === '' || !valido(n)) {
+      campo.setAttribute('aria-invalid', 'true');
+      erro.textContent = T.erro;
+      campo.focus();
+      return;
+    }
+    aoEscolher(n);
+  });
+
+  sincronizar(atual);
+  return { elemento: form, sincronizar };
+}
+
 /** O conteúdo de um diapositivo: cabeçalho, animação, métricas e conclusão. */
 function criarDiapositivo(
   c: Cenario,
@@ -375,8 +459,21 @@ function criarDiapositivo(
   return { elemento: d, palco, passo };
 }
 
+/** A conclusão final: visível por baixo dos cenários, sem ser preciso procurá-la. */
+function criarFecho(): HTMLElement {
+  const { destaque, detalhe } = TEXTOS.fecho(CENARIOS);
+  const secao = el('section', 'fecho');
+  secao.setAttribute('aria-labelledby', 'fecho-titulo');
+  const titulo = el('h2', 'fecho__titulo', TEXTOS.fechoTitulo);
+  titulo.id = 'fecho-titulo';
+  secao.append(titulo, el('p', 'fecho__destaque', destaque), el('p', 'fecho__detalhe', detalhe));
+  return secao;
+}
+
 export const ecraMetricas: Ecra = (contentor) => {
   contentor.append(el('p', 'metricas__intro', TEXTOS.intro));
+  const experimenta = criarExperimenta((wip) => usarWip(wip, true));
+  contentor.append(experimenta.elemento);
 
   const licao = el('section', 'licao');
   licao.setAttribute('aria-roledescription', 'carrossel');
@@ -389,7 +486,7 @@ export const ecraMetricas: Ecra = (contentor) => {
   const diapositivos = CENARIOS.map((c, i) => criarDiapositivo(c, `cenario-${i}`, (wip) => usarWip(wip, true)));
 
   licao.append(janela);
-  contentor.append(licao);
+  contentor.append(licao, criarFecho());
 
   // ---------- Tempo ----------
   let atual = 0;
@@ -435,9 +532,10 @@ export const ecraMetricas: Ecra = (contentor) => {
     janela.style.height = `${diapositivos[atual].elemento.offsetHeight}px`;
   }
 
-  function usarWip(wip: number, mostrarJa: boolean): void {
+  function usarWip(wip: number, mostrarJa: boolean, guardar = true): void {
     const c = cenarioPersonalizado(wip);
-    guardarWip(c.limiteWip);
+    if (guardar) guardarWip(c.limiteWip);
+    experimenta.sincronizar(c.limiteWip);
     const novo = criarDiapositivo(c, 'cenario-teu', (n) => usarWip(n, true));
     if (diapositivos.length > CENARIOS.length) diapositivos[CENARIOS.length] = novo;
     else diapositivos.push(novo);
@@ -478,8 +576,9 @@ export const ecraMetricas: Ecra = (contentor) => {
   }
 
   montar();
+  // «O teu cenário» está sempre lá: com o limite guardado ou com o inicial.
   const guardado = lerWipGuardado();
-  if (guardado !== null) usarWip(guardado, false);
+  usarWip(guardado ?? WIP_PROPRIO_INICIAL, false, guardado !== null);
   irPara(0);
   requestAnimationFrame(tique);
 };
