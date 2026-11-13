@@ -6,7 +6,7 @@
 import './style.css';
 import './shell.css';
 import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
-import { ativarCursor, ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
+import { ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
 import { PASSOS, indicePorAncora } from './data/passos';
@@ -75,10 +75,9 @@ PASSOS.forEach((_, i) => desenharPasso(i));
 // Fontes (T20): no fim da página, depois do último passo.
 app.after(criarFontes());
 animarAoAparecer(seccoes);
-// Efeitos «wow» (H31): ecrã de carregamento, cursor e cartões com inclinação.
-// Nenhum corre com «reduzir movimento»; o cursor e a inclinação só com rato.
+// Efeitos «wow» (H31): ecrã de carregamento e cartões com inclinação.
+// Nenhum corre com «reduzir movimento»; a inclinação só com rato.
 mostrarCarregamento();
-ativarCursor();
 ativarInclinacao();
 atualizarLeitura();
 window.addEventListener('resize', atualizarLeitura);

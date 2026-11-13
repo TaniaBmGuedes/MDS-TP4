@@ -1,9 +1,9 @@
 // Efeitos «wow» (SCRUM-137 · H31), inspirados no portefólio da equipa:
-// ecrã de carregamento, luz e anel que seguem o cursor, botões magnéticos,
-// cartões com inclinação 3D, palavras a subir e palavra a descodificar.
+// ecrã de carregamento, botões magnéticos, cartões com inclinação 3D,
+// palavras a subir e palavra a descodificar.
 //
 // Regras: com «reduzir movimento» nada disto corre e nada fica escondido;
-// o cursor, o magnetismo e a inclinação só existem com rato (pointer: fine).
+// o magnetismo e a inclinação só existem com rato (pointer: fine).
 import './efeitos.css';
 
 const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -80,58 +80,6 @@ export function mostrarCarregamento(): void {
   requestAnimationFrame(tique);
 }
 
-// ---------- Cursor: luz suave e anel ----------
-/** Elementos sobre os quais o anel cresce. */
-const INTERATIVOS = 'a, button, input, select, textarea, [role="button"], label';
-
-export function ativarCursor(): void {
-  if (semMovimento() || !comRato.matches) return;
-
-  const luz = document.createElement('div');
-  luz.className = 'cursor-luz';
-  luz.setAttribute('aria-hidden', 'true');
-  const anel = document.createElement('div');
-  anel.className = 'cursor-anel';
-  anel.setAttribute('aria-hidden', 'true');
-  document.body.append(luz, anel);
-  document.documentElement.classList.add('com-cursor');
-
-  // O anel e a luz seguem o rato com atraso (interpolação a cada frame).
-  let alvoX = -500;
-  let alvoY = -500;
-  let anelX = alvoX;
-  let anelY = alvoY;
-  let luzX = alvoX;
-  let luzY = alvoY;
-
-  window.addEventListener(
-    'pointermove',
-    (e) => {
-      if (e.pointerType !== 'mouse') return;
-      alvoX = e.clientX;
-      alvoY = e.clientY;
-      const sobre = e.target instanceof Element && e.target.closest(INTERATIVOS) !== null;
-      anel.classList.toggle('cursor-anel--sobre', sobre);
-    },
-    { passive: true },
-  );
-  document.addEventListener('pointerleave', () => anel.classList.add('cursor-anel--fora'));
-  document.addEventListener('pointerenter', () => anel.classList.remove('cursor-anel--fora'));
-  window.addEventListener('pointerdown', () => anel.classList.add('cursor-anel--carregar'));
-  window.addEventListener('pointerup', () => anel.classList.remove('cursor-anel--carregar'));
-
-  function tique(): void {
-    anelX += (alvoX - anelX) * 0.25;
-    anelY += (alvoY - anelY) * 0.25;
-    luzX += (alvoX - luzX) * 0.08;
-    luzY += (alvoY - luzY) * 0.08;
-    anel.style.transform = `translate3d(${anelX}px, ${anelY}px, 0) translate(-50%, -50%)`;
-    luz.style.transform = `translate3d(${luzX}px, ${luzY}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(tique);
-  }
-  requestAnimationFrame(tique);
-}
-
 // ---------- Magnético ----------
 /** O botão inclina-se para o rato e volta ao sítio quando ele sai. */
 export function tornarMagnetico(elemento: HTMLElement, forca = 0.3): void {
@@ -150,7 +98,7 @@ export function tornarMagnetico(elemento: HTMLElement, forca = 0.3): void {
 }
 
 // ---------- Inclinação 3D ----------
-/** Cartões que se inclinam para o rato, com um brilho por baixo dele. */
+/** Cartões que se inclinam para o rato. */
 const INCLINAVEIS = '.inicio__item, .cartao-opcao, .regra, .kanban-quadro, .quadro-vivo';
 const INCLINACAO_MAX = 8;
 
@@ -177,8 +125,6 @@ export function ativarInclinacao(): void {
       const r = cartao.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width;
       const py = (e.clientY - r.top) / r.height;
-      cartao.style.setProperty('--mx', `${px * 100}%`);
-      cartao.style.setProperty('--my', `${py * 100}%`);
       const ry = (px - 0.5) * INCLINACAO_MAX * 2;
       const rx = -(py - 0.5) * INCLINACAO_MAX * 2;
       cartao.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
