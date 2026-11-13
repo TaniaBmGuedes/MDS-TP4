@@ -146,7 +146,8 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
     const largura = Math.round(area.clientWidth);
     if (!series || largura === 0) return;
     const estreito = largura < ESTREITO;
-    const altura = estreito ? 250 : 320;
+    // Em ecrãs baixos o gráfico encolhe, para o passo caber num ecrã.
+    const altura = estreito ? 250 : window.innerHeight < 1000 ? 230 : 320;
     desenho.setAttribute('width', String(largura));
     desenho.setAttribute('height', String(altura));
     desenho.setAttribute('viewBox', `0 0 ${largura} ${altura}`);

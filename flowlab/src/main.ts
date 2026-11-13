@@ -72,8 +72,10 @@ function desenharPasso(indice: number): void {
 
 PASSOS.forEach((_, i) => desenharPasso(i));
 
-// Fontes (T20): no fim da página, depois do último passo.
-app.after(criarFontes());
+// Fontes (T20): botão no cabeçalho que abre a janela com as referências.
+const fontes = criarFontes();
+document.querySelector('.site-topo__linha')?.append(fontes.botao);
+document.body.append(fontes.janela);
 animarAoAparecer(seccoes);
 // Efeitos «wow» (H31): ecrã de carregamento e cartões com inclinação.
 // Nenhum corre com «reduzir movimento»; a inclinação só com rato.

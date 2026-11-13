@@ -1,13 +1,13 @@
 /* Ecrã 7 · Quiz final (T17). Cores do tema em shell.css (e no modo escuro,
    em escuro.css); só o vermelho das respostas erradas é escrito aqui. */
 
-.quiz__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+.quiz__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); }
 
 .quiz {
   --errada: #B42318;
   --errada-fundo: #FDECEA;
   display: flex; flex-direction: column; gap: 18px;
-  max-width: 760px; padding: 24px;
+  padding: 24px;
   border: 1px solid var(--divisor); border-radius: 12px; background: var(--superficie);
 }
 
