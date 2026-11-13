@@ -3,7 +3,8 @@ import { PASSOS, indicePorAncora, textoProgresso, vizinhos } from './passos';
 
 describe('indicePorAncora', () => {
   it('encontra o passo pela âncora, com ou sem #', () => {
-    expect(indicePorAncora('#simular')).toBe(0);
+    expect(indicePorAncora('#inicio')).toBe(0);
+    expect(indicePorAncora('#simular')).toBe(1);
     expect(indicePorAncora('metricas')).toBe(3);
   });
 

@@ -67,8 +67,9 @@ function desenharPasso(estado: EstadoPercurso): void {
   seccao.classList.add('ecra--entrar');
   ECRAS[passo.id](seccao, passo, percurso);
   // Fluxo contínuo: no fim do ecrã, ir para o passo anterior ou seguinte sem
-  // passar pelo menu. A cor do passo atual vai para o body (shell.css).
-  seccao.append(criarNavegacaoPassos(estado.passoAtual, percurso));
+  // passar pelo menu. A introdução não precisa: tem o seu botão «Começar».
+  // A cor do passo atual vai para o body (shell.css).
+  if (passo.id !== 'inicio') seccao.append(criarNavegacaoPassos(estado.passoAtual, percurso));
   document.body.dataset.passo = passo.id;
 
   // Ao mudar de passo, o foco vai para o título: quem usa teclado ou leitor de

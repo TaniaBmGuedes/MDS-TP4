@@ -106,8 +106,9 @@ describe('criarPercurso', () => {
 });
 
 describe('PASSOS', () => {
-  it('são 6 e o tempo restante ao avançar é ~8, ~6, ~4, ~3, ~1 min', () => {
+  it('são 6, a começar pela introdução, e o tempo restante ao avançar é ~9, ~6, ~4, ~3, ~1 min', () => {
     expect(PASSOS).toHaveLength(6);
-    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 3, 1]);
+    expect(PASSOS[0].id).toBe('inicio');
+    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([9, 6, 4, 3, 1]);
   });
 });

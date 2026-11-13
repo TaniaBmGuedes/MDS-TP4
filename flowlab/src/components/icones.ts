@@ -7,6 +7,8 @@ function svg(conteudo: string, tamanho = 20): string {
 }
 
 const DESENHOS: Record<IdPasso, string> = {
+  // Bandeira de partida
+  inicio: '<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>',
   // Controlos deslizantes
   simular: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
   // Gráfico de áreas

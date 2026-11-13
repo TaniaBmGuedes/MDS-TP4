@@ -1,0 +1,36 @@
+/* Ecrã de introdução (H20). Cores do tema em shell.css e tokens.css. */
+.inicio__tema { font-size: clamp(18px, 2.2vw, 21px); line-height: 1.5; color: var(--texto); max-width: 760px; }
+.inicio__objetivo { font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+.inicio__subtitulo { margin-top: 8px; font: 700 20px var(--letra-titulos); }
+
+.inicio__lista {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 12px;
+}
+.inicio__item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px; border-radius: 14px;
+  background: var(--superficie); border: 1px solid var(--divisor);
+  border-top: 4px solid var(--passo);
+  color: var(--texto);
+}
+.inicio__icone {
+  flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
+  background: var(--passo-clara); color: var(--passo);
+}
+
+.inicio__comecar {
+  align-self: flex-start; margin-top: 8px;
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 0 24px;
+  border: 0; border-radius: 12px;
+  background: var(--passo); color: var(--cor-texto-invertido);
+  font-size: 17px; font-weight: 600;
+  transition: transform .2s var(--ease);
+}
+.inicio__comecar:hover { transform: translateY(-2px); }
+.inicio__comecar:focus-visible { outline-color: var(--passo); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+  .inicio__comecar { align-self: stretch; justify-content: center; }
+}
