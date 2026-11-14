@@ -1,0 +1,62 @@
+/* Ticket do percurso no cabeçalho (ticketPercurso.ts). Cores de estado como
+   as do Jira: cinzento por fazer, azul em curso, amarelo em teste, verde
+   concluído. Usa as variáveis de shell.css, por isso o modo escuro funciona. */
+
+.ticket-percurso {
+  --largura-cartao: calc((100% - 4px) / var(--colunas));
+  flex: 1 1 auto; min-width: 0; max-width: 900px;
+  margin-inline: auto; padding-inline: 16px;
+}
+.ticket-percurso__pista {
+  position: relative;
+  display: grid; grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
+  height: 36px; border-radius: 10px;
+  background: var(--pairar);
+}
+.ticket-percurso__coluna {
+  display: grid; place-items: center; min-width: 0; padding-inline: 4px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--texto-fraco);
+}
+.ticket-percurso__coluna + .ticket-percurso__coluna { border-left: 1px dashed var(--divisor-forte); }
+.ticket-percurso__coluna--passada { color: var(--verde); }
+
+/* O cartão segue o scroll: o centro fica no centro da coluna da posição. */
+.ticket-percurso__cartao {
+  --cor: var(--texto-suave);
+  --cor-fundo: var(--pairar);
+  position: absolute; top: 3px; bottom: 3px;
+  left: calc(2px + var(--posicao, 0) * var(--largura-cartao));
+  width: var(--largura-cartao);
+  display: flex; align-items: center; gap: 6px; min-width: 0; padding: 0 8px;
+  border-radius: 8px; border: 1px solid var(--divisor-forte);
+  background: var(--superficie);
+  box-shadow: inset 3px 0 0 var(--cor), 0 4px 12px rgba(9, 30, 66, .15);
+  transition: left .2s linear, border-color .3s;
+}
+.ticket-percurso__tipo { display: inline-flex; color: var(--acento); }
+.ticket-percurso__estado {
+  margin-inline: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 1px 6px; border-radius: 4px;
+  font: 700 10px var(--letra-texto);
+  letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
+  background: var(--cor-fundo); color: var(--cor);
+}
+.ticket-percurso__cartao[data-estado="2"],
+.ticket-percurso__cartao[data-estado="3"] { --cor: var(--acento-escuro); --cor-fundo: var(--acento-fundo); }
+.ticket-percurso__cartao[data-estado="4"] { --cor: var(--texto); --cor-fundo: var(--amarelo-fundo); }
+.ticket-percurso__cartao--feito { --cor: var(--verde); --cor-fundo: var(--verde-fundo); border-color: var(--verde); }
+.ticket-percurso__cartao--feito .ticket-percurso__tipo { color: var(--verde); }
+
+.ticket-percurso__cartao--mudou { animation: ticket-mudou .45s cubic-bezier(.22, 1, .36, 1); }
+@keyframes ticket-mudou { 40% { transform: translateY(-3px) scale(1.04); } }
+
+/* Janela média: só o cartão, sem os nomes das colunas. */
+@media (max-width: 900px) {
+  .ticket-percurso__coluna { color: transparent; }
+  .ticket-percurso__coluna--passada { color: transparent; }
+}
+/* Telemóvel: não há espaço no cabeçalho. */
+@media (max-width: 600px) {
+  .ticket-percurso { display: none; }
+}

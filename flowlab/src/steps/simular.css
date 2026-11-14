@@ -2,7 +2,7 @@
    mesmas cores das fichas do ecrã das métricas: branco-cinza à espera,
    amarelo em curso, verde-floresta feito. */
 
-.sim__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+.sim__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); }
 
 /* Aviso quando se vem do quiz (T17) */
 .sim__vindo {
@@ -17,12 +17,12 @@
 .sim__voltar:hover { background: var(--pairar); }
 
 .sim {
-  display: grid; grid-template-columns: minmax(250px, 310px) minmax(0, 1fr);
-  gap: 20px; align-items: start;
+  display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 20px; align-items: stretch;
 }
 .sim__controlos, .sim__grafico {
-  display: flex; flex-direction: column; gap: 16px; min-width: 0;
-  padding: 20px; border: 1px solid var(--divisor); border-radius: 12px;
+  display: flex; flex-direction: column; gap: 12px; min-width: 0;
+  padding: 18px; border: 1px solid var(--divisor); border-radius: 12px;
   background: var(--superficie);
 }
 
@@ -68,7 +68,7 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 }
 .sim__veredicto--alerta { background: var(--amarelo-fundo); color: #5A4614; }
 
-.sim__bandas { font-size: 15px; color: var(--texto-suave); }
+.sim__bandas { font-size: 14px; color: var(--texto-suave); }
 
 /* ---------- Gráfico (componente graficoCumulativo) ---------- */
 .cfd { display: flex; flex-direction: column; gap: 12px; margin: 0; min-width: 0; }
@@ -128,13 +128,13 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 .cfd__tabela .cfd__celula--destaque { background: var(--amarelo-fundo); font-weight: 700; box-shadow: inset 0 0 0 2px var(--amarelo); }
 
 /* ---------- Regras de leitura ---------- */
-.regras { display: flex; flex-direction: column; gap: 12px; }
-.regras__titulo { font: 700 22px/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
-.regras__ajuda { color: var(--texto-suave); }
-.regras__lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.regras { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--divisor); }
+.regras__titulo { font: 700 17px/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.regras__ajuda { font-size: 14px; color: var(--texto-suave); }
+.regras__lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
 .regra {
-  display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-content: start;
-  min-height: 44px; padding: 16px; text-align: left;
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-content: start;
+  min-height: 44px; padding: 12px; text-align: left;
   border: 1px solid var(--divisor-forte); border-radius: 12px; background: var(--superficie);
   transition: border-color .15s, background .15s, box-shadow .15s;
 }
@@ -145,8 +145,8 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
   background: var(--acento-fundo); color: var(--acento-escuro); font-size: 14px; font-weight: 700;
 }
 .regra[aria-pressed="true"] .regra__numero { background: var(--acento); color: #fff; }
-.regra__titulo { font-size: 16px; font-weight: 700; color: var(--texto); }
-.regra__resumo { font-size: 14px; color: var(--texto-suave); }
+.regra__titulo { font-size: 15px; font-weight: 700; color: var(--texto); }
+.regra__resumo { font-size: 13px; color: var(--texto-suave); }
 .regras__explica {
   padding: 14px 16px; border-left: 3px solid var(--acento); border-radius: 0 8px 8px 0;
   background: var(--acento-fundo); color: var(--texto); font-size: 16px;

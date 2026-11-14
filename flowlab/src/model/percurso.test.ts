@@ -80,7 +80,10 @@ describe('criarPercurso', () => {
     expect(p.tirarPedidoSimulador()).toBeNull();
     p.pedirSimulador({ wip: 12, regra: 'alargar', pergunta: 2 });
     expect(ouvinte).not.toHaveBeenCalled();
+    expect(p.temPedidoSimulador()).toBe(true);
+    expect(p.temPedidoSimulador()).toBe(true);
     expect(p.tirarPedidoSimulador()).toEqual({ wip: 12, regra: 'alargar', pergunta: 2 });
+    expect(p.temPedidoSimulador()).toBe(false);
     expect(p.tirarPedidoSimulador()).toBeNull();
   });
 
@@ -106,8 +109,9 @@ describe('criarPercurso', () => {
 });
 
 describe('PASSOS', () => {
-  it('são 6 e o tempo restante ao avançar é ~8, ~6, ~4, ~3, ~1 min', () => {
+  it('são 6, a começar pela introdução, e o tempo restante ao avançar é ~9, ~6, ~4, ~3, ~1 min', () => {
     expect(PASSOS).toHaveLength(6);
-    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([8, 6, 4, 3, 1]);
+    expect(PASSOS[0].id).toBe('inicio');
+    expect(PASSOS.slice(1).map((p) => p.minutosRestantes)).toEqual([9, 6, 4, 3, 1]);
   });
 });

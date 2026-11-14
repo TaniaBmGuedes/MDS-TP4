@@ -1,7 +1,7 @@
 /* Ecrã 6 · Simulador da equipa (T03). Cores do tema em shell.css (e do modo
    escuro em escuro.css): só se usam variáveis, sem cores escritas à mão. */
 
-.eq__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); max-width: 760px; }
+.eq__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); }
 
 /* ---------- Cenários ---------- */
 .eq__cenarios { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -70,13 +70,13 @@
 
 /* ---------- A resposta ao dilema ---------- */
 .eq__resposta {
-  display: flex; flex-direction: column; gap: 12px; padding: 24px;
+  display: flex; flex-direction: column; gap: 8px; padding: 18px 20px;
   border: 2px solid var(--acento); border-radius: 16px; background: var(--superficie);
 }
 .eq__resposta-etiqueta { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
-.eq__resposta-titulo { font: 700 clamp(22px, 3vw, 28px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
-.eq__resposta-texto { max-width: 820px; color: var(--texto-suave); font-size: 16px; }
-.eq__nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 8px; }
+.eq__resposta-titulo { font: 700 clamp(20px, 2.2vw, 24px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.eq__resposta-texto { color: var(--texto-suave); font-size: 15px; }
+.eq__nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .eq__barra-cheia, .eq__pilula, .eq__botao { transition: none; }

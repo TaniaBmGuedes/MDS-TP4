@@ -51,6 +51,8 @@ export interface Percurso {
   reiniciarQuiz(): void;
   /** Guarda um pedido para o simulador abrir com estes valores. */
   pedirSimulador(pedido: PedidoSimulador): void;
+  /** Diz se há um pedido à espera, sem o apagar. */
+  temPedidoSimulador(): boolean;
   /** Devolve o pedido guardado (ou null) e apaga-o: só vale uma vez. */
   tirarPedidoSimulador(): PedidoSimulador | null;
   /** Chama o ouvinte a cada mudança. Devolve a função que o desliga. */
@@ -126,6 +128,7 @@ export function criarPercurso(totalPassos: number, totalPerguntas: number): Perc
       pedido = null;
       return atual;
     },
+    temPedidoSimulador: () => pedido !== null,
     subscrever(ouvinte) {
       ouvintes.add(ouvinte);
       return () => ouvintes.delete(ouvinte);

@@ -1,0 +1,56 @@
+/* Efeitos «wow» (H31). Só correm sem «reduzir movimento» (efeitos.ts não os
+   liga e a regra geral em shell.css corta as animações). */
+
+/* ---------- Ecrã de carregamento ---------- */
+.a-carregar { overflow: hidden; }
+.carregar {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: #05080C; color: #FFFFFF;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path .9s cubic-bezier(.76, 0, .24, 1);
+}
+.carregar--sair { clip-path: inset(0 0 100% 0); }
+.carregar__mascara { overflow: hidden; }
+.carregar__nome {
+  font: 700 clamp(44px, 8vw, 84px)/1 var(--letra-titulos); letter-spacing: -.03em;
+  animation: carregar-subir .8s cubic-bezier(.22, 1, .36, 1) both;
+}
+.carregar__papel {
+  margin-top: 14px; font: 500 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .4em; text-transform: uppercase; color: rgba(255, 255, 255, .55);
+  animation: carregar-aparecer .6s .3s both;
+}
+.carregar__base {
+  position: absolute; left: 24px; right: 24px; bottom: 28px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.carregar__texto { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: rgba(255, 255, 255, .45); }
+.carregar__numero { font: 700 clamp(56px, 10vw, 112px)/1 var(--letra-titulos); font-variant-numeric: tabular-nums; }
+.carregar__barra { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: linear-gradient(90deg, #0C66E4, #388BFF, #85B8FF); }
+@keyframes carregar-subir { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes carregar-aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Magnético ---------- */
+.magnetico { transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
+
+/* ---------- Inclinação 3D ---------- */
+.inicio__item, .cartao-opcao, .regra, .kanban-quadro, .quadro-vivo {
+  position: relative;
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .3s, border-color .3s;
+}
+.inclinado {
+  transition: transform .12s linear, box-shadow .3s, border-color .3s;
+  box-shadow: 0 18px 40px rgba(9, 30, 66, .14);
+  border-color: var(--acento-linha);
+}
+
+/* ---------- Palavras a subir ---------- */
+.palavra { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.palavra__dentro { display: inline-block; }
+.animar .palavras .palavra__dentro {
+  transform: translateY(110%);
+  transition: transform .8s cubic-bezier(.22, 1, .36, 1);
+  transition-delay: calc(var(--i, 0) * 45ms + 80ms);
+}
+.animar .revelado .palavra__dentro, .animar .palavras.revelado .palavra__dentro { transform: none; }
