@@ -1,7 +1,6 @@
-/* Ticket do percurso (ticketPercurso.ts): do lado direito, ao longo do scroll
-   vertical. Sem caixa nem fundo: só uma linha com os estados de um quadro,
-   de cima para baixo, e o cartão do ticket a descer por ela de «Backlog» a
-   «Concluído» à medida que se faz scroll. Cores de estado como as do Jira:
+/* Ticket do percurso (ticketPercurso.ts): só o cartão do ticket, solto no
+   fundo da página do lado direito. Desce ao longo do scroll vertical e muda
+   de estado, de «Backlog» a «Concluído», sem linha nem lista de estados. Cores de estado como as do Jira:
    cinzento por fazer, azul em curso, amarelo em teste, verde concluído.
    Usa as variáveis de shell.css, por isso o modo escuro funciona. */
 
@@ -87,6 +86,13 @@
 .ticket-percurso__cartao--mudou { animation: ticket-mudou .45s cubic-bezier(.22, 1, .36, 1); }
 @keyframes ticket-mudou { 40% { transform: scale(1.05); } }
 
+/* Só o cartão: a linha e os nomes dos estados ficam escondidos (as linhas da
+   grelha continuam a dar a posição do cartão). */
+.ticket-percurso { z-index: 0; }
+.ticket-percurso__pista::before, .ticket-percurso__pista::after { display: none; }
+.ticket-percurso__coluna { visibility: hidden; }
+.ticket-percurso__cartao { left: 0; top: calc(var(--posicao, 0) * var(--altura-linha) + (var(--altura-linha) - var(--altura-cartao)) / 2); }
+
 /* O título «O teu ticket» já não é preciso: a linha e o cartão chegam. */
 .ticket-percurso__titulo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
@@ -96,7 +102,7 @@
 @media (max-height: 640px) {
   .ticket-percurso__pista { --altura-cartao: 38px; }
   .ticket-percurso__resumo { display: none; }
-  .ticket-percurso__cartao { top: calc(var(--posicao, 0) * var(--altura-linha) + 18px); padding-block: 6px; }
+  .ticket-percurso__cartao { padding-block: 6px; }
 }
 /* Janela média: o ticket fica mais estreito e o cartão só diz o estado. */
 @media (max-width: 1199px) {
@@ -105,7 +111,7 @@
   .pagina, body.percurso-aberto .pagina { padding-right: calc(var(--largura-ticket) + 28px); }
   .ticket-percurso__coluna { padding-left: 22px; font-size: 9px; letter-spacing: .06em; }
   .ticket-percurso__pista { --altura-cartao: 34px; }
-  .ticket-percurso__cartao { left: 16px; padding: 0 8px; justify-content: center; top: calc(var(--posicao, 0) * var(--altura-linha) + 20px); }
+  .ticket-percurso__cartao { padding: 0 8px; justify-content: center; }
   .ticket-percurso__resumo, .ticket-percurso__chave { display: none; }
   .ticket-percurso__tipo { display: none; }
   .ticket-percurso__estado { margin: 0 auto; letter-spacing: 0; overflow: visible; }
@@ -117,7 +123,7 @@
   .pagina, body.percurso-aberto .pagina { padding-right: 40px; }
   .ticket-percurso__pista { --x-linha: 11px; --altura-cartao: 24px; }
   .ticket-percurso__coluna { padding: 0; font-size: 0; }
-  .ticket-percurso__cartao { left: 0; right: auto; width: 24px; padding: 0; align-items: center; border-radius: 6px; top: calc(var(--posicao, 0) * var(--altura-linha) + 16px); }
+  .ticket-percurso__cartao { right: auto; width: 24px; padding: 0; align-items: center; border-radius: 6px; }
   .ticket-percurso__estado { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
