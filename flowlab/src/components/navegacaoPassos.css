@@ -1,0 +1,93 @@
+/* Navegação no fim de cada ecrã (H24): «Anterior», timeline dos passos e
+   «Seguinte». Usa as variáveis de shell.css, por isso o modo escuro já funciona. */
+
+.navegacao-passos {
+  display: grid; grid-template-columns: minmax(170px, 1fr) minmax(0, 3fr) minmax(170px, 1fr);
+  align-items: center; gap: 24px;
+  margin-top: auto; padding-top: 24px;
+  border-top: 1px solid var(--divisor);
+}
+.navegacao-passos__lado { display: flex; }
+.navegacao-passos__lado--seguinte { justify-content: flex-end; }
+
+/* ---------- Anterior / Seguinte ---------- */
+.navegacao-passos__botao {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 56px; padding: 8px 20px; border-radius: var(--raio-medio);
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  color: var(--texto); text-align: left;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.navegacao-passos__botao:hover { border-color: var(--acento); background: var(--acento-fundo); color: var(--acento-escuro); }
+.navegacao-passos__botao:focus-visible { outline-offset: 3px; }
+
+/* «Seguinte» é a ação principal. */
+.navegacao-passos__botao--seguinte {
+  text-align: right;
+  border-color: var(--acento); background: var(--acento); color: #FFFFFF;
+}
+.navegacao-passos__botao--seguinte:hover { background: var(--acento-escuro); border-color: var(--acento-escuro); color: #FFFFFF; }
+
+.navegacao-passos__texto { display: flex; flex-direction: column; line-height: 1.2; }
+.navegacao-passos__rotulo { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.navegacao-passos__nome { font-size: 16px; font-weight: 700; }
+
+.navegacao-passos__botao svg { flex: none; transition: transform .25s var(--ease); }
+.navegacao-passos__botao--seguinte:hover svg { transform: translateX(4px); }
+.navegacao-passos__botao--anterior:hover svg { transform: translateX(-4px); }
+
+/* ---------- Timeline ---------- */
+.timeline-passos { display: flex; margin: 0; padding: 0; list-style: none; }
+.timeline-passos__item { position: relative; flex: 1 1 0; min-width: 0; display: flex; justify-content: center; }
+/* Traço entre um ponto e o seguinte (do centro deste ao centro do próximo). */
+.timeline-passos__item + .timeline-passos__item::before {
+  content: ''; position: absolute; top: 15px; right: 50%; width: 100%; height: 2px;
+  background: var(--divisor-forte);
+}
+.timeline-passos__item--feito + .timeline-passos__item::before { background: var(--acento); }
+
+.timeline-passos__botao {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 0 4px; border: 0; background: none; color: var(--texto-fraco);
+  font-size: 12px; font-weight: 600; line-height: 1.25; text-align: center;
+  cursor: pointer;
+}
+.timeline-passos__botao[aria-current] { cursor: default; }
+
+.timeline-passos__ponto {
+  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--divisor-forte); background: var(--superficie);
+  font: 700 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--texto-fraco);
+  transition: border-color .15s, background .15s, color .15s, transform .2s var(--ease);
+}
+.timeline-passos__item--feito .timeline-passos__ponto { border-color: var(--acento); color: var(--acento-escuro); }
+.timeline-passos__item--atual .timeline-passos__ponto { border-color: var(--acento); background: var(--acento); color: #FFFFFF; box-shadow: 0 0 0 4px var(--acento-fundo); }
+.timeline-passos__item--atual .timeline-passos__botao { color: var(--texto); }
+
+.timeline-passos__botao:not([aria-current]):hover { color: var(--acento-escuro); }
+.timeline-passos__botao:not([aria-current]):hover .timeline-passos__ponto { border-color: var(--acento); background: var(--acento-fundo); transform: scale(1.08); }
+
+/* ---------- Ecrãs estreitos ---------- */
+@media (max-width: 900px) {
+  .navegacao-passos { grid-template-columns: 1fr 1fr; }
+  .timeline-passos { grid-column: 1 / -1; grid-row: 1; }
+}
+@media (max-width: 600px) {
+  .navegacao-passos { grid-template-columns: 1fr; gap: 12px; }
+  .navegacao-passos__lado--seguinte { grid-row: 2; }
+  .navegacao-passos__lado--anterior { grid-row: 3; }
+  .navegacao-passos__lado:empty { display: none; }
+  .navegacao-passos__botao { flex: 1; }
+  .navegacao-passos__botao--seguinte { justify-content: space-between; text-align: left; }
+  /* Só o nome do passo atual: os outros ficam como pontos. */
+  .timeline-passos__item:not(.timeline-passos__item--atual) .timeline-passos__nome { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .timeline-passos__ponto { width: 28px; height: 28px; }
+  .timeline-passos__item--atual .timeline-passos__nome { white-space: nowrap; }
+  .timeline-passos__item + .timeline-passos__item::before { top: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navegacao-passos__botao svg, .timeline-passos__ponto { transition: none; }
+  .timeline-passos__botao:not([aria-current]):hover .timeline-passos__ponto { transform: none; }
+}

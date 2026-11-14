@@ -1,5 +1,5 @@
-// Ticket do percurso: no cabeçalho, um cartão de tarefa atravessa as
-// colunas de um quadro à medida que se desce na página. Começa em «Backlog»
+// Ticket do percurso: numa coluna fixa do lado direito, um cartão de tarefa
+// desce pelos estados de um quadro à medida que se desce na página. Começa em «Backlog»
 // na introdução e chega a «Concluído» no último passo. É decorativo
 // (aria-hidden): o menu já diz em que passo se está.
 import './ticketPercurso.css';
@@ -40,12 +40,16 @@ export function criarTicketPercurso(numeroPassos: number): TicketPercurso {
     return coluna;
   });
 
+  const titulo = document.createElement('p');
+  titulo.className = 'ticket-percurso__titulo';
+  titulo.textContent = 'O teu ticket';
+
   const cartao = document.createElement('div');
   cartao.className = 'ticket-percurso__cartao';
-  cartao.innerHTML = `<span class="ticket-percurso__tipo">${ICONE_TAREFA}</span><span class="ticket-percurso__estado"></span>`;
+  cartao.innerHTML = `<span class="ticket-percurso__resumo">Aprender Kanban</span><span class="ticket-percurso__linha"><span class="ticket-percurso__tipo">${ICONE_TAREFA}</span><span class="ticket-percurso__chave">FL-1</span><span class="ticket-percurso__estado"></span></span>`;
   const estado = cartao.querySelector<HTMLElement>('.ticket-percurso__estado');
   pista.append(cartao);
-  elemento.append(pista);
+  elemento.append(titulo, pista);
 
   let passoAntes = -1;
   return {
@@ -60,7 +64,10 @@ export function criarTicketPercurso(numeroPassos: number): TicketPercurso {
       if (estado) estado.textContent = texto;
       cartao.dataset.estado = String(Math.min(passo, numeroPassos - 1));
       cartao.classList.toggle('ticket-percurso__cartao--feito', passo >= numeroPassos - 1);
-      colunas.forEach((c, i) => c.classList.toggle('ticket-percurso__coluna--passada', i < passo));
+      colunas.forEach((c, i) => {
+        c.classList.toggle('ticket-percurso__coluna--passada', i < passo);
+        c.classList.toggle('ticket-percurso__coluna--atual', i === passo);
+      });
       if (!primeiraVez) {
         cartao.classList.remove('ticket-percurso__cartao--mudou');
         void cartao.offsetWidth; // recomeça a animação

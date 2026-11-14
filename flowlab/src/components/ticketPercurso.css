@@ -1,43 +1,62 @@
-/* Ticket do percurso no cabeçalho (ticketPercurso.ts). Cores de estado como
-   as do Jira: cinzento por fazer, azul em curso, amarelo em teste, verde
-   concluído. Usa as variáveis de shell.css, por isso o modo escuro funciona. */
+/* Ticket do percurso (ticketPercurso.ts): coluna fixa do lado direito, com os
+   estados de um quadro de cima para baixo. O cartão desce de «Backlog» até
+   «Concluído» à medida que se faz scroll. Cores de estado como as do Jira:
+   cinzento por fazer, azul em curso, amarelo em teste, verde concluído.
+   Usa as variáveis de shell.css, por isso o modo escuro funciona. */
+
+:root { --largura-ticket: 168px; }
 
 .ticket-percurso {
-  --largura-cartao: calc((100% - 4px) / var(--colunas));
-  flex: 1 1 auto; min-width: 0; max-width: 900px;
-  margin-inline: auto; padding-inline: 16px;
+  position: fixed; z-index: 15;
+  top: calc(var(--altura-topo) + 20px); bottom: 20px; right: 16px;
+  width: var(--largura-ticket);
+  display: flex; flex-direction: column; gap: 8px;
 }
+.ticket-percurso__titulo {
+  font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--texto-fraco);
+}
+
 .ticket-percurso__pista {
-  position: relative;
-  display: grid; grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
-  height: 36px; border-radius: 10px;
+  --altura-linha: calc(100% / var(--colunas));
+  --altura-cartao: 64px;
+  position: relative; flex: 1; min-height: 0;
+  display: grid; grid-template-rows: repeat(var(--colunas), minmax(0, 1fr));
+  border-radius: 12px; border: 1px solid var(--divisor);
   background: var(--pairar);
 }
 .ticket-percurso__coluna {
-  display: grid; place-items: center; min-width: 0; padding-inline: 4px;
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  padding: 8px 10px; min-height: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .08em; text-transform: uppercase; color: var(--texto-fraco);
+  transition: color .3s;
 }
-.ticket-percurso__coluna + .ticket-percurso__coluna { border-left: 1px dashed var(--divisor-forte); }
+.ticket-percurso__coluna + .ticket-percurso__coluna { border-top: 1px dashed var(--divisor-forte); }
 .ticket-percurso__coluna--passada { color: var(--verde); }
+.ticket-percurso__coluna--atual { color: var(--texto); }
 
-/* O cartão segue o scroll: o centro fica no centro da coluna da posição. */
+/* O cartão segue o scroll: o centro fica no centro da linha da posição. */
 .ticket-percurso__cartao {
   --cor: var(--texto-suave);
   --cor-fundo: var(--pairar);
-  position: absolute; top: 3px; bottom: 3px;
-  left: calc(2px + var(--posicao, 0) * var(--largura-cartao));
-  width: var(--largura-cartao);
-  display: flex; align-items: center; gap: 6px; min-width: 0; padding: 0 8px;
+  position: absolute; left: 8px; right: 8px; height: var(--altura-cartao);
+  top: calc(var(--posicao, 0) * var(--altura-linha) + (var(--altura-linha) - var(--altura-cartao)) / 2 + 8px);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 4px;
+  padding: 8px 10px;
   border-radius: 8px; border: 1px solid var(--divisor-forte);
   background: var(--superficie);
-  box-shadow: inset 3px 0 0 var(--cor), 0 4px 12px rgba(9, 30, 66, .15);
-  transition: left .2s linear, border-color .3s;
+  box-shadow: inset 3px 0 0 var(--cor), 0 6px 16px rgba(9, 30, 66, .18);
+  transition: top .2s linear, border-color .3s;
 }
+.ticket-percurso__resumo {
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font: 600 12px var(--letra-texto); color: var(--texto);
+}
+.ticket-percurso__linha { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ticket-percurso__tipo { display: inline-flex; color: var(--acento); }
+.ticket-percurso__chave { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--texto-fraco); }
 .ticket-percurso__estado {
-  margin-inline: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 1px 6px; border-radius: 4px;
+  margin-left: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 1px 6px; border-radius: 4px;
   font: 700 10px var(--letra-texto);
   letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
   background: var(--cor-fundo); color: var(--cor);
@@ -49,14 +68,23 @@
 .ticket-percurso__cartao--feito .ticket-percurso__tipo { color: var(--verde); }
 
 .ticket-percurso__cartao--mudou { animation: ticket-mudou .45s cubic-bezier(.22, 1, .36, 1); }
-@keyframes ticket-mudou { 40% { transform: translateY(-3px) scale(1.04); } }
+@keyframes ticket-mudou { 40% { transform: scale(1.05); } }
 
-/* Janela média: só o cartão, sem os nomes das colunas. */
-@media (max-width: 900px) {
-  .ticket-percurso__coluna { color: transparent; }
-  .ticket-percurso__coluna--passada { color: transparent; }
+/* O conteúdo deixa lugar à coluna do ticket, para nunca ficar tapado. */
+@media (min-width: 1024px) {
+  .pagina, body.percurso-aberto .pagina { padding-right: calc(var(--largura-ticket) + 40px); }
 }
-/* Telemóvel: não há espaço no cabeçalho. */
-@media (max-width: 600px) {
+/* Ecrã baixo: cartão mais pequeno, só com o estado. */
+@media (max-height: 640px) {
+  .ticket-percurso__pista { --altura-cartao: 36px; }
+  .ticket-percurso__resumo { display: none; }
+  .ticket-percurso__coluna { padding-block: 4px; }
+}
+/* Sem largura para a coluna (tablet e telemóvel): o menu já diz o progresso. */
+@media (max-width: 1023px) {
   .ticket-percurso { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-percurso__cartao { transition: none; }
+  .ticket-percurso__cartao--mudou { animation: none; }
 }

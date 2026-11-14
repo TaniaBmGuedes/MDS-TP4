@@ -42,3 +42,25 @@ export function textoProgresso(indice: number): string {
   const passo = PASSOS[indice];
   return `Passo ${indice + 1} de ${PASSOS.length} · faltam ~${passo.minutosRestantes} min`;
 }
+
+export interface PassosVizinhos {
+  /** Índice do passo anterior, ou null no primeiro passo. */
+  anterior: number | null;
+  /** Índice do passo seguinte, ou null no último passo. */
+  seguinte: number | null;
+}
+
+/**
+ * Passos antes e depois do indicado, para os botões «Anterior» e «Seguinte»
+ * no fim de cada ecrã (H24): o primeiro não tem anterior e o último não tem
+ * seguinte.
+ */
+export function passosVizinhos(indice: number): PassosVizinhos {
+  if (!Number.isInteger(indice) || indice < 0 || indice >= PASSOS.length) {
+    throw new RangeError(`Passo inexistente: ${indice}`);
+  }
+  return {
+    anterior: indice > 0 ? indice - 1 : null,
+    seguinte: indice < PASSOS.length - 1 ? indice + 1 : null,
+  };
+}

@@ -10,6 +10,7 @@ import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
 import { ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
+import { criarNavegacaoPassos } from './components/navegacaoPassos';
 import { criarTicketPercurso } from './components/ticketPercurso';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
@@ -70,6 +71,9 @@ function desenharPasso(indice: number): void {
   seccao.append(titulo);
 
   ECRAS[passo.id](seccao, passo, percurso);
+
+  // «Anterior» e «Seguinte» no fim de cada ecrã (H24).
+  seccao.append(criarNavegacaoPassos(indice, percurso));
 }
 
 PASSOS.forEach((_, i) => desenharPasso(i));
@@ -79,10 +83,10 @@ const fontes = criarFontes();
 document.querySelector('.site-topo__linha')?.append(fontes.botao);
 document.body.append(fontes.janela);
 
-// Ticket do percurso: atravessa as colunas do quadro com o scroll, de
-// «Backlog» (introdução) a «Concluído» (último passo).
+// Ticket do percurso: coluna do lado direito em que o cartão desce pelos
+// estados do quadro com o scroll, de «Backlog» (introdução) a «Concluído».
 const ticket = criarTicketPercurso(PASSOS.length);
-fontes.botao.before(ticket.elemento);
+document.body.append(ticket.elemento);
 
 // Um ecrã por tema: cada passo ajusta-se à altura do ecrã (computador).
 ajustarAoEcra(seccoes);
