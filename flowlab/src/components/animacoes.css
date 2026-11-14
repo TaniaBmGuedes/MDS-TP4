@@ -2,11 +2,71 @@
    a classe «animar» no html (nunca com «reduzir movimento»). */
 .animar .aparecer {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s var(--ease), transform .6s var(--ease);
+  transform: translateY(32px);
+  transition: opacity .45s var(--ease), transform .5s var(--ease);
   transition-delay: var(--atraso, 0ms);
 }
 .animar .aparecer.revelado { opacity: 1; transform: none; }
+
+/* Texto, cartões, opções e itens de listas entram um a um depois do bloco
+   (--atraso vem do bloco, --atraso-item da posição da peça), cada tipo à
+   sua maneira (data-entrar, posto em animacoes.ts). */
+.animar .aparecer .entrar-item {
+  opacity: 0;
+  transition: opacity .4s var(--ease), transform .45s var(--ease), filter .4s var(--ease);
+  transition-delay: calc(var(--atraso, 0ms) + var(--atraso-item, 0ms));
+}
+.animar .aparecer .entrar-item[data-entrar="subir"] { transform: translateY(18px); filter: blur(6px); }
+.animar .aparecer .entrar-item[data-entrar="lado"] { transform: translateX(-36px); }
+.animar .aparecer .entrar-item[data-entrar="pop"] {
+  transform: translateY(16px) scale(.88);
+  transition-timing-function: var(--ease), cubic-bezier(.34, 1.56, .64, 1), var(--ease);
+}
+.animar .aparecer.revelado .entrar-item { opacity: 1; transform: none; filter: none; }
+
+/* Botões principais: um brilho atravessa-os depois de entrarem. */
+.animar .revelado :is(.botao, .inicio__comecar) { position: relative; overflow: hidden; }
+.animar .revelado :is(.botao, .inicio__comecar)::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .45) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: brilho .9s var(--ease) .5s both;
+}
+@keyframes brilho { to { transform: translateX(120%); } }
+
+/* Passagem entre passos, ligada ao scroll (só no computador, onde cada passo
+   ocupa o ecrã): o passo que entra sobe de baixo e acende-se; o que sai
+   encolhe um pouco e apaga-se. Usa «translate», «scale» e a opacidade da
+   secção, para não chocar com o «transform» e a opacidade da entrada acima.
+   Browsers sem animações ligadas ao scroll ficam como estavam. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+    .ecra {
+      view-timeline: --ecra block;
+      animation: ecra-passagem linear both;
+      animation-timeline: view();
+    }
+    .ecra > * {
+      transform-origin: 50% 0;
+      animation: ecra-bloco linear both;
+      animation-timeline: --ecra;
+    }
+    /* O quiz é o último passo: nunca sai do ecrã por cima. */
+    .ecra:last-child, .ecra:last-child > * { animation-range: entry 0% contain 0%; }
+  }
+}
+@keyframes ecra-passagem {
+  entry 0% { opacity: .15; }
+  entry 100% { opacity: 1; }
+  exit 0% { opacity: 1; }
+  exit 100% { opacity: .1; }
+}
+@keyframes ecra-bloco {
+  entry 0% { translate: 0 22vh; scale: .92; }
+  entry 100% { translate: 0 0; scale: 1; }
+  exit 0% { translate: 0 0; scale: 1; }
+  exit 100% { translate: 0 -10vh; scale: .86; }
+}
 
 /* O traço por baixo do título cresce da esquerda quando o título aparece. */
 .animar .ecra__titulo::after { transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) .45s; }
