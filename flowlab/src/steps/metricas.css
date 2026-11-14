@@ -162,3 +162,41 @@
   .faixa__significado, .faixa__definicao { font-size: 12px; }
   .cenario__situacao, .cenario__conclusao { font-size: 16px; }
 }
+
+/* ---------- Passo a passo ---------- */
+/* Separadores: Exemplo 1, 2, 3 e «Agora tu». */
+.licao__separadores { display: flex; flex-wrap: wrap; gap: 8px; }
+.licao__separador {
+  min-height: 40px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  color: var(--texto-suave); font-size: 14px; font-weight: 600;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.licao__separador:hover { border-color: var(--acento); color: var(--acento-escuro); }
+.licao__separador[aria-current] { border-color: var(--acento); background: var(--acento-fundo); color: var(--acento-escuro); }
+
+/* Botão de cada diapositivo: mostra a etapa seguinte. */
+.cenario__botao {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 48px; padding: 0 22px; border-radius: var(--raio-medio);
+  border: 0; background: var(--acento); color: #FFFFFF;
+  font-size: 16px; font-weight: 700;
+  transition: background .15s;
+}
+.cenario__botao::after { content: '→'; transition: transform .25s var(--ease); }
+.cenario__botao:hover { background: var(--acento-escuro); }
+.cenario__botao:hover::after { transform: translateX(4px); }
+.cenario__botao:focus-visible { outline-offset: 3px; }
+.cenario__botao[hidden] { display: none; }
+
+.cenario__fim { display: flex; flex-direction: column; gap: 20px; }
+.cenario__fim[hidden], .faixa__item[hidden], .fecho[hidden] { display: none; }
+
+/* O que acabou de aparecer entra com um pequeno movimento. */
+.faixa__item:not([hidden]), .cenario__fim:not([hidden]), .fecho:not([hidden]) { animation: aparecer .45s var(--ease); }
+@keyframes aparecer { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .faixa__item:not([hidden]), .cenario__fim:not([hidden]), .fecho:not([hidden]) { animation: none; }
+  .cenario__botao::after { transition: none; }
+}
