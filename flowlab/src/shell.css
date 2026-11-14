@@ -249,21 +249,40 @@ a { color: #0C66E4; }
   .ecra + .ecra { margin-top: 48px; padding-top: 48px; }
 }
 
-/* Um ecrã por tema (SCRUM-135): em ecrãs de computador, cada passo ocupa a
-   altura do ecrã, com o conteúdo ao centro, e o scroll encaixa suavemente
-   no início de cada passo (proximity: só quando se para perto). Se um passo
-   não couber (ecrã baixo), cresce em vez de cortar. No telemóvel os passos
-   seguem uns atrás dos outros, sem altura fixa. */
+/* Um ecrã por tema (SCRUM-135): em ecrãs de computador, cada passo ocupa
+   exatamente o ecrã (largura e altura) e o scroll encaixa no início de cada
+   passo (proximity: só quando se para perto). O bloco principal de cada passo
+   estica para preencher a altura que sobra; se o conteúdo não couber,
+   ajustarAoEcra() (main.ts) reduz-lhe a escala com --escala. No telemóvel os
+   passos seguem uns atrás dos outros, sem altura fixa. */
 @media (min-width: 1024px) and (min-height: 700px) {
   html { scroll-snap-type: y proximity; scroll-padding-top: var(--altura-topo); }
-  .pagina { padding-top: 0; padding-bottom: 0; }
+  .pagina, body.percurso-aberto .pagina { max-width: none; padding-top: 0; padding-bottom: 0; }
   .ecra {
-    min-height: calc(100vh - var(--altura-topo));
-    justify-content: center; gap: 14px;
-    padding-block: 24px;
+    height: calc(100vh - var(--altura-topo));
+    justify-content: flex-start; gap: 14px;
+    padding-block: 28px;
+    overflow: hidden;
     scroll-snap-align: start; scroll-margin-top: 0;
   }
-  .ecra + .ecra { margin-top: 0; padding-top: 24px; border-top: 1px solid var(--divisor); }
+  .ecra > * { zoom: var(--escala, 1); flex-shrink: 0; }
+  /* Nem com a escala mínima coube: o passo cresce em vez de cortar. */
+  .ecra.ecra--cresce { height: auto; min-height: calc(100vh - var(--altura-topo)); overflow: visible; }
+  .ecra + .ecra { margin-top: 0; padding-top: 28px; border-top: 1px solid var(--divisor); }
+  /* O bloco principal de cada passo preenche o resto da altura. */
+  .inicio__heroi, .sim, .ecra-info__kanban, .licao, .eq, .quiz { flex: 1 0 auto; }
+  .eq { align-items: stretch; }
+  .licao { justify-content: center; }
+  /* Conheces o Kanban: o quadro estica até ao fundo, o texto fica ao meio. */
+  .kanban-cabecalho { margin-top: 12px; }
+  .ecra-info__kanban { align-items: stretch; margin-top: 0; }
+  .ecra-info__kanban > :first-child { align-self: start; }
+  /* Quiz: pergunta e opções maiores; o espaço por baixo recebe a explicação
+     e o botão «Seguinte» depois de responder. */
+  .ecra .quiz { gap: 22px; }
+  .ecra .quiz__pergunta { font-size: clamp(22px, 2.3vw, 32px); }
+  .ecra .quiz__opcoes { gap: 12px; }
+  .ecra .quiz__opcao { min-height: 68px; font-size: 18px; }
   /* Simulador: no cartão da regra fica só o número e o título; a explicação
      completa aparece por baixo quando se escolhe a regra. */
   .regra__resumo { display: none; }

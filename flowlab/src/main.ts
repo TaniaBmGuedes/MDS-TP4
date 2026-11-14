@@ -5,10 +5,12 @@
 // passo do menu (ou num botão que leve a outro passo) desliza até ele.
 import './style.css';
 import './shell.css';
+import { ajustarAoEcra } from './components/ajusteEcra';
 import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
 import { ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
+import { criarTicketPercurso } from './components/ticketPercurso';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
@@ -76,6 +78,14 @@ PASSOS.forEach((_, i) => desenharPasso(i));
 const fontes = criarFontes();
 document.querySelector('.site-topo__linha')?.append(fontes.botao);
 document.body.append(fontes.janela);
+
+// Ticket do percurso: atravessa as colunas do quadro com o scroll, de
+// «Backlog» (introdução) a «Concluído» (último passo).
+const ticket = criarTicketPercurso(PASSOS.length);
+fontes.botao.before(ticket.elemento);
+
+// Um ecrã por tema: cada passo ajusta-se à altura do ecrã (computador).
+ajustarAoEcra(seccoes);
 animarAoAparecer(seccoes);
 // Efeitos «wow» (H31): ecrã de carregamento e cartões com inclinação.
 // Nenhum corre com «reduzir movimento»; a inclinação só com rato.
@@ -105,6 +115,31 @@ function passoVisivel(): number {
   return atual;
 }
 
+/**
+ * Posição contínua na página, de 0 ao último passo: arredondada dá o passo
+ * atual (muda quando a secção seguinte passa a linha), com casas decimais
+ * entre dois passos. Faz o ticket deslizar com o scroll.
+ */
+function posicaoContinua(): number {
+  const fundo = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  if (fundo) return seccoes.length - 1;
+  const linha = window.innerHeight * LINHA_DO_ECRA;
+  const i = passoVisivel();
+  const r = seccoes[i].getBoundingClientRect();
+  // a: quanto a secção já subiu desde que passou a linha; s: quanto falta
+  // subir até o início dela chegar ao cabeçalho. Com o passo encostado ao
+  // cabeçalho, a posição é exatamente i (o ticket fica no centro da coluna).
+  const topo = document.querySelector('.site-topo')?.getBoundingClientRect().bottom ?? 0;
+  const a = Math.max(0, linha - r.top);
+  const s = Math.max(1, linha - topo);
+  if (a <= s) return i - 0.5 + (0.5 * a) / s;
+  return i + Math.min(0.5, (0.5 * (a - s)) / Math.max(1, r.height - s));
+}
+
+function atualizarTicket(): void {
+  ticket.atualizar(posicaoContinua(), percurso.estado().passoAtual);
+}
+
 let pedidoFrame = 0;
 window.addEventListener(
   'scroll',
@@ -113,6 +148,7 @@ window.addEventListener(
     pedidoFrame = requestAnimationFrame(() => {
       pedidoFrame = 0;
       atualizarLeitura();
+      atualizarTicket();
       if (performance.now() < deslizarAte) return;
       const i = passoVisivel();
       if (i === percurso.estado().passoAtual) return;
@@ -180,3 +216,6 @@ if (inicial !== null && inicial !== 0) {
 
 atualizarAncora(percurso.estado());
 percurso.subscrever(atualizarAncora);
+percurso.subscrever(atualizarTicket);
+window.addEventListener('resize', atualizarTicket);
+atualizarTicket();
