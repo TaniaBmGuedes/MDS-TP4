@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CAMINHO, estadoDoPasso, posicaoHorizontal } from './ticketPercurso';
+import { estadoDoPasso, ladoDoPasso, ladoNaLinha } from './ticketPercurso';
 
 describe('estadoDoPasso', () => {
   it('começa em Backlog e acaba em Concluído com 6 passos', () => {
@@ -19,21 +19,27 @@ describe('estadoDoPasso', () => {
   });
 });
 
-describe('posicaoHorizontal', () => {
-  it('passa pela direita, pelo meio e pela esquerda, um ponto por passo', () => {
-    expect([0, 1, 2, 3, 4, 5].map(posicaoHorizontal)).toEqual([...CAMINHO]);
+describe('ladoNaLinha', () => {
+  // Três passos seguidos, com um intervalo de 100 px entre o 2.º e o 3.º.
+  const passos = [{ top: 0, bottom: 500 }, { top: 500, bottom: 1000 }, { top: 1100, bottom: 1600 }];
+
+  it('os passos alternam: direita, esquerda, direita, …', () => {
+    expect([0, 1, 2, 3].map(ladoDoPasso)).toEqual([1, 0, 1, 0]);
   });
 
-  it('entre dois passos fica a meio caminho', () => {
-    expect(posicaoHorizontal(0.5)).toBeCloseTo(0.75);
-    expect(posicaoHorizontal(1.5)).toBeCloseTo(0.25);
+  it('dentro de um passo, o cartão fica do lado desse passo', () => {
+    expect(ladoNaLinha(passos, 250)).toBe(1);
+    expect(ladoNaLinha(passos, 700)).toBe(0);
+    expect(ladoNaLinha(passos, 1300)).toBe(1);
   });
 
-  it('fica sempre entre a esquerda e a direita', () => {
-    for (let p = -1; p <= 12; p += 0.25) {
-      const x = posicaoHorizontal(p);
-      expect(x).toBeGreaterThanOrEqual(0);
-      expect(x).toBeLessThanOrEqual(1);
-    }
+  it('num intervalo entre passos, fica a meio caminho', () => {
+    expect(ladoNaLinha(passos, 1050)).toBeCloseTo(0.5);
+  });
+
+  it('antes do primeiro e depois do último passo, fica do lado deles', () => {
+    expect(ladoNaLinha(passos, -50)).toBe(1);
+    expect(ladoNaLinha(passos, 2000)).toBe(1);
+    expect(ladoNaLinha([], 10)).toBe(1);
   });
 });

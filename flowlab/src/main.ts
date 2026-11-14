@@ -11,7 +11,7 @@ import { ativarInclinacao, dividirPalavras, mostrarCarregamento } from './compon
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
 import { criarNavegacaoPassos } from './components/navegacaoPassos';
-import { criarTicketPercurso } from './components/ticketPercurso';
+import { LINHA_DO_TICKET, criarTicketPercurso, ladoNaLinha } from './components/ticketPercurso';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
@@ -119,29 +119,10 @@ function passoVisivel(): number {
   return atual;
 }
 
-/**
- * Posição contínua na página, de 0 ao último passo: arredondada dá o passo
- * atual (muda quando a secção seguinte passa a linha), com casas decimais
- * entre dois passos. Faz o ticket deslizar com o scroll.
- */
-function posicaoContinua(): number {
-  const fundo = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-  if (fundo) return seccoes.length - 1;
-  const linha = window.innerHeight * LINHA_DO_ECRA;
-  const i = passoVisivel();
-  const r = seccoes[i].getBoundingClientRect();
-  // a: quanto a secção já subiu desde que passou a linha; s: quanto falta
-  // subir até o início dela chegar ao cabeçalho. Com o passo encostado ao
-  // cabeçalho, a posição é exatamente i (o ticket fica no centro da coluna).
-  const topo = document.querySelector('.site-topo')?.getBoundingClientRect().bottom ?? 0;
-  const a = Math.max(0, linha - r.top);
-  const s = Math.max(1, linha - topo);
-  if (a <= s) return i - 0.5 + (0.5 * a) / s;
-  return i + Math.min(0.5, (0.5 * (a - s)) / Math.max(1, r.height - s));
-}
-
 function atualizarTicket(): void {
-  ticket.atualizar(posicaoContinua(), percurso.estado().passoAtual);
+  // O cartão fica do lado do passo que está à altura dele (ticketPercurso.ts).
+  const faixas = seccoes.map((s) => s.getBoundingClientRect());
+  ticket.atualizar(ladoNaLinha(faixas, window.innerHeight * LINHA_DO_TICKET), percurso.estado().passoAtual);
 }
 
 let pedidoFrame = 0;
