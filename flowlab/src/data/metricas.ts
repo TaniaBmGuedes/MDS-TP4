@@ -221,7 +221,7 @@ function diasPorExtenso(valor: number): string {
 }
 
 export const TEXTOS = {
-  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${CENARIOS.length} exemplos preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e num cenário teu, em que mudas o limite de WIP de ${WIP_MINIMO} a ${WIP_MAXIMO}. Quando a simulação de um exemplo acaba, passa sozinho ao seguinte.`,
+  intro: `A mesma equipa de ${PARAMETROS.pessoas} pessoas em ${CENARIOS.length} exemplos preparados (WIP ${listaPorExtenso(CENARIOS.map((c) => c.limiteWip))}) e num cenário teu, em que mudas o limite de WIP de ${WIP_MINIMO} a ${WIP_MAXIMO}. Vê um exemplo de cada vez e descobre as métricas uma a uma.`,
   /** Etiqueta de cada diapositivo: «Exemplo 2 de 3» e, no último, o convite. */
   passoExemplo: (i: number, n: number) => `Exemplo ${i} de ${n}`,
   /** O cenário da pessoa, com um limite de WIP que não é o de nenhum exemplo. */
@@ -287,3 +287,37 @@ export const TEXTOS = {
     };
   },
 };
+
+// ---------- Passo a passo ----------
+// Cada exemplo começa só com o quadro animado. Um botão de cada vez mostra a
+// métrica seguinte e, no fim, o que o exemplo quer dizer; depois passa-se ao
+// exemplo seguinte. Assim não aparece tudo de uma vez.
+
+/** O que cada clique mostra, por esta ordem. */
+export const ETAPAS = ['wip', 'throughput', 'lead', 'conclusao'] as const;
+export type Etapa = (typeof ETAPAS)[number];
+
+const BOTAO_ETAPA: Record<Etapa, string> = {
+  wip: 'Ver o WIP',
+  throughput: 'Ver o throughput',
+  lead: 'Ver o lead time',
+  conclusao: 'O que isto quer dizer?',
+};
+
+/** Etapas já à vista quando se mostraram `vistas` (0 = só o quadro). */
+export function etapasVisiveis(vistas: number): readonly Etapa[] {
+  return ETAPAS.slice(0, Math.max(0, Math.min(vistas, ETAPAS.length)));
+}
+
+/**
+ * Texto do botão de um diapositivo, depois de `vistas` etapas mostradas.
+ * `indice` é o do diapositivo: os exemplos vêm primeiro e «O teu cenário» é
+ * o último (indice === total de exemplos). Devolve null quando não há mais
+ * nada a fazer nesse diapositivo.
+ */
+export function textoBotao(vistas: number, indice: number, cenarios: readonly Cenario[] = CENARIOS): string | null {
+  if (vistas < ETAPAS.length) return BOTAO_ETAPA[ETAPAS[vistas]];
+  if (indice < cenarios.length - 1) return `Próximo exemplo: WIP ${cenarios[indice + 1].limiteWip}`;
+  if (indice === cenarios.length - 1) return 'Agora tu: escolhe o WIP';
+  return null;
+}

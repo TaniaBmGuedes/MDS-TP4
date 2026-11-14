@@ -1,17 +1,21 @@
-// Ecrã das métricas (T16): uma lição com um ponto de foco.
+// Ecrã das métricas (T16): uma lição passo a passo, para não mostrar tudo de
+// uma vez.
 // 1. Introdução numa frase (a etiqueta e o título vêm do main.ts).
-// 2. Diapositivos, um cenário de cada vez (WIP 2, 4 e 12). Cada um tem uma
-//    animação dos 15 dias do simulador com a mesma equipa de 4 pessoas, a
-//    faixa com as três métricas e a conclusão. Passam sozinhos ao fim de uns 20
-//    segundos; param com o rato ou o foco lá dentro e com a aba escondida.
-// 3. O último cenário, «O teu cenário», está sempre lá. Um controlo visível
-//    (− / + e um campo, de 1 a 12) escolhe o limite de WIP; o simulador
-//    calcula o cenário e o limite fica guardado. O duplo clique no número do
-//    WIP, no título, continua a funcionar como atalho.
-// 4. Por baixo dos cenários, a conclusão final compara-os com os números.
+// 2. Diapositivos, um cenário de cada vez (WIP 2, 4 e 12), com separadores
+//    por cima para saltar entre eles. Cada um começa só com a animação dos 15
+//    dias do simulador. Um botão mostra uma coisa de cada vez: o WIP, o
+//    throughput, o lead time e o que o exemplo quer dizer; depois leva ao
+//    exemplo seguinte. Os exemplos já não passam sozinhos.
+// 3. O último diapositivo é «Agora tu»: um controlo visível (− / + e um campo,
+//    de 1 a 12) escolhe o limite de WIP; o simulador calcula o cenário e o
+//    limite fica guardado. O duplo clique no número do WIP, no título,
+//    continua a funcionar como atalho.
+// 4. A conclusão final, que compara os exemplos, aparece quando se chega a
+//    «Agora tu».
 import './metricas.css';
 import {
   CENARIOS,
+  ETAPAS,
   METRICAS,
   PARAMETROS,
   TEXTOS,
@@ -20,19 +24,18 @@ import {
   WIP_PROPRIO_INICIAL,
   cenarioPersonalizado,
   comparacao,
+  etapasVisiveis,
   indiceDoExemplo,
   conclusao,
+  textoBotao,
   numero,
   situacao,
   throughput,
   type Cenario,
+  type Etapa,
 } from '../data/metricas';
 import type { Ecra } from './index';
 
-/** Quando a simulação acaba, fica parada este tempo antes do cenário seguinte. */
-const PAUSA_FIM_MS = 2_500;
-/** Com «reduzir movimento» não há animação: cada cenário fica este tempo. */
-const LEITURA_MS = 12_000;
 /** Na animação: chegada das tarefas novas, depois o trabalho do dia. */
 const CHEGADA_MS = 450;
 const TRABALHO_MS = 750;
@@ -349,6 +352,7 @@ function criarNumeroWip(valor: number, aoMudar: (wip: number) => void): HTMLElem
 function criarExperimenta(aoEscolher: (wip: number) => void): {
   elemento: HTMLFormElement;
   sincronizar: (wip: number) => void;
+  focar: () => void;
 } {
   const T = TEXTOS.experimenta;
   const form = el('form', 'experimenta');
@@ -421,15 +425,21 @@ function criarExperimenta(aoEscolher: (wip: number) => void): {
   campo.addEventListener('change', aplicarEscrito);
 
   sincronizar(atual);
-  return { elemento: form, sincronizar };
+  return { elemento: form, sincronizar, focar: () => campo.focus({ preventScroll: true }) };
 }
 
 /** O conteúdo de um diapositivo: cabeçalho, animação, métricas e conclusão. */
-function criarDiapositivo(
-  c: Cenario,
-  id: string,
-  aoMudarWip: (wip: number) => void,
-): { elemento: HTMLElement; palco: Palco; passo: HTMLElement } {
+interface Diapositivo {
+  elemento: HTMLElement;
+  palco: Palco;
+  passo: HTMLElement;
+  /** O que cada etapa mostra (uma métrica ou a conclusão). */
+  partes: Map<Etapa, HTMLElement[]>;
+  /** Botão que mostra a etapa seguinte ou leva ao exemplo seguinte. */
+  botao: HTMLButtonElement;
+}
+
+function criarDiapositivo(c: Cenario, id: string, aoMudarWip: (wip: number) => void): Diapositivo {
   // div e não article: o padrão de carrossel pede role="group", que não é
   // permitido em article (auditoria de acessibilidade, H17).
   const d = el('div', 'cenario');
@@ -447,9 +457,14 @@ function criarDiapositivo(
 
   const palco = criarPalco(c);
 
+  const partes = new Map<Etapa, HTMLElement[]>();
   const faixa = el('dl', 'faixa');
+  // Quem usa leitor de ecrã ouve cada métrica quando aparece.
+  faixa.setAttribute('aria-live', 'polite');
   for (const m of METRICAS) {
     const item = el('div', 'faixa__item');
+    item.hidden = true;
+    partes.set(m.id, [item]);
     const v = m.valor(c);
     const nome = el('dt', 'faixa__nome', m.nome);
     nome.append(el('span', 'faixa__significado', m.explicacao));
@@ -459,10 +474,19 @@ function criarDiapositivo(
     faixa.append(item);
   }
 
-  d.append(cab, palco.elemento, faixa, el('p', 'cenario__conclusao', conclusao(c)));
+  const fim = el('div', 'cenario__fim');
+  fim.hidden = true;
+  fim.setAttribute('aria-live', 'polite');
+  fim.append(el('p', 'cenario__conclusao', conclusao(c)));
   const comparar = comparacao(c);
-  if (comparar) d.append(el('p', 'cenario__comparacao', comparar));
-  return { elemento: d, palco, passo };
+  if (comparar) fim.append(el('p', 'cenario__comparacao', comparar));
+  partes.set('conclusao', [fim]);
+
+  const botao = el('button', 'cenario__botao');
+  botao.type = 'button';
+
+  d.append(cab, palco.elemento, faixa, fim, botao);
+  return { elemento: d, palco, passo, partes, botao };
 }
 
 /** A conclusão final: visível por baixo dos cenários, sem ser preciso procurá-la. */
@@ -473,13 +497,15 @@ function criarFecho(): HTMLElement {
   const titulo = el('h2', 'fecho__titulo', TEXTOS.fechoTitulo);
   titulo.id = 'fecho-titulo';
   secao.append(titulo, el('p', 'fecho__destaque', destaque), el('p', 'fecho__detalhe', detalhe));
+  // Só aparece quando se chega a «Agora tu», depois dos exemplos.
+  secao.hidden = true;
   return secao;
 }
 
 export const ecraMetricas: Ecra = (contentor) => {
   contentor.append(el('p', 'metricas__intro', TEXTOS.intro));
+  // O controlo do WIP fica dentro do último diapositivo, «Agora tu».
   const experimenta = criarExperimenta((wip) => usarWip(wip, true));
-  contentor.append(experimenta.elemento);
 
   const licao = el('section', 'licao');
   licao.setAttribute('aria-roledescription', 'carrossel');
@@ -490,26 +516,56 @@ export const ecraMetricas: Ecra = (contentor) => {
   janela.append(pista);
 
   const diapositivos = CENARIOS.map((c, i) => criarDiapositivo(c, `cenario-${i}`, (wip) => usarWip(wip, true)));
+  /** Quantas etapas já se mostraram em cada diapositivo. */
+  const vistas: number[] = diapositivos.map(() => 0);
 
-  licao.append(janela);
-  contentor.append(licao, criarFecho());
+  // Separadores por cima: Exemplo 1, 2, 3 e «Agora tu».
+  const separadores = el('div', 'licao__separadores');
+  separadores.setAttribute('role', 'group');
+  separadores.setAttribute('aria-label', 'Escolher o exemplo');
+  const botoesSeparador = [...CENARIOS.map((c) => `WIP ${c.limiteWip}`), 'Agora tu'].map((texto, i) => {
+    const b = el('button', 'licao__separador', i < CENARIOS.length ? `Exemplo ${i + 1} · ${texto}` : texto);
+    b.type = 'button';
+    b.addEventListener('click', () => irPara(i));
+    separadores.append(b);
+    return b;
+  });
+
+  const fecho = criarFecho();
+  licao.append(separadores, janela);
+  contentor.append(licao, fecho);
 
   // ---------- Tempo ----------
   let atual = 0;
-  let decorrido = 0; // só com «reduzir movimento»: tempo de leitura
   let tempoPalco = 0; // da animação deste cenário
-  // Com «reduzir movimento» os cenários passam na mesma, mas sem animação:
-  // cada um mostra logo o fim dos 15 dias.
+  // Com «reduzir movimento» não há animação: cada cenário mostra logo o fim
+  // dos 15 dias.
   const reduzido = movimentoReduzido();
-  let rato = false;
-  let foco = false;
 
-  licao.addEventListener('pointerenter', () => (rato = true));
-  licao.addEventListener('pointerleave', () => (rato = false));
-  licao.addEventListener('focusin', () => (foco = true));
-  licao.addEventListener('focusout', (e) => {
-    if (!licao.contains(e.relatedTarget as Node | null)) foco = false;
-  });
+  /** Mostra as etapas já vistas do diapositivo i e põe o texto do botão. */
+  function mostrarEtapas(i: number): void {
+    const d = diapositivos[i];
+    const visiveis = new Set(etapasVisiveis(vistas[i]));
+    d.partes.forEach((elementos, etapa) => elementos.forEach((e) => (e.hidden = !visiveis.has(etapa))));
+    const texto = textoBotao(vistas[i], i);
+    d.botao.hidden = texto === null;
+    d.botao.textContent = texto ?? '';
+  }
+
+  function ligarBotao(i: number): void {
+    diapositivos[i].botao.addEventListener('click', () => {
+      if (vistas[i] < ETAPAS.length) {
+        vistas[i]++;
+        mostrarEtapas(i);
+        ajustarAltura();
+        return;
+      }
+      irPara(i + 1);
+      // Em «Agora tu», o foco vai para o campo do WIP.
+      if (i + 1 === CENARIOS.length) experimenta.focar();
+      else diapositivos[i + 1].botao.focus({ preventScroll: true });
+    });
+  }
 
   // Etiqueta do último diapositivo: se o limite escolhido é o de um exemplo,
   // diz qual; se é outro, diz que é um valor diferente dos exemplos.
@@ -523,13 +579,18 @@ export const ecraMetricas: Ecra = (contentor) => {
   }
 
   function irPara(indice: number): void {
-    atual = (indice + diapositivos.length) % diapositivos.length;
-    decorrido = 0;
+    atual = Math.max(0, Math.min(indice, diapositivos.length - 1));
     pista.style.transform = `translateX(-${atual * 100}%)`;
     diapositivos.forEach((d, i) => {
       d.elemento.inert = i !== atual;
       d.elemento.classList.toggle('cenario--ativo', i === atual);
     });
+    botoesSeparador.forEach((b, i) => {
+      if (i === atual) b.setAttribute('aria-current', 'step');
+      else b.removeAttribute('aria-current');
+    });
+    // A conclusão final aparece quando se chega a «Agora tu».
+    if (atual === CENARIOS.length) fecho.hidden = false;
     ajustarAltura();
     const palco = diapositivos[atual].palco;
     palco.reiniciar();
@@ -551,10 +612,19 @@ export const ecraMetricas: Ecra = (contentor) => {
     if (guardar) guardarWip(c.limiteWip);
     experimenta.sincronizar(c.limiteWip);
     const novo = criarDiapositivo(c, 'cenario-teu', (n) => usarWip(n, true));
+    // O controlo passa para o diapositivo novo; quem estava a escrever nele
+    // continua com o foco no mesmo sítio.
+    const ativo = document.activeElement;
+    const tinhaFoco = ativo instanceof HTMLElement && experimenta.elemento.contains(ativo);
+    novo.elemento.querySelector('.cenario__cabeca')?.after(experimenta.elemento);
     if (diapositivos.length > CENARIOS.length) diapositivos[CENARIOS.length] = novo;
     else diapositivos.push(novo);
+    vistas[CENARIOS.length] = 0;
+    ligarBotao(CENARIOS.length);
     montar();
+    mostrarEtapas(CENARIOS.length);
     novo.palco.posicionar();
+    if (tinhaFoco) ativo.focus({ preventScroll: true });
     if (mostrarJa) irPara(CENARIOS.length);
   }
 
@@ -574,21 +644,19 @@ export const ecraMetricas: Ecra = (contentor) => {
     const dt = Math.min(agora - ultimo, 100);
     ultimo = agora;
     if (!document.hidden) {
-      const palco = diapositivos[atual].palco;
-      if (!reduzido) {
+      // Os exemplos já não passam sozinhos: a animação corre e fica no fim.
+      if (!reduzido && tempoPalco < diapositivos[atual].palco.tempoFinal) {
         tempoPalco += dt;
-        palco.definirTempo(tempoPalco);
-      } else {
-        decorrido += dt;
+        diapositivos[atual].palco.definirTempo(tempoPalco);
       }
-      // Quando a simulação acaba (e depois de uma pausa curta), passa ao
-      // cenário seguinte. Com o rato ou o foco lá dentro, espera.
-      const acabou = reduzido ? decorrido >= LEITURA_MS : tempoPalco >= palco.tempoFinal + PAUSA_FIM_MS;
-      if (acabou && !rato && !foco) irPara(atual + 1);
     }
     requestAnimationFrame(tique);
   }
 
+  CENARIOS.forEach((_, i) => {
+    ligarBotao(i);
+    mostrarEtapas(i);
+  });
   montar();
   // «O teu cenário» está sempre lá: com o limite guardado ou com o inicial.
   const guardado = lerWipGuardado();

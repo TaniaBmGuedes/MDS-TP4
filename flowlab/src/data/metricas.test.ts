@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, comparacao, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
+import { CENARIOS, CENARIO_INICIAL, ETAPAS, METRICAS, etapasVisiveis, textoBotao, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, comparacao, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
 
 describe('METRICAS', () => {
   it('são as três do Sketch 2, cada uma com os textos todos', () => {
@@ -192,5 +192,34 @@ describe('comparação com uma tarefa por pessoa', () => {
       expect(texto).toContain(numero(base.leadTime));
     }
     expect(comparacao(cenarioPersonalizado(7))).toContain(throughput(base.throughput));
+  });
+});
+
+describe('passo a passo', () => {
+  it('mostra uma métrica de cada vez e só depois a conclusão', () => {
+    expect(ETAPAS).toEqual(['wip', 'throughput', 'lead', 'conclusao']);
+    expect(etapasVisiveis(0)).toEqual([]);
+    expect(etapasVisiveis(2)).toEqual(['wip', 'throughput']);
+    expect(etapasVisiveis(99)).toEqual(ETAPAS);
+    expect(etapasVisiveis(-1)).toEqual([]);
+  });
+
+  it('o botão diz o que vem a seguir', () => {
+    expect(textoBotao(0, 0)).toBe('Ver o WIP');
+    expect(textoBotao(1, 0)).toBe('Ver o throughput');
+    expect(textoBotao(2, 0)).toBe('Ver o lead time');
+    expect(textoBotao(3, 0)).toBe('O que isto quer dizer?');
+  });
+
+  it('no fim de um exemplo passa ao seguinte e, no último, ao cenário da pessoa', () => {
+    const fim = ETAPAS.length;
+    expect(textoBotao(fim, 0)).toBe(`Próximo exemplo: WIP ${CENARIOS[1].limiteWip}`);
+    expect(textoBotao(fim, CENARIOS.length - 1)).toBe('Agora tu: escolhe o WIP');
+    expect(textoBotao(fim, CENARIOS.length)).toBeNull();
+  });
+
+  it('a introdução já não diz que os exemplos passam sozinhos', () => {
+    expect(TEXTOS.intro).not.toContain('sozinho');
+    expect(TEXTOS.intro).toContain('um exemplo de cada vez');
   });
 });
