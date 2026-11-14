@@ -186,6 +186,8 @@ export const ecraEquipa: Ecra = (contentor, _passo, percurso) => {
   nav.append(anterior, seguinte);
   // A escolha que a pessoa fez no dilema (H23), antes da resposta geral.
   const escolha = el('p', 'eq__resposta-escolha', textoEscolhaNaEquipa(percurso.estado().respostaDilema));
+  // Todos os ecrãs são desenhados ao abrir o site: a frase acompanha a escolha feita no dilema.
+  percurso.subscrever((estado) => { escolha.textContent = textoEscolhaNaEquipa(estado.respostaDilema); });
   resposta.append(el('p', 'eq__resposta-etiqueta', TEXTOS.respostaEtiqueta), titulo, escolha, el('p', 'eq__resposta-texto', TEXTOS.resposta), nav);
   contentor.append(resposta);
 
