@@ -1,0 +1,92 @@
+/* Ecrã de introdução (H20) em ecrã inteiro (H31). */
+
+/* Topo: texto à esquerda, quadro vivo à direita, ocupa o ecrã. */
+.inicio__heroi {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 48px;
+  position: relative;
+}
+/* Grelha de pontos atrás do topo, a desvanecer nas pontas. */
+.inicio__heroi::before {
+  content: ""; position: absolute; inset: -48px 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(color-mix(in srgb, var(--texto) 16%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse at 70% 50%, #000 0%, transparent 70%);
+}
+.inicio__texto { display: flex; flex-direction: column; gap: 16px; }
+#inicio .ecra__titulo { font-size: clamp(36px, 4.2vw, 60px); line-height: 1.02; letter-spacing: -.035em; }
+
+.inicio__tema { font-size: clamp(18px, 2vw, 22px); color: var(--texto-suave); }
+.inicio__palavra {
+  display: inline-block; min-width: 6ch;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600;
+  color: var(--acento);
+}
+.inicio__objetivo { font-size: 17px; color: var(--texto-suave); }
+
+.inicio__comecar {
+  align-self: flex-start; margin-top: 8px;
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 56px; padding: 0 28px;
+  border: 0; border-radius: 999px;
+  font-size: 17px; font-weight: 600;
+}
+.inicio__comecar svg { transition: transform .25s var(--ease); }
+.inicio__comecar:hover svg { transform: translateX(4px); }
+.inicio__comecar:focus-visible { outline-offset: 3px; }
+
+/* ---------- Quadro vivo ---------- */
+.quadro-vivo {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;
+  padding: 16px; border-radius: 16px;
+  background: var(--superficie); border: 1px solid var(--divisor);
+  box-shadow: 0 30px 60px -20px rgba(9, 30, 66, .25);
+}
+.quadro-vivo__coluna { display: flex; flex-direction: column; gap: 10px; min-height: 250px; padding: 10px; border-radius: 10px; background: var(--pairar); }
+.quadro-vivo__cabeca { font: 700 11px var(--letra-texto); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave); }
+.quadro-vivo__coluna--1 .quadro-vivo__cabeca { color: var(--acento); }
+.quadro-vivo__coluna--2 .quadro-vivo__cabeca { color: var(--verde); }
+.quadro-vivo__lista { display: flex; flex-direction: column; gap: 8px; }
+.quadro-vivo__cartao {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px; border-radius: 8px;
+  background: var(--superficie); border: 1px solid var(--divisor);
+  box-shadow: 0 1px 2px rgba(9, 30, 66, .12);
+}
+.quadro-vivo__coluna--1 .quadro-vivo__cartao { border-color: var(--acento-linha); box-shadow: inset 3px 0 0 var(--acento), 0 1px 2px rgba(9, 30, 66, .12); }
+.quadro-vivo__coluna--2 .quadro-vivo__cartao { opacity: .7; }
+.quadro-vivo__id { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--texto-fraco); }
+.quadro-vivo__linha { height: 6px; border-radius: 3px; background: var(--divisor); }
+.quadro-vivo__linha--curta { width: 60%; }
+.quadro-vivo__cartao--novo { animation: cartao-chegar .6s cubic-bezier(.22, 1, .36, 1); }
+@keyframes cartao-chegar { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
+
+/* ---------- O que vais aprender (largura toda, por baixo do topo) ---------- */
+.inicio__aprender { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+.inicio__subtitulo { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--texto-fraco); }
+.inicio__lista {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+}
+.inicio__item {
+  display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 4px 12px;
+  padding: 12px 14px; border-radius: 12px;
+  background: var(--superficie); border: 1px solid var(--divisor);
+  color: var(--texto); font-size: 14px; line-height: 1.4;
+}
+.inicio__icone {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+  background: var(--acento-fundo); color: var(--acento);
+}
+
+@media (max-width: 900px) {
+  .inicio__heroi { grid-template-columns: 1fr; min-height: 0; gap: 32px; }
+  .quadro-vivo__coluna { min-height: 220px; }
+  .inicio__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .inicio__lista { grid-template-columns: 1fr; }
+  .inicio__comecar { align-self: stretch; justify-content: center; }
+  .quadro-vivo { gap: 6px; padding: 10px; }
+  .quadro-vivo__coluna { padding: 6px; min-height: 200px; }
+  .quadro-vivo__cabeca { font-size: 9px; }
+}

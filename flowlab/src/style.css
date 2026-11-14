@@ -54,7 +54,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .seccao { padding: 56px 0 8px; display: flex; flex-direction: column; gap: 18px; }
 .caixa { background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio-caixa); padding: 32px; margin-top: 48px; }
 .etiqueta { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--azul); }
-.lead { font-size: 19px; color: var(--cor-texto-medio); max-width: 720px; }
+.lead { font-size: 19px; color: var(--cor-texto-medio); }
 .suave { color: var(--suave); }
 .nota { font-size: 13px; color: var(--suave); }
 
@@ -176,7 +176,7 @@ input[type=range] { width: 220px; max-width: 100%; margin-top: 8px; accent-color
 /* Ecrã Info (Dilema) */
 .ecra-info__subtitulo {
   font-size: 1.125rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
   opacity: 0.85; /* Dá um tom mais suave ao texto secundário */
 }
 
@@ -243,7 +243,7 @@ input[type=range] { width: 220px; max-width: 100%; margin-top: 8px; accent-color
 
 /* Espaçamento grande para separar da zona dos botões acima */
 .kanban-cabecalho {
-  margin-top: 5rem;
+  margin-top: 8px;
 }
 
 .ecra-info__kanban {
