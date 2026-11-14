@@ -19,7 +19,7 @@ Os entregáveis seguem a lista da secção 6 do enunciado (`theme/assignment4.pd
 Outros documentos:
 
 - `entrega/05_Teste_do_Chatbot.docx`: 10 perguntas com respostas esperadas para o BOTSchool.ai e a tabela de resultados (o bot ainda não existe a 14/11).
-- `entrega/figuras/`: burndown dos dois sprints, story points por pessoa e tickets bloqueados, feitos com os dados do Jira.
+- `entrega/figuras/`: burndown do Sprint 1, story points por pessoa e tickets bloqueados (o burndown do Sprint 2 entra no fecho do sprint), feitos com os dados do Jira.
 - `Registos/Tania/`: registo de uso de IA da Tânia, com os pedidos traduzidos para inglês em `prompts/`.
 - `Screenshots/Tania/v2/`: capturas do site e do quadro do Jira a 14/11.
 
