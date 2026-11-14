@@ -24,6 +24,7 @@ import {
   textoDiferenca,
   throughputPorDia,
 } from '../data/scenarios';
+import { textoEscolhaNaEquipa } from '../data/dilema';
 import { calcularEquipa, type Diferenca, type Equipa } from '../model/equipa';
 import type { Ecra } from './index';
 
@@ -183,7 +184,11 @@ export const ecraEquipa: Ecra = (contentor, _passo, percurso) => {
   seguinte.type = 'button';
   seguinte.addEventListener('click', () => percurso.avancar());
   nav.append(anterior, seguinte);
-  resposta.append(el('p', 'eq__resposta-etiqueta', TEXTOS.respostaEtiqueta), titulo, el('p', 'eq__resposta-texto', TEXTOS.resposta), nav);
+  // A escolha que a pessoa fez no dilema (H23), antes da resposta geral.
+  const escolha = el('p', 'eq__resposta-escolha', textoEscolhaNaEquipa(percurso.estado().respostaDilema));
+  // Todos os ecrãs são desenhados ao abrir o site: a frase acompanha a escolha feita no dilema.
+  percurso.subscrever((estado) => { escolha.textContent = textoEscolhaNaEquipa(estado.respostaDilema); });
+  resposta.append(el('p', 'eq__resposta-etiqueta', TEXTOS.respostaEtiqueta), titulo, escolha, el('p', 'eq__resposta-texto', TEXTOS.resposta), nav);
   contentor.append(resposta);
 
   function usar(nova: Equipa): void {

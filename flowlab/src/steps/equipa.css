@@ -75,6 +75,7 @@
 }
 .eq__resposta-etiqueta { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
 .eq__resposta-titulo { font: 700 clamp(20px, 2.2vw, 24px)/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.eq__resposta-escolha { margin: 0; padding: 10px 14px; border-left: 4px solid var(--acento); background: var(--acento-fundo); border-radius: 0 10px 10px 0; color: var(--texto); font-size: 15px; font-weight: 500; }
 .eq__resposta-texto { color: var(--texto-suave); font-size: 15px; }
 .eq__nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 4px; }
 

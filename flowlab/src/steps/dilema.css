@@ -1,0 +1,30 @@
+/* O dilema do início (H23). Cores do tema em shell.css. As opções são as de
+   style.css (.cartao-opcao); aqui só se garante que se veem no tema claro e
+   se desenha o resultado que aparece ao escolher. */
+
+.ecra-info__opcoes .cartao-opcao {
+  border: 1px solid var(--divisor-forte);
+  background: var(--superficie);
+}
+.ecra-info__opcoes .cartao-opcao:hover { border-color: var(--acento); background: var(--pairar); }
+.ecra-info__opcoes .cartao-opcao[aria-pressed="true"] {
+  border-color: var(--acento); background: var(--acento-fundo); box-shadow: 0 0 0 2px var(--acento);
+}
+.ecra-info__opcoes .cartao-opcao:focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+.dilema__resultado {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 1.5rem; padding: 20px 24px;
+  border: 1px solid var(--divisor); border-left: 5px solid var(--acento); border-radius: 14px;
+  background: var(--superficie);
+}
+.dilema__resultado[hidden] { display: none; }
+.dilema__etiqueta { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
+.dilema__veredicto { margin: 0; font: 700 clamp(20px, 2.4vw, 26px)/1.25 Inter, system-ui, sans-serif; color: var(--texto); }
+.dilema__explicacao { margin: 0; font-size: 17px; color: var(--texto); }
+.dilema__numeros { margin: 0; font-size: 14px; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .dilema__resultado:not([hidden]) { animation: dilema-entra .35s var(--ease) both; }
+}
+@keyframes dilema-entra { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

@@ -1,67 +1,13 @@
 import type { Passo } from './passos';
 import type { Percurso } from '../model/percurso';
+import { montarDilema } from '../steps/dilema';
 
-const INFO_DILEMA = {
-  subtitulo: 'Escolhe por instinto. No fim do percurso vais ver, com números, se acertaste.',
-  opcoes: [
-    {
-      id: 'trazer-gente',
-      titulo: 'Trazer mais gente',
-      descricao: 'Mais pessoas, mais mãos a trabalhar.',
-    },
-    {
-      id: 'comecar-trabalho',
-      titulo: 'Começar mais trabalho',
-      descricao: 'Tudo em paralelo, para não ficar nada parado.',
-    },
-    {
-      id: 'fazer-menos',
-      titulo: 'Fazer menos de cada vez',
-      descricao: 'Acabar antes de começar coisas novas.',
-    }
-  ]
-};
-
-// Adicionámos o _ antes de passo e percurso para avisar o TypeScript 
-// que é normal não os estarmos a usar neste momento.
-export function ecraInfo(seccao: HTMLElement, _passo: Passo, _percurso: Percurso): void {
+// O _ antes de passo avisa o TypeScript de que é normal não o usarmos.
+export function ecraInfo(seccao: HTMLElement, _passo: Passo, percurso: Percurso): void {
   // ==========================================
-  // PARTE 1: O DILEMA (BOTÕES)
+  // PARTE 1: O DILEMA (H23, em steps/dilema.ts)
   // ==========================================
-  const subtitulo = document.createElement('p');
-  subtitulo.className = 'ecra-info__subtitulo';
-  subtitulo.textContent = INFO_DILEMA.subtitulo;
-  seccao.append(subtitulo);
-
-  const grelhaOpcoes = document.createElement('div');
-  grelhaOpcoes.className = 'ecra-info__opcoes';
-
-  INFO_DILEMA.opcoes.forEach(opcao => {
-    const botao = document.createElement('button');
-    botao.className = 'cartao-opcao';
-    
-    const tituloOpcao = document.createElement('h2');
-    tituloOpcao.className = 'cartao-opcao__titulo';
-    tituloOpcao.textContent = opcao.titulo;
-    
-    const descOpcao = document.createElement('p');
-    descOpcao.className = 'cartao-opcao__desc';
-    descOpcao.textContent = opcao.descricao;
-    
-    botao.append(tituloOpcao, descOpcao);
-    
-    botao.addEventListener('click', () => {
-      const todosCartoes = grelhaOpcoes.querySelectorAll('.cartao-opcao');
-      todosCartoes.forEach(cartao => {
-        cartao.classList.remove('cartao-opcao--selecionado');
-      });
-      botao.classList.add('cartao-opcao--selecionado');
-    });
-    
-    grelhaOpcoes.append(botao);
-  });
-
-  seccao.append(grelhaOpcoes);
+  montarDilema(seccao, percurso);
 
 
   // ==========================================
