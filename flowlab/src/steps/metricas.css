@@ -67,7 +67,7 @@
 .ficha {
   position: absolute; left: 0; top: 0;
   width: var(--t); height: var(--t); border-radius: 3px;
-  transition: transform .9s var(--ease), background-color .5s, border-color .5s, opacity .6s;
+  transition: transform .4s var(--ease), background-color .3s, border-color .3s, opacity .4s;
 }
 .ficha--espera { background: var(--superficie); border: 1.5px solid var(--divisor-forte); }
 .ficha--curso { background: var(--amarelo-fundo); border: 1.5px solid var(--amarelo); }
@@ -90,6 +90,7 @@
   color: var(--acento); font-variant-numeric: tabular-nums;
 }
 .cenario__conclusao { font-size: 17px; font-weight: 500; color: var(--texto); }
+.cenario__comparacao { margin: -10px 0 0; font-size: 15px; color: var(--texto-suave); }
 
 /* ---------- Número do WIP editável (duplo clique) ---------- */
 .cenario__wip {
@@ -104,6 +105,46 @@
   background: var(--superficie); color: var(--texto); font: inherit; letter-spacing: inherit;
 }
 .cenario__campo:focus { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+/* ---------- «O teu cenário»: controlo visível (H26) ---------- */
+.experimenta {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  padding: 16px 20px; border: 1px solid var(--acento-linha); border-radius: 14px; background: var(--acento-fundo);
+}
+.experimenta__rotulo { font-size: 15px; font-weight: 700; color: var(--texto); }
+.experimenta__linha { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.experimenta__passo {
+  width: 44px; height: 44px; border-radius: 10px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  font-size: 22px; line-height: 1; color: var(--texto);
+  transition: background .15s, border-color .15s;
+}
+.experimenta__passo:hover { border-color: var(--acento); background: var(--pairar); }
+.experimenta__passo[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+.experimenta__passo[aria-disabled="true"]:hover { border-color: var(--divisor-forte); background: var(--superficie); }
+.experimenta__campo {
+  width: 4.5em; height: 44px; padding: 0 8px; text-align: center;
+  border: 1px solid var(--divisor-forte); border-radius: 10px;
+  background: var(--superficie); color: var(--texto);
+  font: 700 20px/1 Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums;
+}
+.experimenta__campo[aria-invalid="true"] { border-color: var(--amarelo); box-shadow: 0 0 0 3px var(--amarelo-fundo); }
+.experimenta__ajuda { margin: 0; font-size: 14px; color: var(--texto-suave); }
+.experimenta__erro { margin: 0; min-height: 1.2em; font-size: 14px; font-weight: 600; color: var(--texto); }
+.experimenta__erro:empty { display: none; }
+.experimenta__passo:focus-visible, .experimenta__campo:focus-visible {
+  outline: 2px solid var(--acento); outline-offset: 2px;
+}
+
+/* ---------- Conclusão final (H27) ---------- */
+.fecho {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 20px 24px; border-radius: 14px;
+  background: var(--superficie); border: 1px solid var(--divisor); border-left: 5px solid var(--acento);
+}
+.fecho__titulo { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--acento); }
+.fecho__destaque { margin: 0; font: 700 clamp(20px, 2.4vw, 26px)/1.25 Inter, system-ui, sans-serif; color: var(--texto); }
+.fecho__detalhe { margin: 0; font-size: 16px; color: var(--texto-suave); }
 
 /* ---------- Ecrãs mais pequenos ---------- */
 @media (max-width: 700px) {

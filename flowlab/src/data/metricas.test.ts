@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, cenarioPersonalizado, conclusao, numero, situacao, throughput } from './metricas';
+import { CENARIOS, CENARIO_INICIAL, METRICAS, PARAMETROS, TEXTOS, WIP_MAXIMO, WIP_MINIMO, WIP_PROPRIO_INICIAL, cenarioPersonalizado, comparacao, conclusao, indiceDoExemplo, numero, situacao, throughput } from './metricas';
 
 describe('METRICAS', () => {
   it('são as três do Sketch 2, cada uma com os textos todos', () => {
@@ -105,7 +105,7 @@ describe('cenarioPersonalizado', () => {
     expect(c.limiteWip).toBe(6);
     expect(c.noSistema / c.throughput).toBeCloseTo(c.leadTime, 9);
     expect(cenarioPersonalizado(0).limiteWip).toBe(1);
-    expect(cenarioPersonalizado(99).limiteWip).toBe(15);
+    expect(cenarioPersonalizado(99).limiteWip).toBe(WIP_MAXIMO);
     expect(situacao(cenarioPersonalizado(1))).toContain('1 tarefa em curso');
     expect({ ...cenarioPersonalizado(4), nome: "" }).toEqual({ ...CENARIOS[CENARIO_INICIAL], nome: "" });
   });
@@ -118,5 +118,79 @@ describe('numero', () => {
     expect(numero(13.27)).toBe('13,3');
     expect(throughput(1.0304)).toBe('1,03');
     expect(throughput(2)).toBe('2');
+  });
+});
+
+describe('texto de abertura e controlo de «O teu cenário»', () => {
+  it('o texto de abertura diz quantos exemplos há e o intervalo do teu cenário', () => {
+    expect(TEXTOS.intro).toContain(`${CENARIOS.length} exemplos`);
+    expect(TEXTOS.intro).toContain(`${WIP_MINIMO} a ${WIP_MAXIMO}`);
+    expect(TEXTOS.intro).not.toContain('três cenários');
+    for (const c of CENARIOS) expect(TEXTOS.intro).toContain(String(c.limiteWip));
+  });
+
+  it('as etiquetas dos diapositivos contam só os exemplos', () => {
+    expect(TEXTOS.passoExemplo(1, CENARIOS.length)).toBe(`Exemplo 1 de ${CENARIOS.length}`);
+    expect(TEXTOS.passoTeu).toContain('teu cenário');
+  });
+
+  it('reconhece quando o WIP escolhido é o de um exemplo', () => {
+    expect(indiceDoExemplo(2)).toBe(0);
+    expect(indiceDoExemplo(4)).toBe(1);
+    expect(indiceDoExemplo(12)).toBe(2);
+    expect(indiceDoExemplo(6)).toBe(-1);
+    expect(TEXTOS.passoIgual(2, CENARIOS.length)).toContain('Exemplo 2 de 3');
+    expect(TEXTOS.passoTeu).toContain('diferente');
+  });
+
+  it('o máximo do teu cenário é o mesmo do simulador', () => {
+    expect(WIP_MAXIMO).toBe(12);
+  });
+
+  it('o intervalo permitido está escrito e o valor inicial cabe nele', () => {
+    expect(TEXTOS.experimenta.ajuda).toContain(`${WIP_MINIMO} a ${WIP_MAXIMO}`);
+    expect(TEXTOS.experimenta.erro).toContain(`${WIP_MINIMO} a ${WIP_MAXIMO}`);
+    expect(WIP_PROPRIO_INICIAL).toBeGreaterThanOrEqual(WIP_MINIMO);
+    expect(WIP_PROPRIO_INICIAL).toBeLessThanOrEqual(WIP_MAXIMO);
+    // O cenário inicial não repete nenhum dos cenários já preparados.
+    expect(CENARIOS.map((c) => c.limiteWip)).not.toContain(WIP_PROPRIO_INICIAL);
+  });
+});
+
+describe('conclusão final', () => {
+  it('compara os três cenários com os números do simulador', () => {
+    const { destaque, detalhe } = TEXTOS.fecho(CENARIOS);
+    expect(destaque).toContain(`WIP ${PARAMETROS.pessoas}`);
+    for (const c of CENARIOS) {
+      expect(detalhe).toContain(`WIP ${c.limiteWip}:`);
+      expect(detalhe).toContain(`${throughput(c.throughput)} `);
+      expect(detalhe).toContain(numero(c.leadTime));
+    }
+  });
+
+  it('só afirma «entrega mais e mais depressa» se os números o mostrarem', () => {
+    const igual = CENARIOS.find((c) => c.limiteWip === PARAMETROS.pessoas)!;
+    for (const c of CENARIOS.filter((x) => x !== igual)) {
+      expect(igual.throughput).toBeGreaterThan(c.throughput);
+      expect(igual.leadTime).toBeLessThan(c.leadTime);
+    }
+  });
+});
+
+describe('comparação com uma tarefa por pessoa', () => {
+  const base = CENARIOS[CENARIO_INICIAL];
+
+  it('no cenário de uma tarefa por pessoa não há nada a comparar', () => {
+    expect(comparacao(base)).toBe('');
+  });
+
+  it('nos outros diz os números do cenário de uma tarefa por pessoa', () => {
+    for (const c of CENARIOS.filter((x) => x !== base)) {
+      const texto = comparacao(c);
+      expect(texto).toContain(`WIP ${PARAMETROS.pessoas}`);
+      expect(texto).toContain(throughput(base.throughput));
+      expect(texto).toContain(numero(base.leadTime));
+    }
+    expect(comparacao(cenarioPersonalizado(7))).toContain(throughput(base.throughput));
   });
 });
