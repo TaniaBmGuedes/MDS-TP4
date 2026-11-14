@@ -12,7 +12,7 @@
   background-size: 22px 22px;
   mask-image: radial-gradient(ellipse at 70% 50%, #000 0%, transparent 70%);
 }
-.inicio__texto { display: flex; flex-direction: column; gap: 18px; }
+.inicio__texto { display: flex; flex-direction: column; gap: 16px; }
 #inicio .ecra__titulo { font-size: clamp(36px, 4.2vw, 60px); line-height: 1.02; letter-spacing: -.035em; }
 
 .inicio__tema { font-size: clamp(18px, 2vw, 22px); color: var(--texto-suave); }
@@ -41,7 +41,7 @@
   background: var(--superficie); border: 1px solid var(--divisor);
   box-shadow: 0 30px 60px -20px rgba(9, 30, 66, .25);
 }
-.quadro-vivo__coluna { display: flex; flex-direction: column; gap: 10px; min-height: 300px; padding: 10px; border-radius: 10px; background: var(--pairar); }
+.quadro-vivo__coluna { display: flex; flex-direction: column; gap: 10px; min-height: 250px; padding: 10px; border-radius: 10px; background: var(--pairar); }
 .quadro-vivo__cabeca { font: 700 11px var(--letra-texto); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave); }
 .quadro-vivo__coluna--1 .quadro-vivo__cabeca { color: var(--acento); }
 .quadro-vivo__coluna--2 .quadro-vivo__cabeca { color: var(--verde); }
@@ -60,12 +60,12 @@
 .quadro-vivo__cartao--novo { animation: cartao-chegar .6s cubic-bezier(.22, 1, .36, 1); }
 @keyframes cartao-chegar { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
 
-/* ---------- O que vais aprender (dentro do bloco de texto) ---------- */
-.inicio__aprender { display: flex; flex-direction: column; gap: 10px; }
+/* ---------- O que vais aprender (largura toda, por baixo do topo) ---------- */
+.inicio__aprender { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
 .inicio__subtitulo { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--texto-fraco); }
 .inicio__lista {
   list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
 }
 .inicio__item {
   display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 4px 12px;
@@ -81,6 +81,7 @@
 @media (max-width: 900px) {
   .inicio__heroi { grid-template-columns: 1fr; min-height: 0; gap: 32px; }
   .quadro-vivo__coluna { min-height: 220px; }
+  .inicio__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .inicio__lista { grid-template-columns: 1fr; }
