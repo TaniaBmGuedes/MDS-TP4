@@ -76,13 +76,13 @@ export const ecraInicio: Ecra = (seccao, _passo, percurso) => {
     lista.append(li);
   });
 
-  // Tudo num só ecrã: o que se vai aprender fica no bloco de texto, antes
-  // do botão.
+  // Tudo no primeiro ecrã: o que se vai aprender fica por baixo do topo,
+  // na largura toda, em quatro cartões lado a lado.
   const aprender = document.createElement('div');
   aprender.className = 'inicio__aprender';
   aprender.append(subtitulo, lista);
-  texto.append(tema, objetivo, aprender, comecar);
-  seccao.append(heroi);
+  texto.append(tema, objetivo, comecar);
+  seccao.append(heroi, aprender);
 };
 
 // ---------- Quadro vivo ----------
