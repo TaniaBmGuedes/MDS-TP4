@@ -105,7 +105,7 @@ describe('cenarioPersonalizado', () => {
     expect(c.limiteWip).toBe(6);
     expect(c.noSistema / c.throughput).toBeCloseTo(c.leadTime, 9);
     expect(cenarioPersonalizado(0).limiteWip).toBe(1);
-    expect(cenarioPersonalizado(99).limiteWip).toBe(15);
+    expect(cenarioPersonalizado(99).limiteWip).toBe(WIP_MAXIMO);
     expect(situacao(cenarioPersonalizado(1))).toContain('1 tarefa em curso');
     expect({ ...cenarioPersonalizado(4), nome: "" }).toEqual({ ...CENARIOS[CENARIO_INICIAL], nome: "" });
   });
@@ -131,7 +131,7 @@ describe('texto de abertura e controlo de «O teu cenário»', () => {
 
   it('as etiquetas dos diapositivos contam só os exemplos', () => {
     expect(TEXTOS.passoExemplo(1, CENARIOS.length)).toBe(`Exemplo 1 de ${CENARIOS.length}`);
-    expect(TEXTOS.passoTeu).toContain('tu');
+    expect(TEXTOS.passoTeu).toContain('teu cenário');
   });
 
   it('reconhece quando o WIP escolhido é o de um exemplo', () => {
