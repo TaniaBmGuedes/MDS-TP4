@@ -25,8 +25,10 @@ export interface EstadoPercurso {
   /** vistos[i] é true se a pessoa já abriu o passo i. */
   readonly vistos: readonly boolean[];
   /**
-   * concluidos[i] é true se a pessoa saiu do passo i para a frente. Voltar
-   * atrás ou saltar para um passo anterior não conclui o passo.
+   * concluidos[i] é true se a pessoa passou pelo passo i e está agora num
+   * passo à frente dele. Ao voltar atrás, o passo de destino e os seguintes
+   * deixam de estar concluídos (SCRUM-142); só ficam concluídos passos antes
+   * do passo atual.
    */
   readonly concluidos: readonly boolean[];
   readonly respostaDilema: EscolhaDilema | null;
@@ -91,7 +93,18 @@ export function criarPercurso(totalPassos: number, totalPerguntas: number): Perc
       ...estado,
       passoAtual: destino,
       vistos: estado.vistos.map((visto, i) => visto || i === destino),
-      concluidos: estado.concluidos.map((feito, i) => feito || (paraAFrente && i === origem)),
+      // SCRUM-142: o menu mostra a verde só o que fica para trás do passo atual.
+      // - Para a frente: conclui o passo de onde se sai e os que se atravessam
+      //   e já tinham sido vistos (ex.: voltar do simulador ao quiz pelo botão
+      //   «Voltar ao quiz»). Os que se saltam sem nunca os abrir não contam.
+      // - Para trás: o passo de destino e os seguintes deixam de estar
+      //   concluídos, porque a pessoa voltou a estar antes deles.
+      concluidos: estado.concluidos.map((feito, i) => {
+        if (paraAFrente) {
+          return feito || i === origem || (i > origem && i < destino && estado.vistos[i]);
+        }
+        return i < destino && feito;
+      }),
     });
   }
 
