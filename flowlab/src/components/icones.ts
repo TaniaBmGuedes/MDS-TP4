@@ -9,11 +9,13 @@ function svg(conteudo: string, tamanho = 20): string {
 const DESENHOS: Record<IdPasso, string> = {
   // Bandeira de partida
   inicio: '<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>',
+  // Quadro com três colunas
+  kanban: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/><path d="M5.5 8h1.5M11 8h2M11 11h2M17 8h1.5"/>',
   // Controlos deslizantes
   simular: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
   // Gráfico de áreas
   grafico: '<path d="M3 3v18h18"/><path d="M7 16l4-5 3 3 5-7"/>',
-  // Lâmpada
+  // Lâmpada (dilema)
   info: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/>',
   // Mostrador
   metricas: '<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1"/>',

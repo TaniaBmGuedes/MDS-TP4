@@ -273,8 +273,7 @@ a { color: #0C66E4; }
   .inicio__heroi, .sim, .ecra-info__kanban, .licao, .eq, .quiz { flex: 1 0 auto; }
   .eq { align-items: stretch; }
   .licao { justify-content: center; }
-  /* Conheces o Kanban: o quadro estica até ao fundo, o texto fica ao meio. */
-  .kanban-cabecalho { margin-top: 12px; }
+  /* O que é Kanban: o quadro estica até ao fundo, o texto fica ao meio. */
   .ecra-info__kanban { align-items: stretch; margin-top: 0; }
   .ecra-info__kanban > :first-child { align-self: start; }
   /* Quiz: pergunta e opções maiores; o espaço por baixo recebe a explicação

@@ -6,6 +6,7 @@ import type { IdPasso, Passo } from '../data/passos';
 import type { Percurso } from '../model/percurso';
 import { ecraEquipa } from './equipa';
 import { ecraInicio } from './inicio';
+import { ecraKanban } from './kanban';
 import { ecraMetricas } from './metricas';
 import { ecraInfo } from '../data/info';
 import { ecraQuiz } from './quiz';
@@ -18,9 +19,10 @@ const provisorio: Ecra = () => {};
 
 export const ECRAS: Record<IdPasso, Ecra> = {
   inicio: ecraInicio,
+  kanban: ecraKanban,
   simular: ecraSimular,
   grafico: provisorio,
-  info: ecraInfo, // Substituído o ecrã provisório pelo ecraInfo
+  info: ecraInfo, // o dilema
   metricas: ecraMetricas,
   equipa: ecraEquipa,
   quiz: ecraQuiz,
