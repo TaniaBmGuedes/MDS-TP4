@@ -185,6 +185,9 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
 
     grafico.atualizar(series, TEXTOS.descricao(series, wip));
     mostrarRegra();
+    // Fora do cenário de uma tarefa por pessoa, o gráfico compara com ele.
+    const referencia = wip === EQUIPA_INICIAL.pessoas ? null : simular(EQUIPA_INICIAL.pessoas, EQUIPA_INICIAL);
+    grafico.comparar(referencia, referencia ? TEXTOS.comparacao(series, referencia) : '');
   }
 
   slider.addEventListener('input', () => usarWip(Number(slider.value)));

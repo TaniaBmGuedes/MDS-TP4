@@ -53,6 +53,18 @@ export const TEXTOS = {
     const d = s.entradas.length - 1;
     return `Gráfico de fluxo cumulativo com limite de WIP ${wip}, do dia 0 ao dia ${d}. Três bandas empilhadas: Feito em baixo, Em curso no meio e A fazer em cima. No dia ${d}: ${tarefas(alturaBanda(s, 'aFazer', d))} a fazer, ${tarefas(alturaBanda(s, 'emCurso', d))} em curso e ${tarefas(alturaBanda(s, 'feito', d))} feitas. Os valores de cada dia estão na tabela a seguir ao gráfico.`;
   },
+  /**
+   * Comparação com o cenário de referência (uma tarefa por pessoa), que o
+   * gráfico mostra a tracejado: quantas tarefas estariam feitas no fim.
+   */
+  comparacao: (s: SeriesCumulativas, referencia: SeriesCumulativas): string => {
+    const d = s.entradas.length - 1;
+    const falta = referencia.acabadas[d] - s.acabadas[d];
+    const base = `Tracejado: as tarefas feitas com uma por pessoa (limite ${EQUIPA_INICIAL.pessoas}).`;
+    return falta > 0.05
+      ? `${base} No dia ${d} seriam ${numero(referencia.acabadas[d])}; com este limite são ${numero(s.acabadas[d])}, menos ${numero(falta)}.`
+      : `${base} Com este limite, a equipa acaba as mesmas.`;
+  },
   /** Ajuda do gráfico para quem usa o teclado (cursor dos dias). */
   ajudaCursor: 'Usa as setas para ver os valores de cada dia.',
   /** Valores de um dia, para o cursor do gráfico (rato, toque ou setas). */

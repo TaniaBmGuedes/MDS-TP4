@@ -87,7 +87,7 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
    sair do ecrã. */
 .cfd__svg { display: block; overflow: visible; max-width: 100%; height: auto; }
 
-.cfd__linha { stroke: var(--divisor); stroke-width: 1; }
+.cfd__linha { stroke: var(--divisor-forte); stroke-width: 1; stroke-dasharray: 1 5; stroke-linecap: round; }
 .cfd__eixo { stroke: var(--divisor-forte); stroke-width: 1.5; }
 .cfd__valor { font: 12px Inter, system-ui, sans-serif; fill: var(--texto-fraco); font-variant-numeric: tabular-nums; }
 .cfd__rotulo { font: 600 12px Inter, system-ui, sans-serif; fill: var(--texto-suave); }
@@ -119,6 +119,29 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 .cfd--destaque .cfd__banda--alvo { opacity: 1; }
 /* «A fazer» é clara: em destaque escurece, senão perde para as esbatidas. */
 .cfd--destaque .cfd__banda--aFazer.cfd__banda--alvo { fill: var(--cfd-afazer-alvo); }
+
+/* Tracejado do cenário de referência e a frase por baixo do gráfico */
+.cfd__referencia { fill: none; stroke: var(--texto); stroke-width: 2; stroke-dasharray: 7 5; stroke-linecap: round; transition: d .45s var(--ease), opacity .3s; }
+.cfd--sem-transicao .cfd__referencia { transition: none; }
+.cfd--destaque .cfd__referencia { opacity: .25; }
+.cfd__comparacao { display: flex; align-items: baseline; gap: 8px; font-size: 14px; color: var(--texto-suave); }
+.cfd__comparacao[hidden] { display: none; }
+.cfd__comparacao-traco { flex: none; width: 24px; border-top: 2px dashed var(--texto); transform: translateY(-4px); }
+
+/* «Pedidos», por cima da linha de cima */
+.cfd__rotulo-topo {
+  font: 600 12px Inter, system-ui, sans-serif; fill: var(--texto-suave);
+  paint-order: stroke; stroke: var(--superficie); stroke-width: 4px; stroke-linejoin: round;
+}
+
+/* Entrada: até o gráfico chegar ao ecrã as bandas ficam escondidas; depois
+   entram da esquerda para a direita e os rótulos aparecem no fim. As margens
+   negativas deixam os contornos de fora do recorte. */
+.cfd__bandas { clip-path: inset(-4px 100% -4px -4px); }
+.cfd__referencia, .cfd__fim { opacity: 0; }
+.cfd--visto .cfd__bandas { clip-path: inset(-4px); transition: clip-path 1.1s var(--ease); }
+.cfd--visto .cfd__referencia, .cfd--visto .cfd__fim { opacity: 1; transition: opacity .4s .9s, d .45s var(--ease); }
+.cfd--visto.cfd--destaque .cfd__referencia { opacity: .25; }
 
 /* Rótulos no fim das bandas */
 .cfd__fim-texto { font: 13px Inter, system-ui, sans-serif; fill: var(--texto); font-variant-numeric: tabular-nums; }

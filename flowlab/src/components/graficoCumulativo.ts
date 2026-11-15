@@ -17,6 +17,11 @@
 // dia (com espaço, a legenda de cima encolhe para uma linha). Passar o rato,
 // tocar ou usar as setas no gráfico mostra uma linha vertical com os valores
 // desse dia; o texto é anunciado ao leitor de ecrã.
+//
+// Comparação: comparar() desenha a tracejado onde estaria a banda «Feito»
+// num cenário de referência (uma tarefa por pessoa), com uma frase por baixo.
+// A linha de cima tem o rótulo «Pedidos». Na primeira vez que o gráfico
+// aparece no ecrã, as bandas entram da esquerda para a direita, como o tempo.
 import { celulasDestacadas, estaDestacada } from '../data/destaqueTabela';
 import { NOMES_BANDAS, SIGNIFICADO_BANDAS, TEXTOS, type Destaque } from '../data/grafico';
 import { numero } from '../data/metricas';
@@ -41,6 +46,11 @@ export interface GraficoCumulativo {
    * para quem não vê o desenho saber o que está destacado.
    */
   destacar: (destaque: Destaque | null, explicacao?: string) => void;
+  /**
+   * Mostra a tracejado as tarefas feitas num cenário de referência, com a
+   * frase `texto` por baixo do gráfico. Com null, tira a comparação.
+   */
+  comparar: (referencia: SeriesCumulativas | null, texto?: string) => void;
 }
 
 let instancias = 0;
@@ -110,6 +120,8 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
     caminhos.set(banda, caminho);
     camadaBandas.append(caminho);
   }
+  // Tracejado do cenário de referência, por cima das bandas.
+  const linhaReferencia = svg('path', { class: 'cfd__referencia', 'aria-hidden': 'true' });
   const marcas = svg('g', { class: 'cfd__marcas', 'aria-hidden': 'true' });
   const fim = svg('g', { class: 'cfd__fim', 'aria-hidden': 'true' });
   // Cursor dos dias: linha vertical e um ponto no topo de cada banda.
@@ -122,7 +134,7 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
     pontosCursor.set(banda, ponto);
     cursor.append(ponto);
   }
-  desenho.append(defs, grelha, camadaBandas, marcas, fim, cursor);
+  desenho.append(defs, grelha, camadaBandas, linhaReferencia, marcas, fim, cursor);
 
   // Caixa com os valores do dia. É anunciada (aria-live), por isso quem usa
   // o teclado ouve os valores ao andar com as setas.
@@ -163,10 +175,18 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   rolar.append(tabela);
   dados.append(rolar);
 
-  figura.append(legenda, area, dados);
+  // Frase da comparação, com a amostra do tracejado. Fica visível para todos,
+  // por isso também serve quem não vê o desenho.
+  const comparacao = el('p', 'cfd__comparacao');
+  const textoComparacao = el('span');
+  comparacao.append(el('span', 'cfd__comparacao-traco'), textoComparacao);
+  comparacao.hidden = true;
+
+  figura.append(legenda, area, comparacao, dados);
 
   let series: SeriesCumulativas | null = null;
   let destaque: Destaque | null = null;
+  let referencia: SeriesCumulativas | null = null;
   let descricao = '';
   let explicacaoDestaque = '';
   /** Dia mostrado pelo cursor, ou null sem cursor. */
@@ -227,6 +247,13 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
       caminhos.get(banda)!.setAttribute('d', `M${cima.join('L')}L${fundo.join('L')}Z`);
     }
 
+    // Referência: o topo de «Feito» no cenário de comparação.
+    const r = referencia;
+    linhaReferencia.setAttribute(
+      'd',
+      r ? `M${r.acabadas.map((v, dia) => `${x(dia).toFixed(1)},${y(v).toFixed(1)}`).join('L')}` : '',
+    );
+
     // Rótulos no fim: nome e valor do último dia, à frente do meio de cada
     // banda, afastados para não se sobreporem quando as bandas são finas.
     fim.replaceChildren();
@@ -245,6 +272,12 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
         fim.append(texto);
       });
     }
+    // A linha de cima é o total de pedidos que entraram até cada dia. O
+    // rótulo fica por cima dela, à esquerda, onde não há bandas.
+    const diaRotulo = Math.round(ultimoDia * 0.3);
+    fim.append(
+      svg('text', { x: x(diaRotulo) - 6, y: y(s.entradas[diaRotulo]) - 8, class: 'cfd__rotulo-topo', 'text-anchor': 'end' }, 'Pedidos'),
+    );
 
     desenharDestaque(x, y, largura);
     desenharCursor();
@@ -442,6 +475,22 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   });
   observador.observe(area);
 
+  // Entrada: as bandas só aparecem quando o gráfico chega ao ecrã, e entram
+  // da esquerda para a direita (CSS em .cfd--visto). Uma vez só.
+  if ('IntersectionObserver' in window) {
+    const aoVer = new IntersectionObserver(
+      (entradas) => {
+        if (!entradas.some((e) => e.isIntersecting)) return;
+        figura.classList.add('cfd--visto');
+        aoVer.disconnect();
+      },
+      { threshold: 0.3 },
+    );
+    aoVer.observe(area);
+  } else {
+    figura.classList.add('cfd--visto');
+  }
+
   return {
     elemento: figura,
     atualizar(novas, novaDescricao) {
@@ -456,6 +505,12 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
       explicacaoDestaque = explicacao;
       atualizarDescricao();
       if (series) preencherTabela(series);
+      desenhar();
+    },
+    comparar(nova, texto = '') {
+      referencia = nova;
+      textoComparacao.textContent = texto;
+      comparacao.hidden = nova === null || texto === '';
       desenhar();
     },
   };

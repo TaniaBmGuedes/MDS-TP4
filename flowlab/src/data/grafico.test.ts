@@ -50,3 +50,17 @@ describe('valores de um dia (cursor do gráfico)', () => {
     expect(TEXTOS.dia(s, fim)).toBe(`Dia ${fim}: 2 a fazer, 4 em curso, 30 feitas.`);
   });
 });
+
+describe('comparação com uma tarefa por pessoa', () => {
+  const referencia = simular(EQUIPA_INICIAL.pessoas, EQUIPA_INICIAL);
+
+  it('diz quantas tarefas ficam por fazer com tarefas a mais', () => {
+    const texto = TEXTOS.comparacao(simular(12, EQUIPA_INICIAL), referencia);
+    expect(texto).toContain('seriam 30');
+    expect(texto).toContain('são 15,5, menos 14,5');
+  });
+
+  it('não inventa diferença quando o resultado é igual', () => {
+    expect(TEXTOS.comparacao(referencia, referencia)).toContain('acaba as mesmas');
+  });
+});
