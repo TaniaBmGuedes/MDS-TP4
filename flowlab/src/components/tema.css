@@ -1,0 +1,22 @@
+/* Botão «Modo escuro» (SCRUM-141): igual ao botão «Fontes», ao lado dele.
+   Usa as variáveis de shell.css, por isso muda de cor com o próprio tema. */
+
+.botao-tema {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 40px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  color: var(--texto); font-size: 14px; font-weight: 600;
+  transition: border-color .15s, background .15s;
+}
+.botao-tema:hover { border-color: var(--acento); background: var(--acento-fundo); color: var(--acento-escuro); }
+.botao-tema[aria-pressed="true"] { border-color: var(--acento-linha); }
+
+/* Telemóvel: só o ícone, para caber no cabeçalho. O texto continua
+   disponível para leitores de ecrã. */
+@media (max-width: 600px) {
+  .botao-tema { padding: 0 10px; }
+  .botao-tema__texto {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+}

@@ -12,8 +12,8 @@
  * Regra: os outros CSS usam estes tokens (diretamente ou pelos nomes curtos
  * do :root de style.css) e não escrevem cores à mão.
  *
- * Modo escuro: escuro.css (T29) troca os nomes curtos de style.css dentro de
- * prefers-color-scheme: dark, por isso continua a funcionar sem alterações.
+ * Modo escuro: escuro.css (ticket 12) troca os nomes curtos de style.css
+ * quando o <html> tem data-tema="escuro" (botão do cabeçalho, SCRUM-141).
  *
  * Os pares de cor usados em texto estão verificados contra o nível AA da WCAG
  * (contraste >= 4,5:1) em tokens.test.ts.

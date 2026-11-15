@@ -30,11 +30,10 @@
 .cracha-menu__botao:hover, .resumo__guardar:hover { background: var(--pairar); }
 .resumo__guardar { flex: none; margin-left: auto; align-self: center; }
 
-@media (prefers-color-scheme: dark) {
-  .cracha-menu { --metal: #E3C46A; --metal-fundo: #33291A; }
-  .cracha-menu--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
-  .cracha-menu--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
-}
+/* Tema escuro (escuro.css, SCRUM-141) */
+:where([data-tema="escuro"]) .cracha-menu { --metal: #E3C46A; --metal-fundo: #33291A; }
+:where([data-tema="escuro"]) .cracha-menu--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
+:where([data-tema="escuro"]) .cracha-menu--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
 
 /* Telemóvel: o botão «Guardar o crachá» passa para baixo, a toda a largura */
 @media (max-width: 600px) {

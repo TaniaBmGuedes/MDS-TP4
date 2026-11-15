@@ -6,6 +6,18 @@
   <title>FlowLab · Kanban e métricas de fluxo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script>
+    // Tema (SCRUM-141): aplicado antes de a página aparecer, para não piscar.
+    // A mesma regra de src/model/tema.ts: a escolha guardada ou, sem ela, o sistema.
+    (function () {
+      var escolha = null;
+      try { escolha = localStorage.getItem('flowlab.tema'); } catch (e) { /* sem armazenamento */ }
+      if (escolha !== 'claro' && escolha !== 'escuro') {
+        escolha = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
+      }
+      document.documentElement.dataset.tema = escolha;
+    })();
+  </script>
 </head>
 <body>
   <a class="saltar" href="#app">Saltar para o conteúdo</a>
