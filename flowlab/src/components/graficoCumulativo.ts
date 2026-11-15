@@ -12,15 +12,29 @@
 // e a tabela com os valores de cada dia fica logo a seguir, num <details>.
 // Com uma regra escolhida (T25), o texto alternativo diz o que está
 // destacado e a tabela marca as mesmas células que o desenho.
+//
+// Leitura mais fácil: no fim de cada banda fica o nome e o valor do último
+// dia (com espaço, a legenda de cima encolhe para uma linha). Passar o rato,
+// tocar ou usar as setas no gráfico mostra uma linha vertical com os valores
+// desse dia; o texto é anunciado ao leitor de ecrã.
+//
+// Comparação: comparar() desenha a tracejado onde estaria a banda «Feito»
+// num cenário de referência (uma tarefa por pessoa), com uma frase por baixo.
+// A linha de cima tem o rótulo «Pedidos». Na primeira vez que o gráfico
+// aparece no ecrã, as bandas entram da esquerda para a direita, como o tempo.
 import { celulasDestacadas, estaDestacada } from '../data/destaqueTabela';
-import { NOMES_BANDAS, SIGNIFICADO_BANDAS, type Destaque } from '../data/grafico';
+import { NOMES_BANDAS, SIGNIFICADO_BANDAS, TEXTOS, type Destaque } from '../data/grafico';
 import { numero } from '../data/metricas';
 import { BANDAS, limitesBanda, type IdBanda, type SeriesCumulativas } from '../model/cfd';
+import { afastarRotulos } from '../model/rotulos';
 
 const NS = 'http://www.w3.org/2000/svg';
-/** Abaixo desta largura o gráfico fica mais baixo e os dias vão de 5 em 5. */
+/** Abaixo desta largura o gráfico fica mais baixo, os dias vão de 5 em 5 e não há rótulos no fim. */
 const ESTREITO = 520;
-const MARGEM = { esquerda: 40, direita: 14, cima: 26, baixo: 40 };
+/** À direita fica o espaço dos rótulos no fim das bandas. */
+const margem = (comRotulos: boolean) => ({ esquerda: 40, direita: comRotulos ? 104 : 14, cima: 26, baixo: 40 });
+/** Distância mínima, na vertical, entre os rótulos do fim. */
+const ESPACO_ROTULOS = 17;
 
 export interface GraficoCumulativo {
   elemento: HTMLElement;
@@ -32,6 +46,11 @@ export interface GraficoCumulativo {
    * para quem não vê o desenho saber o que está destacado.
    */
   destacar: (destaque: Destaque | null, explicacao?: string) => void;
+  /**
+   * Mostra a tracejado as tarefas feitas num cenário de referência, com a
+   * frase `texto` por baixo do gráfico. Com null, tira a comparação.
+   */
+  comparar: (referencia: SeriesCumulativas | null, texto?: string) => void;
 }
 
 let instancias = 0;
@@ -101,9 +120,36 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
     caminhos.set(banda, caminho);
     camadaBandas.append(caminho);
   }
+  // Tracejado do cenário de referência, por cima das bandas.
+  const linhaReferencia = svg('path', { class: 'cfd__referencia', 'aria-hidden': 'true' });
   const marcas = svg('g', { class: 'cfd__marcas', 'aria-hidden': 'true' });
-  desenho.append(defs, grelha, camadaBandas, marcas);
-  area.append(desenho);
+  const fim = svg('g', { class: 'cfd__fim', 'aria-hidden': 'true' });
+  // Cursor dos dias: linha vertical e um ponto no topo de cada banda.
+  const cursor = svg('g', { class: 'cfd__cursor', 'aria-hidden': 'true' });
+  const linhaCursor = svg('line', { class: 'cfd__cursor-linha' });
+  const pontosCursor = new Map<IdBanda, SVGCircleElement>();
+  cursor.append(linhaCursor);
+  for (const banda of BANDAS) {
+    const ponto = svg('circle', { r: 4, class: `cfd__cursor-ponto cfd__cursor-ponto--${banda}` });
+    pontosCursor.set(banda, ponto);
+    cursor.append(ponto);
+  }
+  desenho.append(defs, grelha, camadaBandas, linhaReferencia, marcas, fim, cursor);
+
+  // Caixa com os valores do dia. É anunciada (aria-live), por isso quem usa
+  // o teclado ouve os valores ao andar com as setas.
+  const caixa = el('div', 'cfd__caixa');
+  caixa.setAttribute('aria-live', 'polite');
+  caixa.hidden = true;
+  const ajuda = el('p', 'escondido-visual', TEXTOS.ajudaCursor);
+  ajuda.id = `${id}-ajuda`;
+  // A área recebe o foco para as setas funcionarem; o desenho continua a ser
+  // uma imagem com texto alternativo.
+  area.tabIndex = 0;
+  area.setAttribute('role', 'group');
+  area.setAttribute('aria-labelledby', `${id}-titulo`);
+  area.setAttribute('aria-describedby', ajuda.id);
+  area.append(desenho, caixa, ajuda);
 
   const dados = el('details', 'cfd__dados');
   dados.append(el('summary', undefined, 'Ver os valores de cada dia (tabela)'));
@@ -129,12 +175,24 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   rolar.append(tabela);
   dados.append(rolar);
 
-  figura.append(legenda, area, dados);
+  // Frase da comparação, com a amostra do tracejado. Fica visível para todos,
+  // por isso também serve quem não vê o desenho.
+  const comparacao = el('p', 'cfd__comparacao');
+  const textoComparacao = el('span');
+  comparacao.append(el('span', 'cfd__comparacao-traco'), textoComparacao);
+  comparacao.hidden = true;
+
+  figura.append(legenda, area, comparacao, dados);
 
   let series: SeriesCumulativas | null = null;
   let destaque: Destaque | null = null;
+  let referencia: SeriesCumulativas | null = null;
   let descricao = '';
   let explicacaoDestaque = '';
+  /** Dia mostrado pelo cursor, ou null sem cursor. */
+  let diaCursor: number | null = null;
+  /** Escalas do último desenho, para o cursor e o rato. */
+  let escala: { x: (dia: number) => number; y: (v: number) => number; esquerda: number; direita: number } | null = null;
 
   /** Texto alternativo: os números do fim e, se houver, o destaque. */
   function atualizarDescricao(): void {
@@ -146,18 +204,22 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
     const largura = Math.round(area.clientWidth);
     if (!series || largura === 0) return;
     const estreito = largura < ESTREITO;
-    // Em ecrãs baixos o gráfico encolhe, para o passo caber num ecrã.
-    const altura = estreito ? 250 : window.innerHeight < 1000 ? 230 : 320;
+    figura.classList.toggle('cfd--rotulos', !estreito);
+    // Em ecrãs baixos o gráfico encolhe um pouco, para o passo caber num ecrã,
+    // mas fica alto o bastante para as bandas não parecerem fitas.
+    const altura = estreito ? 260 : window.innerHeight < 1000 ? 290 : 340;
     desenho.setAttribute('width', String(largura));
     desenho.setAttribute('height', String(altura));
     desenho.setAttribute('viewBox', `0 0 ${largura} ${altura}`);
 
+    const MARGEM = margem(!estreito);
     const s = series;
     const ultimoDia = s.entradas.length - 1;
     const { topo, passo } = topoEixo(Math.max(...s.entradas));
     const baixo = altura - MARGEM.baixo;
     const x = (dia: number): number => MARGEM.esquerda + (dia / ultimoDia) * (largura - MARGEM.esquerda - MARGEM.direita);
     const y = (v: number): number => MARGEM.cima + (1 - v / topo) * (baixo - MARGEM.cima);
+    escala = { x, y, esquerda: MARGEM.esquerda, direita: largura - MARGEM.direita };
 
     // Grelha e eixos.
     grelha.replaceChildren();
@@ -170,7 +232,7 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
       grelha.append(svg('line', { x1: x(dia), x2: x(dia), y1: baixo, y2: baixo + 5, class: 'cfd__eixo' }));
       grelha.append(svg('text', { x: x(dia), y: baixo + 18, class: 'cfd__valor', 'text-anchor': 'middle' }, String(dia)));
     }
-    grelha.append(svg('text', { x: largura - MARGEM.direita, y: altura - 4, class: 'cfd__rotulo', 'text-anchor': 'end' }, 'Dias'));
+    grelha.append(svg('text', { x: x(ultimoDia), y: altura - 4, class: 'cfd__rotulo', 'text-anchor': 'end' }, 'Dias'));
     grelha.append(svg('text', { x: 0, y: 12, class: 'cfd__rotulo' }, 'Tarefas (acumulado)'));
 
     // Bandas: o limite de cima da esquerda para a direita, o de baixo de volta.
@@ -185,8 +247,116 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
       caminhos.get(banda)!.setAttribute('d', `M${cima.join('L')}L${fundo.join('L')}Z`);
     }
 
+    // Referência: o topo de «Feito» no cenário de comparação.
+    const r = referencia;
+    linhaReferencia.setAttribute(
+      'd',
+      r ? `M${r.acabadas.map((v, dia) => `${x(dia).toFixed(1)},${y(v).toFixed(1)}`).join('L')}` : '',
+    );
+
+    // Rótulos no fim: nome e valor do último dia, à frente do meio de cada
+    // banda, afastados para não se sobreporem quando as bandas são finas.
+    fim.replaceChildren();
+    if (!estreito) {
+      const ideais = BANDAS.map((b) => {
+        const l = limitesBanda(s, b, ultimoDia);
+        return (y(l.cima) + y(l.baixo)) / 2;
+      });
+      const ys = afastarRotulos(ideais, ESPACO_ROTULOS, MARGEM.cima, baixo);
+      BANDAS.forEach((b, i) => {
+        const l = limitesBanda(s, b, ultimoDia);
+        const px = x(ultimoDia) + 10;
+        fim.append(svg('circle', { cx: px + 4, cy: ys[i], r: 4, class: `cfd__fim-cor cfd__fim-cor--${b}` }));
+        const texto = svg('text', { x: px + 13, y: ys[i], class: 'cfd__fim-texto', 'dominant-baseline': 'middle' });
+        texto.append(svg('tspan', { class: 'cfd__fim-nome' }, NOMES_BANDAS[b]), svg('tspan', { dx: 5 }, numero(l.cima - l.baixo)));
+        fim.append(texto);
+      });
+    }
+    // A linha de cima é o total de pedidos que entraram até cada dia. O
+    // rótulo fica por cima dela, à esquerda, onde não há bandas.
+    const diaRotulo = Math.round(ultimoDia * 0.3);
+    fim.append(
+      svg('text', { x: x(diaRotulo) - 6, y: y(s.entradas[diaRotulo]) - 8, class: 'cfd__rotulo-topo', 'text-anchor': 'end' }, 'Pedidos'),
+    );
+
     desenharDestaque(x, y, largura);
+    desenharCursor();
   }
+
+  /** Põe a linha, os pontos e a caixa no dia do cursor (ou esconde-os). */
+  function desenharCursor(): void {
+    const s = series;
+    const e = escala;
+    const mostrar = diaCursor !== null && s !== null && e !== null;
+    cursor.classList.toggle('cfd__cursor--visivel', mostrar);
+    caixa.hidden = !mostrar;
+    if (!mostrar) return;
+    const dia = diaCursor!;
+    const px = e.x(dia);
+    linhaCursor.setAttribute('x1', String(px));
+    linhaCursor.setAttribute('x2', String(px));
+    linhaCursor.setAttribute('y1', String(e.y(s.entradas[dia])));
+    linhaCursor.setAttribute('y2', String(e.y(0)));
+    for (const [banda, ponto] of pontosCursor) {
+      ponto.setAttribute('cx', String(px));
+      ponto.setAttribute('cy', String(e.y(limitesBanda(s, banda, dia).cima)));
+    }
+    caixa.replaceChildren(el('strong', undefined, `Dia ${dia}`));
+    for (const banda of BANDAS) {
+      const l = limitesBanda(s, banda, dia);
+      const linha = el('span', `cfd__caixa-linha cfd__caixa-linha--${banda}`);
+      linha.append(el('span', 'cfd__caixa-cor'), `${NOMES_BANDAS[banda]} `, el('b', undefined, numero(l.cima - l.baixo)));
+      caixa.append(linha);
+    }
+    // O leitor de ecrã ouve uma frase completa, não as linhas soltas.
+    caixa.setAttribute('aria-label', TEXTOS.dia(s, dia));
+    // A caixa fica do lado com mais espaço, para não tapar a linha.
+    const meio = (e.esquerda + e.direita) / 2;
+    caixa.style.left = px > meio ? '' : `${px + 12}px`;
+    caixa.style.right = px > meio ? `${area.clientWidth - px + 12}px` : '';
+  }
+
+  function mostrarDia(dia: number | null): void {
+    if (!series) return;
+    const ultimo = series.entradas.length - 1;
+    diaCursor = dia === null ? null : Math.min(ultimo, Math.max(0, Math.round(dia)));
+    desenharCursor();
+  }
+
+  // Rato e toque: o dia mais próximo do ponteiro. touch-action no CSS deixa
+  // o deslizar vertical continuar a fazer scroll.
+  function diaDoPonteiro(ev: PointerEvent): void {
+    const e = escala;
+    if (!e || !series) return;
+    const r = desenho.getBoundingClientRect();
+    const px = ev.clientX - r.left;
+    if (px < e.esquerda - 10 || px > e.direita + 10) return mostrarDia(null);
+    const ultimo = series.entradas.length - 1;
+    mostrarDia(((px - e.esquerda) / (e.direita - e.esquerda)) * ultimo);
+  }
+  area.addEventListener('pointermove', diaDoPonteiro);
+  // Um toque rápido no telemóvel não gera pointermove.
+  area.addEventListener('pointerdown', diaDoPonteiro);
+  area.addEventListener('pointerleave', (ev) => {
+    if (ev.pointerType === 'mouse') mostrarDia(null);
+  });
+  // Teclado: setas mudam de dia, Home e End vão ao início e ao fim, Esc esconde.
+  area.addEventListener('keydown', (ev) => {
+    if (!series) return;
+    const ultimo = series.entradas.length - 1;
+    const atual = diaCursor ?? ultimo;
+    const teclas: Record<string, number | null> = {
+      ArrowLeft: diaCursor === null ? ultimo : atual - 1,
+      ArrowRight: diaCursor === null ? ultimo : atual + 1,
+      Home: 0,
+      End: ultimo,
+      Escape: null,
+    };
+    if (!(ev.key in teclas)) return;
+    ev.preventDefault();
+    mostrarDia(teclas[ev.key]);
+  });
+  area.addEventListener('focusout', () => mostrarDia(null));
 
   function rotulo(px: number, py: number, texto: string, ancora: 'start' | 'middle' | 'end'): SVGTextElement {
     return svg('text', { x: px, y: py, class: 'cfd__rotulo-marca', 'text-anchor': ancora, 'dominant-baseline': 'middle' }, texto);
@@ -258,7 +428,7 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
         break;
       }
       case 'estavel':
-        marcas.append(rotulo(x(ultimoDia / 2), MARGEM.cima - 6, 'Nenhuma banda alarga: fluxo estável', 'middle'));
+        marcas.append(rotulo(x(ultimoDia / 2), margem(false).cima - 6, 'Nenhuma banda alarga: fluxo estável', 'middle'));
         break;
     }
   }
@@ -305,6 +475,22 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
   });
   observador.observe(area);
 
+  // Entrada: as bandas só aparecem quando o gráfico chega ao ecrã, e entram
+  // da esquerda para a direita (CSS em .cfd--visto). Uma vez só.
+  if ('IntersectionObserver' in window) {
+    const aoVer = new IntersectionObserver(
+      (entradas) => {
+        if (!entradas.some((e) => e.isIntersecting)) return;
+        figura.classList.add('cfd--visto');
+        aoVer.disconnect();
+      },
+      { threshold: 0.3 },
+    );
+    aoVer.observe(area);
+  } else {
+    figura.classList.add('cfd--visto');
+  }
+
   return {
     elemento: figura,
     atualizar(novas, novaDescricao) {
@@ -319,6 +505,12 @@ export function criarGraficoCumulativo(titulo: string): GraficoCumulativo {
       explicacaoDestaque = explicacao;
       atualizarDescricao();
       if (series) preencherTabela(series);
+      desenhar();
+    },
+    comparar(nova, texto = '') {
+      referencia = nova;
+      textoComparacao.textContent = texto;
+      comparacao.hidden = nova === null || texto === '';
       desenhar();
     },
   };

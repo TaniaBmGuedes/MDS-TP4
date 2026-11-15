@@ -41,3 +41,26 @@ describe('texto alternativo do gráfico', () => {
     expect(texto).not.toMatch(/NaN|undefined/);
   });
 });
+
+describe('valores de um dia (cursor do gráfico)', () => {
+  it('diz o dia e as três bandas, que somam o que entrou', () => {
+    const s = simular(4, EQUIPA_INICIAL);
+    expect(TEXTOS.dia(s, 0)).toBe(`Dia 0: ${EQUIPA_INICIAL.filaInicial} a fazer, 0 em curso, 0 feitas.`);
+    const fim = EQUIPA_INICIAL.dias;
+    expect(TEXTOS.dia(s, fim)).toBe(`Dia ${fim}: 2 a fazer, 4 em curso, 30 feitas.`);
+  });
+});
+
+describe('comparação com uma tarefa por pessoa', () => {
+  const referencia = simular(EQUIPA_INICIAL.pessoas, EQUIPA_INICIAL);
+
+  it('diz quantas tarefas ficam por fazer com tarefas a mais', () => {
+    const texto = TEXTOS.comparacao(simular(12, EQUIPA_INICIAL), referencia);
+    expect(texto).toContain('seriam 30');
+    expect(texto).toContain('são 15,5, menos 14,5');
+  });
+
+  it('não inventa diferença quando o resultado é igual', () => {
+    expect(TEXTOS.comparacao(referencia, referencia)).toContain('acaba as mesmas');
+  });
+});
