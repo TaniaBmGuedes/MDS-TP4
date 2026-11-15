@@ -267,7 +267,9 @@ a { color: #0C66E4; }
   }
   .ecra > * { zoom: var(--escala, 1); flex-shrink: 0; }
   /* Nem com a escala mínima coube: o passo cresce em vez de cortar. */
-  .ecra.ecra--cresce { height: auto; min-height: calc(100vh - var(--altura-topo)); overflow: visible; }
+  /* Um passo mais alto do que o ecrã não prende o scroll: senão o snap puxava
+     sempre para o início dele e não se conseguia ler o fim. */
+  .ecra.ecra--cresce { height: auto; min-height: calc(100vh - var(--altura-topo)); overflow: visible; scroll-snap-align: none; }
   .ecra + .ecra { margin-top: 0; padding-top: 28px; border-top: 1px solid var(--divisor); }
   /* O bloco principal de cada passo preenche o resto da altura. */
   .inicio__heroi, .sim, .ecra-info__kanban, .licao, .eq, .quiz { flex: 1 0 auto; }

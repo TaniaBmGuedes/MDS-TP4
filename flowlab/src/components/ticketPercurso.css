@@ -1,44 +1,60 @@
-/* Ticket do percurso no cabeçalho (ticketPercurso.ts). Cores de estado como
-   as do Jira: cinzento por fazer, azul em curso, amarelo em teste, verde
-   concluído. Usa as variáveis de shell.css, por isso o modo escuro funciona. */
+/* Ticket do percurso (ticketPercurso.ts): um cartão sempre à vista, a meio da
+   altura do ecrã. Cada passo guarda uma faixa vazia de lado, alternando
+   (direita, esquerda, direita, …), e o cartão anda nessa faixa: ao passar de
+   um passo ao seguinte, atravessa a página para o outro lado. Assim nunca fica
+   por trás de texto. Muda de estado de «Backlog» a «Concluído», com as cores
+   de estado do Jira. Usa as variáveis de shell.css (modo escuro incluído). */
+
+:root {
+  --largura-ticket: 208px;
+  --altura-ticket: 96px;
+  /* Faixa que cada passo deixa livre para o cartão. */
+  --faixa-ticket: calc(var(--largura-ticket) + 32px);
+}
+
+@media (min-width: 601px) {
+  #app > .ecra:nth-child(odd) { padding-right: var(--faixa-ticket); }
+  #app > .ecra:nth-child(even) { padding-left: var(--faixa-ticket); }
+}
 
 .ticket-percurso {
-  --largura-cartao: calc((100% - 4px) / var(--colunas));
-  flex: 1 1 auto; min-width: 0; max-width: 900px;
-  margin-inline: auto; padding-inline: 16px;
+  position: fixed; z-index: 14; inset: 0 24px 0 24px;
+  pointer-events: none;
 }
-.ticket-percurso__pista {
-  position: relative;
-  display: grid; grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
-  height: 36px; border-radius: 10px;
-  background: var(--pairar);
+/* Com o menu aberto, o cartão anda só na parte da página. */
+@media (min-width: 601px) {
+  body.percurso-aberto .ticket-percurso { left: calc(var(--largura-painel) + 24px); }
 }
-.ticket-percurso__coluna {
-  display: grid; place-items: center; min-width: 0; padding-inline: 4px;
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-  font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace;
-  letter-spacing: .08em; text-transform: uppercase; color: var(--texto-fraco);
-}
-.ticket-percurso__coluna + .ticket-percurso__coluna { border-left: 1px dashed var(--divisor-forte); }
-.ticket-percurso__coluna--passada { color: var(--verde); }
 
-/* O cartão segue o scroll: o centro fica no centro da coluna da posição. */
 .ticket-percurso__cartao {
   --cor: var(--texto-suave);
   --cor-fundo: var(--pairar);
-  position: absolute; top: 3px; bottom: 3px;
-  left: calc(2px + var(--posicao, 0) * var(--largura-cartao));
-  width: var(--largura-cartao);
-  display: flex; align-items: center; gap: 6px; min-width: 0; padding: 0 8px;
-  border-radius: 8px; border: 1px solid var(--divisor-forte);
+  position: absolute;
+  width: var(--largura-ticket); height: var(--altura-ticket);
+  /* --x: 0 encostado à esquerda, 1 à direita. */
+  left: calc(var(--x, 1) * (100% - var(--largura-ticket)));
+  top: calc(50% - var(--altura-ticket) / 2 + var(--altura-topo) / 2);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 4px;
+  padding: 10px 14px;
+  border-radius: 12px; border: 1px solid var(--divisor-forte);
   background: var(--superficie);
-  box-shadow: inset 3px 0 0 var(--cor), 0 4px 12px rgba(9, 30, 66, .15);
-  transition: left .2s linear, border-color .3s;
+  box-shadow: inset 4px 0 0 var(--cor), 0 14px 36px rgba(9, 30, 66, .28);
+  transition: left .7s var(--ease), border-color .3s;
 }
+.ticket-percurso__titulo {
+  font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--texto-fraco);
+}
+.ticket-percurso__resumo {
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font: 700 15px var(--letra-texto); color: var(--texto);
+}
+.ticket-percurso__linha { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .ticket-percurso__tipo { display: inline-flex; color: var(--acento); }
+.ticket-percurso__chave { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--texto-fraco); }
 .ticket-percurso__estado {
-  margin-inline: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 1px 6px; border-radius: 4px;
-  font: 700 10px var(--letra-texto);
+  margin-left: auto; padding: 3px 8px; border-radius: 4px;
+  font: 700 11px var(--letra-texto);
   letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
   background: var(--cor-fundo); color: var(--cor);
 }
@@ -49,14 +65,27 @@
 .ticket-percurso__cartao--feito .ticket-percurso__tipo { color: var(--verde); }
 
 .ticket-percurso__cartao--mudou { animation: ticket-mudou .45s cubic-bezier(.22, 1, .36, 1); }
-@keyframes ticket-mudou { 40% { transform: translateY(-3px) scale(1.04); } }
+@keyframes ticket-mudou { 40% { transform: scale(1.06); } }
 
-/* Janela média: só o cartão, sem os nomes das colunas. */
-@media (max-width: 900px) {
-  .ticket-percurso__coluna { color: transparent; }
-  .ticket-percurso__coluna--passada { color: transparent; }
+/* Janela média: cartão mais estreito, sem o nome da tarefa. */
+@media (max-width: 1199px) {
+  :root { --largura-ticket: 140px; --altura-ticket: 64px; }
+  .ticket-percurso { inset: 0 16px 0 16px; }
+  body.percurso-aberto .ticket-percurso { left: calc(var(--largura-painel) + 16px); }
+  .ticket-percurso__cartao { padding: 8px 10px; }
+  .ticket-percurso__resumo, .ticket-percurso__chave { display: none; }
 }
-/* Telemóvel: não há espaço no cabeçalho. */
+/* Telemóvel: não há lugar para faixas; o cartão fica em baixo, pequeno, e
+   muda de lado na mesma. */
 @media (max-width: 600px) {
-  .ticket-percurso { display: none; }
+  :root { --largura-ticket: 136px; --altura-ticket: 34px; }
+  .ticket-percurso { inset: 0 12px 0 12px; }
+  .ticket-percurso__cartao { top: auto; bottom: 12px; flex-direction: row; align-items: center; padding: 0 10px; }
+  .ticket-percurso__titulo { font-size: 9px; letter-spacing: .06em; }
+  .ticket-percurso__linha { margin-left: auto; }
+  .ticket-percurso__tipo { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-percurso__cartao { transition: none; }
+  .ticket-percurso__cartao--mudou { animation: none; }
 }

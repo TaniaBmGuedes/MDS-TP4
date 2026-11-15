@@ -10,3 +10,4 @@ Peças de interface usadas em mais do que um ecrã.
 - `ticketPercurso.ts`: ticket no cabeçalho que atravessa as colunas de um quadro com o scroll, de «Backlog» (introdução) a «Concluído» (último passo).
 - `ajusteEcra.ts`: um ecrã por tema; no computador, cada passo tem a altura do ecrã e, se o conteúdo não couber, reduz a escala até caber (ou cresce, se nem assim couber).
 - `efeitos.ts`: efeitos «wow» (H31): ecrã de carregamento, botões magnéticos, cartões com inclinação 3D, palavras a subir e palavra a descodificar; nada corre com «reduzir movimento».
+- `navegacaoPassos.ts`: botões «Anterior» e «Seguinte» no fim de cada ecrã, com o nome do passo; o primeiro não tem «Anterior» e o último não tem «Seguinte» (H24).
