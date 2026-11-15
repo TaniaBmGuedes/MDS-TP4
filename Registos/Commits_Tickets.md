@@ -45,6 +45,9 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 |---|---|---|---|---|---|
 | T17 Ecrã 7 · Quiz final | SCRUM-7 | [112dc76](https://github.com/TaniaBmGuedes/MDS-TP4/commit/112dc764a5d4cd64489ce56424696316912dd909) | 09/11 | Miguel | 5 perguntas tipadas em `data/quiz.ts`; contador e explicação; «Ver no simulador» abre o simulador com o WIP e a regra da pergunta; ecrã final com pontuação e escolha do dilema; pergunta atual guardada no store do percurso |
 | H19 Resumo final ou badge | | [746fd05](https://github.com/TaniaBmGuedes/MDS-TP4/commit/746fd05f89bf0282c3dc9e6b8bc9cfdd83380e5f) | 09/11 | Tânia | Badge ouro/prata/bronze com a pontuação e 5 conceitos (dominado ou a rever, com botão para o passo) no ecrã de resultado do quiz; `data/resumo.ts` com testes |
+| 28 Simulador: pergunta guia e chamadas de atenção | SCRUM-28 | [aa9b99d](https://github.com/TaniaBmGuedes/MDS-TP4/commit/aa9b99d20d416f2df94cab5b735fc7bb3c89cfea) | 15/11 | Miguel | Pergunta guia «Fazer mais coisas ao mesmo tempo é melhor?» no topo do simulador; previsão entre os 3 cenários antes de experimentar; frase «Repara…» em cada cenário sugerido; textos em `data/guia.ts`, com testes |
+| Melhorias ao gráfico do simulador | | [72ee762](https://github.com/TaniaBmGuedes/MDS-TP4/commit/72ee7623b4cda3bc4895debb0835942200e6d88b) | 15/11 | Miguel | Gráfico mais alto; cores das bandas em variáveis, com modo escuro; nome e valor no fim de cada banda; cursor dos dias (rato, toque e setas) com os valores de cada dia |
+| Melhorias ao gráfico do simulador | | [ea5f22c](https://github.com/TaniaBmGuedes/MDS-TP4/commit/ea5f22cfba430729ad33616296e4d04bb32890c8) | 15/11 | Miguel | Comparação a tracejado com uma tarefa por pessoa, com frase por baixo; rótulo «Pedidos»; grelha pontilhada; entrada animada das bandas |
 
 ## Registos contínuos (C01–C08)
 
