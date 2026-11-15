@@ -48,13 +48,12 @@
   --escuro: #111821;
 }
 
-/* Botões com fundo azul claro: texto escuro */
-:where([data-tema="escuro"]) .etapa--atual .etapa__icone, :where([data-tema="escuro"]) .etapa--atual .etapa__botao:hover .etapa__icone, :where([data-tema="escuro"]) .inicio__comecar, :where([data-tema="escuro"]) .botao { color: #05080C; }
-:where([data-tema="escuro"]) .col-curso h3 { color: #85B8FF; }
-/* simular.css: castanho escrito à mão sobre o amarelo, ilegível no escuro */
-:where([data-tema="escuro"]) .sim__caixa--emCurso, :where([data-tema="escuro"]) .sim__veredicto--alerta { color: #F5CD47; }
-:where([data-tema="escuro"]) .quadro-vivo { box-shadow: none; }
-:where([data-tema="escuro"]) .inclinado { box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
+  /* Botões com fundo azul claro: texto escuro */
+  .etapa--atual .etapa__icone, .etapa--atual .etapa__botao:hover .etapa__icone, .inicio__comecar, .botao { color: #05080C; }
+  /* simular.css: castanho escrito à mão sobre o amarelo, ilegível no escuro */
+  .sim__caixa--emCurso, .sim__veredicto--alerta { color: #F5CD47; }
+  .quadro-vivo { box-shadow: none; }
+  .inclinado { box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
 
 /* Texto escrito à mão em style.css, pensado para fundo claro */
 :where([data-tema="escuro"]) .lead, :where([data-tema="escuro"]) .cartao p, :where([data-tema="escuro"]) .legenda { color: var(--texto-suave); }

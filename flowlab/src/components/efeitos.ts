@@ -99,7 +99,7 @@ export function tornarMagnetico(elemento: HTMLElement, forca = 0.3): void {
 
 // ---------- Inclinação 3D ----------
 /** Cartões que se inclinam para o rato. */
-const INCLINAVEIS = '.inicio__item, .cartao-opcao, .regra, .kanban-quadro, .quadro-vivo';
+const INCLINAVEIS = '.inicio__item, .cartao-opcao, .regra, .kanban__exemplo, .quadro-vivo';
 const INCLINACAO_MAX = 8;
 
 export function ativarInclinacao(): void {

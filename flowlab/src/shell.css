@@ -237,8 +237,6 @@ a { color: #0C66E4; }
 .cartao-opcao { background: var(--superficie); border: 1px solid var(--divisor-forte); border-radius: 8px; }
 .cartao-opcao:hover { background: var(--pairar); border-color: var(--acento); }
 .cartao-opcao--selecionado, .cartao-opcao--selecionado:hover { background: var(--acento-fundo); border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento); }
-.kanban-quadro { background: var(--pairar); border-color: var(--divisor); border-radius: 8px; }
-.col-curso h3 { color: #0055CC; }
 
 /* ---------- Passos seguidos (scroll contínuo) ---------- */
 /* Todos os passos estão na mesma página, separados por um fio e espaço.
@@ -270,12 +268,9 @@ a { color: #0C66E4; }
   .ecra.ecra--cresce { height: auto; min-height: calc(100vh - var(--altura-topo)); overflow: visible; }
   .ecra + .ecra { margin-top: 0; padding-top: 28px; border-top: 1px solid var(--divisor); }
   /* O bloco principal de cada passo preenche o resto da altura. */
-  .inicio__heroi, .sim, .ecra-info__kanban, .licao, .eq, .quiz { flex: 1 0 auto; }
+  .inicio__heroi, .sim, .licao, .eq, .quiz { flex: 1 0 auto; }
   .eq { align-items: stretch; }
   .licao { justify-content: center; }
-  /* O que é Kanban: o quadro estica até ao fundo, o texto fica ao meio. */
-  .ecra-info__kanban { align-items: stretch; margin-top: 0; }
-  .ecra-info__kanban > :first-child { align-self: start; }
   /* Quiz: pergunta e opções maiores; o espaço por baixo recebe a explicação
      e o botão «Seguinte» depois de responder. */
   .ecra .quiz { gap: 22px; }
