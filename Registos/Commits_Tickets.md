@@ -3,12 +3,11 @@
 Repositório: https://github.com/TaniaBmGuedes/MDS-TP4
 Quadro: https://isec-team-mfrdhjnv.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog
 
-Os IDs P01–P06, T01–T29 e C01–C08 vêm da `Sprint 1/Proposta de planeamento/TP4_Proposta_Tickets_Conjunta.docx`.
-A coluna **Jira** fica por preencher com a chave `SCRUM-N` de cada ticket.
+A 15/11/2026 os tickets do Jira foram renumerados de 1 a 41 e agrupados em 8 épicos por tema; a coluna **Ticket** usa essa numeração. P01 e P02 (Define e Ideate do Sprint 0) e os registos contínuos C nunca foram tickets no Jira e ficam com o nome da proposta conjunta (`Sprint 1/Proposta de planeamento/TP4_Proposta_Tickets_Conjunta.docx`).
 
 Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket (ex.: `SCRUM-12 deploy no Netlify`).
 
-## Épico 0 · Fechar o Sprint 0
+## Épico 1 · Processo e entregáveis (fecho do Sprint 0)
 
 | Ticket | Jira | Commit | Data | Autor | O que entrou |
 |---|---|---|---|---|---|
@@ -19,32 +18,32 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 | P02 Ideate | | [d707b53](https://github.com/TaniaBmGuedes/MDS-TP4/commit/d707b53a3dcd0be6fef7adb2318af4603d8a712a) | 27/10 | Ricardo | Mockup da página (desktop) |
 | P02 Ideate | | [38fa6ae](https://github.com/TaniaBmGuedes/MDS-TP4/commit/38fa6aed21aec8ae796139ae31a7f719e0d6ef4b) | 27/10 | Tânia | Protótipo v1 (FlowLab) |
 | P02 Ideate | | [0f45399](https://github.com/TaniaBmGuedes/MDS-TP4/commit/0f453992b1eb5da87515b7ba863367c9ee492653) | 27/10 | Tânia | Protótipo v1 organizado em `mockup/v1` |
-| P03 Feedback ao v1 | | [19fb406](https://github.com/TaniaBmGuedes/MDS-TP4/commit/19fb4065bc70502cbb8c83e1343e908176291220) | 27/10 | Ricardo | `mockup/v1/feedback_prototipo.txt` |
-| P05 Backlog e quadro | | [1cb5653](https://github.com/TaniaBmGuedes/MDS-TP4/commit/1cb5653e8c8ab37b491fa0a1b4cf2a61a23e2b3f) | 27/10 | Tânia | Proposta de tickets (Tânia) |
-| P05 Backlog e quadro | | [3a50e80](https://github.com/TaniaBmGuedes/MDS-TP4/commit/3a50e8086fe88ebea5a7e8c14d5bedb5385aa5af) | 29/10 | Tiago | Proposta de tickets (Tiago) |
-| P05 Backlog e quadro (+ P01/P02) | | [cb18875](https://github.com/TaniaBmGuedes/MDS-TP4/commit/cb1887517d32c293cbf6b1f8d5438e82657844c2) | 30/10 | Tânia | Fusão das propostas; Design Thinking atualizado |
-| P05 Backlog e quadro | | [56624ad](https://github.com/TaniaBmGuedes/MDS-TP4/commit/56624adbf6d976cd034960587a64a2f0a9094591) | 30/10 | Yan | Proposta de tickets (Yan) |
-| P05 Backlog e quadro | | [f50dbf8](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f50dbf83f02301b1be65d4b9046580cb2196e21b) | 01/11 | Miguel | Proposta de tickets (Miguel) |
-| P05 Backlog e quadro | | [489a17f](https://github.com/TaniaBmGuedes/MDS-TP4/commit/489a17f7ef550776de7eb7fac55f94776c040731) | 01/11 | Ricardo | Proposta de tickets (Ricardo) |
-| P05 Backlog e quadro | | [bad306a](https://github.com/TaniaBmGuedes/MDS-TP4/commit/bad306ac83afc809632f83048a5d8ff36fa7b02e) | 02/11 | Tânia | Proposta conjunta final |
-| P05 Backlog e quadro | | [149697f](https://github.com/TaniaBmGuedes/MDS-TP4/commit/149697f8b4a3a07e320025fd0dd9b2020a4bb95c) | 03/11 | Tiago | Screenshots da criação dos tickets e da board no Jira |
+| 1 · Feedback ao v1 | SCRUM-12 | [19fb406](https://github.com/TaniaBmGuedes/MDS-TP4/commit/19fb4065bc70502cbb8c83e1343e908176291220) | 27/10 | Ricardo | `mockup/v1/feedback_prototipo.txt` |
+| 3 · Backlog e quadro | SCRUM-14 | [1cb5653](https://github.com/TaniaBmGuedes/MDS-TP4/commit/1cb5653e8c8ab37b491fa0a1b4cf2a61a23e2b3f) | 27/10 | Tânia | Proposta de tickets (Tânia) |
+| 3 · Backlog e quadro | SCRUM-14 | [3a50e80](https://github.com/TaniaBmGuedes/MDS-TP4/commit/3a50e8086fe88ebea5a7e8c14d5bedb5385aa5af) | 29/10 | Tiago | Proposta de tickets (Tiago) |
+| 3 · Backlog e quadro (+ P01/P02) | SCRUM-14 | [cb18875](https://github.com/TaniaBmGuedes/MDS-TP4/commit/cb1887517d32c293cbf6b1f8d5438e82657844c2) | 30/10 | Tânia | Fusão das propostas; Design Thinking atualizado |
+| 3 · Backlog e quadro | SCRUM-14 | [56624ad](https://github.com/TaniaBmGuedes/MDS-TP4/commit/56624adbf6d976cd034960587a64a2f0a9094591) | 30/10 | Yan | Proposta de tickets (Yan) |
+| 3 · Backlog e quadro | SCRUM-14 | [f50dbf8](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f50dbf83f02301b1be65d4b9046580cb2196e21b) | 01/11 | Miguel | Proposta de tickets (Miguel) |
+| 3 · Backlog e quadro | SCRUM-14 | [489a17f](https://github.com/TaniaBmGuedes/MDS-TP4/commit/489a17f7ef550776de7eb7fac55f94776c040731) | 01/11 | Ricardo | Proposta de tickets (Ricardo) |
+| 3 · Backlog e quadro | SCRUM-14 | [bad306a](https://github.com/TaniaBmGuedes/MDS-TP4/commit/bad306ac83afc809632f83048a5d8ff36fa7b02e) | 02/11 | Tânia | Proposta conjunta final |
+| 3 · Backlog e quadro | SCRUM-14 | [149697f](https://github.com/TaniaBmGuedes/MDS-TP4/commit/149697f8b4a3a07e320025fd0dd9b2020a4bb95c) | 03/11 | Tiago | Screenshots da criação dos tickets e da board no Jira |
 
 ## Sprint 1
 
 | Ticket | Jira | Commit | Data | Autor | O que entrou |
 |---|---|---|---|---|---|
-| T01 Deploy no Netlify | SCRUM-16 | [f0e88f3](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f0e88f3a07519b997cb9134237dea736868b7c9a) | 09/11 | Tânia | `netlify.toml` na raiz com base `flowlab`; build com `tsc --noEmit` + `vite build` |
-| T01 Deploy no Netlify | SCRUM-16 | [77e7152](https://github.com/TaniaBmGuedes/MDS-TP4/commit/77e7152a98f8a7980227cde6b55934de24e3c911) | 09/11 | Tânia | URL público (https://delicate-quokka-e180ac.netlify.app) e badge no README |
-| T01 Deploy no Netlify | SCRUM-16 | [c38e08b](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c38e08bb71416d2cdec4df8f70dfa8d066b1b092) | 09/11 | Tânia | Merge do PR #3 para `main`, primeiro deploy automático |
-| T05 Ecrã 1 · Simulador e gráfico cumulativo | SCRUM-23 | [c71082e](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c71082e0732c5a1021328544099b0b17c16e0519) | 09/11 | Miguel | Slider do WIP e cenários; gráfico de fluxo cumulativo (`components/graficoCumulativo.ts`) com legenda, 3 regras de leitura com destaque, texto alternativo e tabela por dia; contas em `model/cfd.ts`, com testes |
-| T05 Ecrã 1 · Simulador e gráfico cumulativo | SCRUM-23 | [a767d22](https://github.com/TaniaBmGuedes/MDS-TP4/commit/a767d2283dfb8df40a1cf81d46834aaa4dd22395) | 09/11 | Tânia | Merge do PR #11 para `main` |
+| 8 · Deploy no Netlify | SCRUM-16 | [f0e88f3](https://github.com/TaniaBmGuedes/MDS-TP4/commit/f0e88f3a07519b997cb9134237dea736868b7c9a) | 09/11 | Tânia | `netlify.toml` na raiz com base `flowlab`; build com `tsc --noEmit` + `vite build` |
+| 8 · Deploy no Netlify | SCRUM-16 | [77e7152](https://github.com/TaniaBmGuedes/MDS-TP4/commit/77e7152a98f8a7980227cde6b55934de24e3c911) | 09/11 | Tânia | URL público (https://delicate-quokka-e180ac.netlify.app) e badge no README |
+| 8 · Deploy no Netlify | SCRUM-16 | [c38e08b](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c38e08bb71416d2cdec4df8f70dfa8d066b1b092) | 09/11 | Tânia | Merge do PR #3 para `main`, primeiro deploy automático |
+| 24 · Simulador e gráfico cumulativo | SCRUM-23 | [c71082e](https://github.com/TaniaBmGuedes/MDS-TP4/commit/c71082e0732c5a1021328544099b0b17c16e0519) | 09/11 | Miguel | Slider do WIP e cenários; gráfico de fluxo cumulativo (`components/graficoCumulativo.ts`) com legenda, 3 regras de leitura com destaque, texto alternativo e tabela por dia; contas em `model/cfd.ts`, com testes |
+| 24 · Simulador e gráfico cumulativo | SCRUM-23 | [a767d22](https://github.com/TaniaBmGuedes/MDS-TP4/commit/a767d2283dfb8df40a1cf81d46834aaa4dd22395) | 09/11 | Tânia | Merge do PR #11 para `main` |
 
 ## Sprint 2
 
 | Ticket | Jira | Commit | Data | Autor | O que entrou |
 |---|---|---|---|---|---|
-| T17 Ecrã 7 · Quiz final | SCRUM-7 | [112dc76](https://github.com/TaniaBmGuedes/MDS-TP4/commit/112dc764a5d4cd64489ce56424696316912dd909) | 09/11 | Miguel | 5 perguntas tipadas em `data/quiz.ts`; contador e explicação; «Ver no simulador» abre o simulador com o WIP e a regra da pergunta; ecrã final com pontuação e escolha do dilema; pergunta atual guardada no store do percurso |
-| H19 Resumo final ou badge | | [746fd05](https://github.com/TaniaBmGuedes/MDS-TP4/commit/746fd05f89bf0282c3dc9e6b8bc9cfdd83380e5f) | 09/11 | Tânia | Badge ouro/prata/bronze com a pontuação e 5 conceitos (dominado ou a rever, com botão para o passo) no ecrã de resultado do quiz; `data/resumo.ts` com testes |
+| 33 · Quiz final | SCRUM-33 | [112dc76](https://github.com/TaniaBmGuedes/MDS-TP4/commit/112dc764a5d4cd64489ce56424696316912dd909) | 09/11 | Miguel | 5 perguntas tipadas em `data/quiz.ts`; contador e explicação; «Ver no simulador» abre o simulador com o WIP e a regra da pergunta; ecrã final com pontuação e escolha do dilema; pergunta atual guardada no store do percurso |
+| 34 · Resumo final ou badge | SCRUM-75 | [746fd05](https://github.com/TaniaBmGuedes/MDS-TP4/commit/746fd05f89bf0282c3dc9e6b8bc9cfdd83380e5f) | 09/11 | Tânia | Badge ouro/prata/bronze com a pontuação e 5 conceitos (dominado ou a rever, com botão para o passo) no ecrã de resultado do quiz; `data/resumo.ts` com testes |
 
 ## Registos contínuos (C01–C08)
 
@@ -63,4 +62,4 @@ Daqui para a frente, cada mensagem de commit deve começar pela chave do ticket 
 
 ## Por associar
 
-Os restantes tickets do Sprint 1 (T02–T29) ainda não estão associados aqui.
+Os restantes tickets ainda não estão associados aqui; a ligação está nos commits e nos PR, que começam pela chave `SCRUM-N`.

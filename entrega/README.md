@@ -6,7 +6,7 @@ Os entregáveis seguem a lista da secção 6 do enunciado (`theme/assignment4.pd
 
 | Entregável (enunciado) | Onde está | Estado |
 |---|---|---|
-| Design Thinking output | `Registos/Sprint 0/Tania/TP4_Sprint0_Design_Thinking.docx` e `Registos/Sprint 0/TP4_Sprint0_Fecho.docx` | Feito |
+| Design Thinking output | `entrega/01_Design_Thinking.docx` (sessão de 27/10, redação revista a 15/11); decisões seguintes em `Registos/Sprint 0/TP4_Sprint0_Fecho.docx` | Feito |
 | Project plan (objetivos, visão, requisitos, release plan, regras, DoD) | `entrega/02_Plano_do_Projeto.docx` | Feito |
 | Product backlog | `entrega/03_Backlog_Sprints_e_Metricas.docx` e Jira | Feito (lido a 14/11) |
 | Sprint goals, sprint backlogs e burndown charts | `entrega/03_Backlog_Sprints_e_Metricas.docx`, `entrega/figuras/` | Sprint 1 feito; Sprint 2 a fechar a 17/11 |
@@ -25,7 +25,7 @@ Outros documentos:
 
 ## O que falta até 17/11
 
-1. Chatbot no BOTSchool.ai (H16, SCRUM-72) e o teste das 10 perguntas: é obrigatório pela Definition of Done.
+1. Chatbot no BOTSchool.ai (ticket 40, SCRUM-72) e o teste das 10 perguntas: é obrigatório pela Definition of Done.
 2. Pôr o site de produção a publicar outra vez (créditos do Netlify ou outro serviço).
 3. Review, demo e retrospetiva do Sprint 2: preencher as atas e o burndown final.
 4. Análise pessoal de cada elemento no relatório (secção 8.2) e uso de IA do Miguel e do Yan (secção 9).

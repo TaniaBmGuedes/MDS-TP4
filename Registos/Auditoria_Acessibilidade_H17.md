@@ -1,4 +1,4 @@
-# Auditoria de acessibilidade e responsividade (H17, SCRUM-73)
+# Auditoria de acessibilidade e responsividade (ticket 41, SCRUM-73)
 
 Data: 09/11/2026 · Feita por: Tânia Guedes (com Claude Code) · Versão auditada: `main` em `29efd0e`, mais as correções deste ramo.
 
@@ -24,7 +24,7 @@ Correções em `flowlab/src/steps/metricas.ts`:
 
 ## Sem problemas críticos
 
-Nenhuma falha crítica ou grave. A interface ainda tem poucos ecrãs com conteúdo (Ler o gráfico, O que fazes? e o Quiz estão por fazer), por isso **esta auditoria tem de ser repetida no fim do Sprint 2**, com os ecrãs todos e num telemóvel real (critério do T19).
+Nenhuma falha crítica ou grave. A interface ainda tem poucos ecrãs com conteúdo (Ler o gráfico, O que fazes? e o Quiz estão por fazer), por isso **esta auditoria tem de ser repetida no fim do Sprint 2**, com os ecrãs todos e num telemóvel real (critério do ticket 41).
 
 ## O que não se testou
 

@@ -24,12 +24,51 @@ describe('criarPercurso', () => {
     const p = criarPercurso(5, 0);
     expect(p.estado().concluidos).toEqual([false, false, false, false, false]);
     p.avancar(); // conclui o 0
-    p.irPara(3); // conclui o 1; o 2 foi saltado
-    p.voltar(); // voltar não conclui o 3
-    expect(p.estado().concluidos).toEqual([true, true, false, false, false]);
-    p.avancar(); // conclui o 2
-    p.voltar();
+    p.avancar(); // conclui o 1
+    p.irPara(4); // conclui o 2; o 3 foi saltado sem ser visto
     expect(p.estado().concluidos).toEqual([true, true, true, false, false]);
+  });
+
+  // SCRUM-142: só os passos antes do atual aparecem a verde no menu.
+  it('voltar atrás tira a conclusão ao passo de destino e aos seguintes', () => {
+    const p = criarPercurso(5, 0);
+    p.irPara(1);
+    p.irPara(2);
+    p.irPara(3); // concluídos 0, 1 e 2
+    p.irPara(1); // clique no menu num passo anterior
+    expect(p.estado().concluidos).toEqual([true, false, false, false, false]);
+    p.voltar(); // botão «Anterior»
+    expect(p.estado().concluidos).toEqual([false, false, false, false, false]);
+  });
+
+  it('nunca há passos concluídos no passo atual nem à frente dele', () => {
+    const p = criarPercurso(5, 0);
+    for (const destino of [1, 2, 3, 4, 2, 0, 3, 1, 4]) {
+      p.irPara(destino);
+      const { passoAtual, concluidos } = p.estado();
+      expect(concluidos.slice(passoAtual).every((c) => !c)).toBe(true);
+    }
+  });
+
+  it('voltar atrás e avançar outra vez volta a pôr os passos a verde', () => {
+    const p = criarPercurso(5, 0);
+    p.avancar();
+    p.avancar();
+    p.avancar(); // está no 3
+    p.irPara(0);
+    p.avancar();
+    p.avancar();
+    p.avancar();
+    expect(p.estado().concluidos).toEqual([true, true, true, false, false]);
+  });
+
+  it('saltar para a frente por cima de passos já vistos também os conclui', () => {
+    // Ex.: do quiz (4) vai-se ao simulador (1) e volta-se ao quiz pelo botão.
+    const p = criarPercurso(5, 0);
+    for (let i = 0; i < 4; i++) p.avancar();
+    p.irPara(1);
+    p.irPara(4);
+    expect(p.estado().concluidos).toEqual([true, true, true, true, false]);
   });
 
   it('não sai dos limites do percurso', () => {

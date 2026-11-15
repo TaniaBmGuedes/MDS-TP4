@@ -79,10 +79,9 @@
 .quiz__item--certa .quiz__icone { background: var(--acento-fundo); color: var(--acento-escuro); }
 .quiz__item--errada .quiz__icone { background: var(--errada-fundo); color: var(--errada); }
 
-@media (prefers-color-scheme: dark) {
-  .quiz { --errada: #F08A80; --errada-fundo: #3D1A17; }
-  .quiz__opcao--errada .quiz__letra { color: #1B201D; }
-}
+/* Tema escuro (escuro.css, SCRUM-141) */
+:where([data-tema="escuro"]) .quiz { --errada: #F08A80; --errada-fundo: #3D1A17; }
+:where([data-tema="escuro"]) .quiz__opcao--errada .quiz__letra { color: #1B201D; }
 
 /* Telemóvel: botões a toda a largura, a principal em cima */
 @media (max-width: 600px) {

@@ -47,11 +47,10 @@
 }
 .resumo__rever:hover { background: var(--pairar); }
 
-@media (prefers-color-scheme: dark) {
-  .resumo__badge { --metal: #E3C46A; --metal-fundo: #33291A; }
-  .resumo__badge--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
-  .resumo__badge--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
-}
+/* Tema escuro (escuro.css, SCRUM-141) */
+:where([data-tema="escuro"]) .resumo__badge { --metal: #E3C46A; --metal-fundo: #33291A; }
+:where([data-tema="escuro"]) .resumo__badge--prata { --metal: #C3CCD4; --metal-fundo: #262B30; }
+:where([data-tema="escuro"]) .resumo__badge--bronze { --metal: #E3A47C; --metal-fundo: #36231A; }
 
 /* Telemóvel: o botão «Rever» passa para baixo do texto, a toda a largura */
 @media (max-width: 600px) {

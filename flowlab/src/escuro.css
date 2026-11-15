@@ -1,50 +1,52 @@
-/* Modo escuro (T29, SCRUM-44). Segue a preferência do sistema
-   (prefers-color-scheme), sem botão. Só troca as variáveis de cor de
+/* Modo escuro (ticket 12, SCRUM-44). Aplica-se quando o <html> tem
+   data-tema="escuro": o index.html põe-no ao abrir, a partir da escolha
+   guardada ou, sem ela, da preferência do sistema, e o botão «Modo escuro»
+   do cabeçalho troca-o (components/tema.ts, SCRUM-141). As regras usam
+   :where(...) para manterem a especificidade que tinham. Só troca as variáveis de cor de
    style.css (protótipo v1) e de shell.css, mais as poucas cores escritas
    à mão. Todos os pares de texto e fundo têm contraste de pelo menos 4,5:1
    (valores medidos no comentário de cada variável).
    Carregado depois de todos os outros estilos, em main.ts. */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+:root[data-tema="escuro"] {
+  color-scheme: dark;
 
-    /* shell.css: quase preto, como o portefólio (sem cinzento) */
-    --papel: #05080C;
-    --superficie: #0B1016;
-    --lateral: #070B10;
-    --texto: #E6EDF3;           /* 16,2:1 sobre a superfície */
-    --texto-suave: #A9B6C4;     /* 9,3:1 */
-    --texto-fraco: #7D8A99;     /* 5,4:1 */
-    --divisor: #18212B;
-    --divisor-forte: #243140;
-    --pairar: #111821;
-    --acento: #4C9AFF;          /* 6,7:1 sobre a superfície */
-    --acento-escuro: #85B8FF;   /* 8,2:1 sobre o fundo do acento */
-    --acento-fundo: #0B1E36;
-    --acento-linha: #123A6B;
-    --degrade: linear-gradient(90deg, #4C9AFF 0%, #85B8FF 100%);
-    --amarelo: #E2B203;
-    --amarelo-fundo: #2A2410;
-    --verde: #6CE0A8;
-    --verde-fundo: #0D2A1E;
-    --sombra: 0 0 0 1px #18212B;
+  /* shell.css: quase preto, como o portefólio (sem cinzento) */
+  --papel: #05080C;
+  --superficie: #0B1016;
+  --lateral: #070B10;
+  --texto: #E6EDF3;           /* 16,2:1 sobre a superfície */
+  --texto-suave: #A9B6C4;     /* 9,3:1 */
+  --texto-fraco: #7D8A99;     /* 5,4:1 */
+  --divisor: #18212B;
+  --divisor-forte: #243140;
+  --pairar: #111821;
+  --acento: #4C9AFF;          /* 6,7:1 sobre a superfície */
+  --acento-escuro: #85B8FF;   /* 8,2:1 sobre o fundo do acento */
+  --acento-fundo: #0B1E36;
+  --acento-linha: #123A6B;
+  --degrade: linear-gradient(90deg, #4C9AFF 0%, #85B8FF 100%);
+  --amarelo: #E2B203;
+  --amarelo-fundo: #2A2410;
+  --verde: #6CE0A8;
+  --verde-fundo: #0D2A1E;
+  --sombra: 0 0 0 1px #18212B;
 
-    /* style.css (protótipo v1) */
-    --fundo: #05080C;
-    --branco: #0B1016;
-    --tinta: #E6EDF3;
-    --suave: #9FADBC;
-    --linha: #18212B;
-    --borda: #3A4757;
-    --azul: #4C9AFF;
-    --azul-escuro: #85B8FF;
-    --azul-claro: #0B1E36;
-    --laranja: #FEA362;
-    --laranja-texto: #FEC195;
-    --laranja-claro: #2E1E12;
-    --escuro: #111821;
-  }
+  /* style.css (protótipo v1) */
+  --fundo: #05080C;
+  --branco: #0B1016;
+  --tinta: #E6EDF3;
+  --suave: #9FADBC;
+  --linha: #18212B;
+  --borda: #3A4757;
+  --azul: #4C9AFF;
+  --azul-escuro: #85B8FF;
+  --azul-claro: #0B1E36;
+  --laranja: #FEA362;
+  --laranja-texto: #FEC195;
+  --laranja-claro: #2E1E12;
+  --escuro: #111821;
+}
 
   /* Botões com fundo azul claro: texto escuro */
   .etapa--atual .etapa__icone, .etapa--atual .etapa__botao:hover .etapa__icone, .inicio__comecar, .botao { color: #05080C; }
@@ -53,25 +55,24 @@
   .quadro-vivo { box-shadow: none; }
   .inclinado { box-shadow: 0 18px 40px rgba(0, 0, 0, .5); }
 
-  /* Texto escrito à mão em style.css, pensado para fundo claro */
-  .lead, .cartao p, .legenda { color: var(--texto-suave); }
-  .aviso--azul, .mini__caixa--azul { color: #C9D7FF; }
-  .aviso--verde { background: #173826; color: #B6E5C8; }
-  .aviso--vermelho { background: #3D1A17; color: #FFC2BB; }
-  .opcao.certa { border-color: #5FBF8A; background: #173826; }
-  .opcao.errada { border-color: #F08A80; background: #3D1A17; }
-  .tarefa--feita, .mini__caixa--cinza, .msg--bot { background: #242A26; }
-  .mini__caixa--laranja { background: var(--laranja-claro); }
-  .coluna--meio, .tarefa--curso { border-color: #3F5590; }
-  .botao--escuro, .pilula.ativa, .pessoas span, .chat-botao, .chat__topo { color: #F3F5F4; }
-  .msg--eu, .chat__form button { color: #0D110F; }
-  .chat__form input { background: var(--superficie); color: var(--texto); }
+/* Texto escrito à mão em style.css, pensado para fundo claro */
+:where([data-tema="escuro"]) .lead, :where([data-tema="escuro"]) .cartao p, :where([data-tema="escuro"]) .legenda { color: var(--texto-suave); }
+:where([data-tema="escuro"]) .aviso--azul, :where([data-tema="escuro"]) .mini__caixa--azul { color: #C9D7FF; }
+:where([data-tema="escuro"]) .aviso--verde { background: #173826; color: #B6E5C8; }
+:where([data-tema="escuro"]) .aviso--vermelho { background: #3D1A17; color: #FFC2BB; }
+:where([data-tema="escuro"]) .opcao.certa { border-color: #5FBF8A; background: #173826; }
+:where([data-tema="escuro"]) .opcao.errada { border-color: #F08A80; background: #3D1A17; }
+:where([data-tema="escuro"]) .tarefa--feita, :where([data-tema="escuro"]) .mini__caixa--cinza, :where([data-tema="escuro"]) .msg--bot { background: #242A26; }
+:where([data-tema="escuro"]) .mini__caixa--laranja { background: var(--laranja-claro); }
+:where([data-tema="escuro"]) .coluna--meio, :where([data-tema="escuro"]) .tarefa--curso { border-color: #3F5590; }
+:where([data-tema="escuro"]) .botao--escuro, :where([data-tema="escuro"]) .pilula.ativa, :where([data-tema="escuro"]) .pessoas span, :where([data-tema="escuro"]) .chat-botao, :where([data-tema="escuro"]) .chat__topo { color: #F3F5F4; }
+:where([data-tema="escuro"]) .msg--eu, :where([data-tema="escuro"]) .chat__form button { color: #0D110F; }
+:where([data-tema="escuro"]) .chat__form input { background: var(--superficie); color: var(--texto); }
 
-  /* shell.css: «Saltar para o conteúdo» tinha texto branco sobre a cor do texto */
-  .saltar { color: var(--papel); }
+/* shell.css: «Saltar para o conteúdo» tinha texto branco sobre a cor do texto */
+:where([data-tema="escuro"]) .saltar { color: var(--papel); }
 
+/* metricas.css: texto escrito à mão sobre o amarelo */
+:where([data-tema="escuro"]) .cenario__aviso { color: #F2DFA6; }
+:where([data-tema="escuro"]) .ficha--ativa { border-color: #8C7530; }
 
-  /* metricas.css: texto escrito à mão sobre o amarelo */
-  .cenario__aviso { color: #F2DFA6; }
-  .ficha--ativa { border-color: #8C7530; }
-}

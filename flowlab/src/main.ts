@@ -10,6 +10,7 @@ import { animarAoAparecer, atualizarLeitura } from './components/animacoes';
 import { ativarInclinacao, dividirPalavras, mostrarCarregamento } from './components/efeitos';
 import { criarFontes } from './components/fontes';
 import { criarMenuLateral } from './components/menuLateral';
+import { criarBotaoTema } from './components/tema';
 import { PASSOS, indicePorAncora } from './data/passos';
 import { PERGUNTAS } from './data/quiz';
 import { criarPercurso, type EstadoPercurso } from './model/percurso';
@@ -77,6 +78,8 @@ PASSOS.forEach((_, i) => desenharPasso(i));
 const fontes = criarFontes();
 document.querySelector('.site-topo__linha')?.append(fontes.botao);
 document.body.append(fontes.janela);
+// Tema claro ou escuro (SCRUM-141): botão a seguir ao «Fontes».
+document.querySelector('.site-topo__linha')?.append(criarBotaoTema());
 
 // Um ecrã por tema: cada passo ajusta-se à altura do ecrã (computador).
 ajustarAoEcra(seccoes);
