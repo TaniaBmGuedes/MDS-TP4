@@ -41,3 +41,12 @@ describe('texto alternativo do gráfico', () => {
     expect(texto).not.toMatch(/NaN|undefined/);
   });
 });
+
+describe('valores de um dia (cursor do gráfico)', () => {
+  it('diz o dia e as três bandas, que somam o que entrou', () => {
+    const s = simular(4, EQUIPA_INICIAL);
+    expect(TEXTOS.dia(s, 0)).toBe(`Dia 0: ${EQUIPA_INICIAL.filaInicial} a fazer, 0 em curso, 0 feitas.`);
+    const fim = EQUIPA_INICIAL.dias;
+    expect(TEXTOS.dia(s, fim)).toBe(`Dia ${fim}: 2 a fazer, 4 em curso, 30 feitas.`);
+  });
+});

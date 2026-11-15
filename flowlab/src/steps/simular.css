@@ -78,9 +78,9 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 .cfd__chave { display: inline-flex; align-items: center; gap: 6px; }
 .cfd__chave strong { color: var(--texto); white-space: nowrap; }
 .cfd__cor { flex: none; width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid; }
-.cfd__chave--aFazer .cfd__cor { background: #ECEFE8; border-color: #7D857F; }
-.cfd__chave--emCurso .cfd__cor { background: var(--amarelo); border-color: #9C7B22; }
-.cfd__chave--feito .cfd__cor { background: var(--acento); border-color: var(--acento-escuro); }
+.cfd__chave--aFazer .cfd__cor { background: var(--cfd-afazer); border-color: var(--cfd-afazer-linha); }
+.cfd__chave--emCurso .cfd__cor { background: var(--cfd-curso); border-color: var(--cfd-curso-linha); }
+.cfd__chave--feito .cfd__cor { background: var(--cfd-feito); border-color: var(--cfd-feito-linha); }
 
 .cfd__area { width: 100%; min-width: 0; }
 /* Até o ResizeObserver voltar a desenhar à nova largura, encolhe em vez de
@@ -92,16 +92,64 @@ input[type=range].sim__slider { width: 100%; max-width: none; min-height: 44px; 
 .cfd__valor { font: 12px Inter, system-ui, sans-serif; fill: var(--texto-fraco); font-variant-numeric: tabular-nums; }
 .cfd__rotulo { font: 600 12px Inter, system-ui, sans-serif; fill: var(--texto-suave); }
 
+/* Cores das bandas, também usadas na legenda, nos rótulos do fim e no
+   cursor. «Feito» é um azul suave (é o acumulado, a banda menos
+   interessante); «Em curso», a que conta, fica em amarelo forte; «A fazer»
+   é cinzento. Os contornos têm contraste de 3:1 com o fundo (WCAG 1.4.11). */
+.cfd {
+  --cfd-afazer: #DFE3E8; --cfd-afazer-linha: #758195; --cfd-afazer-alvo: #B3B9C4;
+  --cfd-curso: #F5CD47;  --cfd-curso-linha: #946F00;
+  --cfd-feito: #B3D4FF;  --cfd-feito-linha: #0C66E4;
+}
+@media (prefers-color-scheme: dark) {
+  .cfd {
+    --cfd-afazer: #2C3A4B; --cfd-afazer-linha: #8C9BAB; --cfd-afazer-alvo: #44546F;
+    --cfd-curso: #E2B203;  --cfd-curso-linha: #F8E6A0;
+    --cfd-feito: #1C3F70;  --cfd-feito-linha: #579DFF;
+  }
+}
+
 .cfd__banda { stroke-width: 1.5; stroke-linejoin: round; transition: d .45s var(--ease), opacity .3s; }
-.cfd__banda--aFazer { fill: #ECEFE8; stroke: #7D857F; }
-.cfd__banda--emCurso { fill: var(--amarelo); stroke: #9C7B22; }
-.cfd__banda--feito { fill: var(--acento); stroke: var(--acento-escuro); }
+.cfd__banda--aFazer { fill: var(--cfd-afazer); stroke: var(--cfd-afazer-linha); }
+.cfd__banda--emCurso { fill: var(--cfd-curso); stroke: var(--cfd-curso-linha); }
+.cfd__banda--feito { fill: var(--cfd-feito); stroke: var(--cfd-feito-linha); }
 .cfd--sem-transicao .cfd__banda { transition: none; }
 /* Com uma regra escolhida, as bandas fora de foco ficam esbatidas. */
 .cfd--destaque .cfd__banda { opacity: .35; }
 .cfd--destaque .cfd__banda--alvo { opacity: 1; }
-/* «A fazer» é quase branca: em destaque escurece, senão perde para as esbatidas. */
-.cfd--destaque .cfd__banda--aFazer.cfd__banda--alvo { fill: #C3CABF; stroke: var(--texto-suave); }
+/* «A fazer» é clara: em destaque escurece, senão perde para as esbatidas. */
+.cfd--destaque .cfd__banda--aFazer.cfd__banda--alvo { fill: var(--cfd-afazer-alvo); }
+
+/* Rótulos no fim das bandas */
+.cfd__fim-texto { font: 13px Inter, system-ui, sans-serif; fill: var(--texto); font-variant-numeric: tabular-nums; }
+.cfd__fim-nome { font-weight: 600; fill: var(--texto-suave); }
+.cfd__fim-cor--aFazer, .cfd__cursor-ponto--aFazer { fill: var(--cfd-afazer); stroke: var(--cfd-afazer-linha); stroke-width: 1.5; }
+.cfd__fim-cor--emCurso, .cfd__cursor-ponto--emCurso { fill: var(--cfd-curso); stroke: var(--cfd-curso-linha); stroke-width: 1.5; }
+.cfd__fim-cor--feito, .cfd__cursor-ponto--feito { fill: var(--cfd-feito); stroke: var(--cfd-feito-linha); stroke-width: 1.5; }
+/* Com rótulos no fim, a legenda de cima fica só com os nomes, numa linha. */
+.cfd--rotulos .cfd__chave span:not(.cfd__cor) { display: none; }
+
+/* Cursor dos dias (rato, toque, setas) */
+.cfd__area { position: relative; touch-action: pan-y; border-radius: 6px; }
+.cfd__area:focus-visible { outline: 2px solid var(--acento); outline-offset: 4px; }
+.cfd__cursor { opacity: 0; pointer-events: none; transition: opacity .15s; }
+.cfd__cursor--visivel { opacity: 1; }
+.cfd__cursor-linha { stroke: var(--texto); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.cfd__caixa {
+  position: absolute; top: 28px; z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column; gap: 2px; min-width: 128px;
+  padding: 8px 10px; border: 1px solid var(--divisor-forte); border-radius: 8px;
+  background: var(--superficie); box-shadow: 0 4px 14px rgb(0 0 0 / .12);
+  font-size: 13px; color: var(--texto-suave); font-variant-numeric: tabular-nums;
+}
+.cfd__caixa[hidden] { display: none; }
+.cfd__caixa strong { color: var(--texto); font-size: 13px; }
+.cfd__caixa-linha { display: flex; align-items: center; gap: 6px; }
+.cfd__caixa-linha b { margin-left: auto; padding-left: 10px; color: var(--texto); }
+.cfd__caixa-cor { width: 10px; height: 10px; border-radius: 2px; border: 1.5px solid; }
+.cfd__caixa-linha--aFazer .cfd__caixa-cor { background: var(--cfd-afazer); border-color: var(--cfd-afazer-linha); }
+.cfd__caixa-linha--emCurso .cfd__caixa-cor { background: var(--cfd-curso); border-color: var(--cfd-curso-linha); }
+.cfd__caixa-linha--feito .cfd__caixa-cor { background: var(--cfd-feito); border-color: var(--cfd-feito-linha); }
 
 .cfd__chaveta line, .cfd__seta { stroke: var(--texto); stroke-width: 2; stroke-linecap: round; }
 .cfd__seta--aberta { stroke-dasharray: 6 5; }

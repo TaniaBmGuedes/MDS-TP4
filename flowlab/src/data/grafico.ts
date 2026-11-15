@@ -53,6 +53,11 @@ export const TEXTOS = {
     const d = s.entradas.length - 1;
     return `Gráfico de fluxo cumulativo com limite de WIP ${wip}, do dia 0 ao dia ${d}. Três bandas empilhadas: Feito em baixo, Em curso no meio e A fazer em cima. No dia ${d}: ${tarefas(alturaBanda(s, 'aFazer', d))} a fazer, ${tarefas(alturaBanda(s, 'emCurso', d))} em curso e ${tarefas(alturaBanda(s, 'feito', d))} feitas. Os valores de cada dia estão na tabela a seguir ao gráfico.`;
   },
+  /** Ajuda do gráfico para quem usa o teclado (cursor dos dias). */
+  ajudaCursor: 'Usa as setas para ver os valores de cada dia.',
+  /** Valores de um dia, para o cursor do gráfico (rato, toque ou setas). */
+  dia: (s: SeriesCumulativas, dia: number): string =>
+    `Dia ${dia}: ${numero(alturaBanda(s, 'aFazer', dia))} a fazer, ${numero(alturaBanda(s, 'emCurso', dia))} em curso, ${numero(alturaBanda(s, 'feito', dia))} feitas.`,
 };
 
 export type IdRegra = 'altura' | 'horizontal' | 'alargar';
