@@ -238,13 +238,8 @@ input[type=range] { width: 220px; max-width: 100%; margin-top: 8px; accent-color
 }
 
 /* ==========================================
-   SECÇÃO KANBAN (Ecrã Info)
+   ECRÃ «O QUE É KANBAN» (steps/kanban.ts, SCRUM-128)
    ========================================== */
-
-/* Espaçamento grande para separar da zona dos botões acima */
-.kanban-cabecalho {
-  margin-top: 8px;
-}
 
 .ecra-info__kanban {
   display: grid;
@@ -270,6 +265,13 @@ input[type=range] { width: 220px; max-width: 100%; margin-top: 8px; accent-color
 
 .kanban-textos li {
   margin-bottom: 1rem;
+}
+
+/* Ponte para o simulador, no passo seguinte */
+.kanban-textos .kanban-textos__seguir {
+  margin: 1.5rem 0 0;
+  font-size: 1rem;
+  color: var(--texto-fraco);
 }
 
 /* Lado Direito: Quadro Kanban */

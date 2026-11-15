@@ -10,8 +10,8 @@ import { descodificar, semMovimento, tornarMagnetico } from '../components/efeit
 import type { Ecra } from './index';
 
 const APRENDER = [
+  { passo: 'kanban', texto: 'O que é um quadro Kanban e porque se limita o trabalho em curso.' },
   { passo: 'simular', texto: 'Porque é que começar menos tarefas ao mesmo tempo faz acabar mais depressa.' },
-  { passo: 'info', texto: 'O que é um quadro Kanban e porque se limita o trabalho em curso.' },
   { passo: 'metricas', texto: 'Ler as três métricas do fluxo: trabalho em curso, throughput e lead time.' },
   { passo: 'equipa', texto: 'Decidir entre trazer mais gente ou fazer menos de cada vez.' },
 ] as const;
