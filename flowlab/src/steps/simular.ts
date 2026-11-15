@@ -9,9 +9,14 @@
 //
 // Vindo do quiz («Ver no simulador», T17), abre com o WIP e a regra da
 // pergunta e mostra um aviso com o botão «Voltar ao quiz».
+//
+// Pergunta guia (SCRUM-28): o ecrã abre com «Fazer mais coisas ao mesmo tempo
+// é melhor?» e pede uma previsão antes de experimentar. Em cada cenário
+// sugerido aparece uma frase «Repara…» com o que observar no resultado.
 import './simular.css';
 import { criarGraficoCumulativo } from '../components/graficoCumulativo';
 import { REGRAS, TEXTOS, WIP_SLIDER_MAX, WIP_SLIDER_MIN, type IdRegra } from '../data/grafico';
+import { PERGUNTA_GUIA, PREVISAO, reparaEm, respostaPrevisao } from '../data/guia';
 import { cenarioPersonalizado, conclusao, numero, throughput } from '../data/metricas';
 import { PASSOS } from '../data/passos';
 import { CENARIOS_WIP, EQUIPA_INICIAL } from '../data/simulacao';
@@ -27,7 +32,44 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, text
 }
 
 export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
-  contentor.append(el('p', 'sim__intro', TEXTOS.intro));
+  // ---------- Pergunta guia e previsão (SCRUM-28) ----------
+  const guia = el('section', 'guia');
+  guia.setAttribute('aria-labelledby', 'guia-pergunta');
+  const pergunta = el('h2', 'guia__pergunta', PERGUNTA_GUIA);
+  pergunta.id = 'guia-pergunta';
+  const previsao = el('p', 'guia__previsao', PREVISAO.pergunta);
+  previsao.id = 'guia-previsao';
+  const opcoesPrevisao = el('div', 'guia__opcoes');
+  opcoesPrevisao.setAttribute('role', 'group');
+  opcoesPrevisao.setAttribute('aria-labelledby', 'guia-previsao');
+  const respostaGuia = el('p', 'guia__resposta');
+  respostaGuia.setAttribute('role', 'status');
+  respostaGuia.hidden = true;
+  let previsto: number | null = null;
+  const botoesPrevisao = CENARIOS_WIP.map((c) => {
+    const b = el('button', 'guia__opcao', `${c.nome} (${c.wip})`);
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => prever(c.wip));
+    opcoesPrevisao.append(b);
+    return { botao: b, wip: c.wip };
+  });
+  guia.append(pergunta, previsao, el('p', 'guia__ajuda', PREVISAO.ajuda), opcoesPrevisao, respostaGuia);
+  contentor.append(guia, el('p', 'sim__intro', TEXTOS.intro));
+
+  // A previsão fica como foi dada: a ideia é comparar o instinto com o
+  // resultado, não ir trocando até acertar.
+  function prever(wipPrevisto: number): void {
+    if (previsto !== null) return;
+    previsto = wipPrevisto;
+    for (const { botao, wip: w } of botoesPrevisao) {
+      botao.setAttribute('aria-pressed', String(w === wipPrevisto));
+      botao.setAttribute('aria-disabled', 'true');
+    }
+    respostaGuia.textContent = respostaPrevisao(wipPrevisto);
+    respostaGuia.hidden = false;
+    usarWip(wipPrevisto);
+  }
 
   const pedido = percurso.tirarPedidoSimulador();
   if (pedido) {
@@ -77,6 +119,9 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
     return { botao: b, wip: c.wip };
   });
 
+  // «Repara…»: só aparece nos cenários sugeridos (SCRUM-28).
+  const repara = el('p', 'sim__repara');
+
   const resumo = el('dl', 'sim__resumo');
   const caixa = (classe: string, nome: string): HTMLElement => {
     const item = el('div', `sim__caixa sim__caixa--${classe}`);
@@ -96,7 +141,7 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
   const anuncio = el('p', 'escondido-visual');
   anuncio.setAttribute('aria-live', 'polite');
 
-  controlos.append(campo, cenarios, quando, resumo, metricas, veredicto, anuncio);
+  controlos.append(campo, cenarios, repara, quando, resumo, metricas, veredicto, anuncio);
 
   // ---------- Gráfico ----------
   const grafico = criarGraficoCumulativo(TEXTOS.tituloGrafico);
@@ -157,7 +202,7 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
     mostrarRegra();
   }
 
-  function usarWip(novo: number): void {
+  function usarWip(novo: number, mostrarRepara = true): void {
     wip = Math.min(WIP_SLIDER_MAX, Math.max(WIP_SLIDER_MIN, Math.round(novo)));
     series = simular(wip, EQUIPA_INICIAL);
     const fim = EQUIPA_INICIAL.dias;
@@ -181,14 +226,20 @@ export const ecraSimular: Ecra = (contentor, _passo, percurso) => {
     );
     veredicto.textContent = conclusao(cenario);
     veredicto.classList.toggle('sim__veredicto--alerta', !cenario.estavel || wip > EQUIPA_INICIAL.pessoas);
-    anuncio.textContent = `Limite ${wip}. No fim do dia ${fim}: ${aFazer} a fazer, ${emCurso} em curso, ${feito} feitas. ${veredicto.textContent}`;
+    // Ao abrir não há frase: o cenário inicial é a resposta certa à previsão
+    // e a frase dava-a antes de a pessoa escolher. Aparece ao mudar de cenário.
+    const fraseRepara = mostrarRepara ? reparaEm(wip) : null;
+    repara.textContent = fraseRepara ?? '';
+    repara.hidden = fraseRepara === null;
+    anuncio.textContent = `Limite ${wip}. No fim do dia ${fim}: ${aFazer} a fazer, ${emCurso} em curso, ${feito} feitas. ${veredicto.textContent}${fraseRepara ? ` ${fraseRepara}` : ''}`;
 
     grafico.atualizar(series, TEXTOS.descricao(series, wip));
     mostrarRegra();
   }
 
   slider.addEventListener('input', () => usarWip(Number(slider.value)));
-  usarWip(wip);
+  // Vindo do quiz, a pessoa já experimentou: mostra logo a frase.
+  usarWip(wip, pedido !== null);
   // O primeiro desenho não é anunciado: só as mudanças feitas pela pessoa.
   anuncio.textContent = '';
 };

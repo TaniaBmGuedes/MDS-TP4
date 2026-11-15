@@ -2,7 +2,36 @@
    mesmas cores das fichas do ecrã das métricas: branco-cinza à espera,
    amarelo em curso, verde-floresta feito. */
 
-.sim__intro { margin-top: -8px; font-size: 17px; color: var(--texto-suave); }
+.sim__intro { font-size: 17px; color: var(--texto-suave); }
+
+/* Pergunta guia e previsão (SCRUM-28) */
+.guia {
+  display: flex; flex-direction: column; gap: 8px; margin-top: -8px;
+  padding: 18px 20px; border: 1px solid var(--acento-linha); border-radius: 12px;
+  background: var(--acento-fundo);
+}
+.guia__pergunta { font: 700 clamp(20px, 2.4vw, 24px)/1.25 Inter, system-ui, sans-serif; letter-spacing: -.01em; color: var(--texto); }
+.guia__previsao { font-size: 16px; font-weight: 600; color: var(--texto); }
+.guia__ajuda { font-size: 14px; color: var(--texto-suave); }
+.guia__opcoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.guia__opcao {
+  min-height: 44px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid var(--divisor-forte); background: var(--superficie);
+  font-size: 14px; font-weight: 600; color: var(--texto);
+  transition: background .15s, border-color .15s;
+}
+.guia__opcao:not([aria-disabled]):hover { border-color: var(--acento); }
+.guia__opcao[aria-disabled] { cursor: default; opacity: .6; }
+.guia__opcao[aria-pressed="true"] { opacity: 1; background: var(--acento); border-color: var(--acento); color: var(--superficie); }
+.guia__resposta { margin-top: 4px; font-size: 15px; color: var(--texto); }
+.guia__resposta[hidden] { display: none; }
+
+/* «Repara…» por baixo dos cenários sugeridos (SCRUM-28) */
+.sim__repara {
+  padding: 10px 12px; border-left: 3px solid var(--amarelo); border-radius: 0 8px 8px 0;
+  background: var(--amarelo-fundo); color: var(--texto); font-size: 14px;
+}
+.sim__repara[hidden] { display: none; }
 
 /* Aviso quando se vem do quiz (T17) */
 .sim__vindo {
