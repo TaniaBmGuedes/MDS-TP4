@@ -11,9 +11,9 @@ Os entregáveis seguem a lista da secção 6 do enunciado (`theme/assignment4.pd
 | Product backlog | `entrega/03_Backlog_Sprints_e_Metricas.docx` e Jira | Feito (lido a 14/11) |
 | Sprint goals, sprint backlogs e burndown charts | `entrega/03_Backlog_Sprints_e_Metricas.docx`, `entrega/figuras/` | Sprint 1 feito; Sprint 2 a fechar a 17/11 |
 | Atas de review e retrospetiva | `entrega/04_Atas_Reviews_e_Retrospetivas.docx` | Sprint 1 feito; Sprint 2 a 17/11 |
-| Produto (URL do Netlify) | https://delicate-quokka-e180ac.netlify.app | Produção em pausa desde 13/11 (créditos do Netlify); versão atual em https://deploy-preview-29--delicate-quokka-e180ac.netlify.app |
+| Produto (URL do Netlify) | https://delicate-quokka-e180ac.netlify.app | Produção em pausa desde 13/11 (créditos do Netlify); o main atual está em https://deploy-preview-32--delicate-quokka-e180ac.netlify.app |
 | Relatório final | `entrega/06_Relatorio_TP4.docx` | Versão de 14/11; faltam o fecho do Sprint 2 e as análises pessoais. Substitui `Relatorio/TP4_Relatorio.docx` (versão de 09/11) |
-| Apresentação | `entrega/07_Apresentacao_Final.pptx` | Rascunho com notas do orador; atualizar a 17/11 |
+| Apresentação | `entrega/07_Apresentacao_Final.pptx` | Números atualizados a 14/11 à noite (32 PR, 129 testes, Sprint 2 com 13 de 31 SP); fechar a 17/11 |
 | Link para a ferramenta de backlog | https://isec-team-mfrdhjnv.atlassian.net/jira/software/projects/SCRUM/boards/1 | Feito |
 
 Outros documentos:
