@@ -1,73 +1,80 @@
 // Ecrã «O que é Kanban» (SCRUM-128): a explicação simples do Kanban, num ecrã
 // próprio e antes do simulador, para quem chega perceber de que se fala antes
-// de experimentar. Três ideias à esquerda e um quadro de exemplo à direita.
-// O título e a etiqueta vêm do main.ts (data/passos.ts).
-// Antes estava por baixo do dilema, em data/info.ts; o feedback do cliente na
-// review do Sprint 1 pediu que viesse à cabeça e separada do dilema.
+// de experimentar. Uma frase de entrada, as três ideias em cartões numerados
+// à esquerda, um quadro de exemplo à direita e, em baixo, a ponte para o
+// simulador. O título e a etiqueta vêm do main.ts (data/passos.ts).
+import './kanban.css';
+import { ICONES } from '../components/icones';
 import type { Ecra } from './index';
 
 const IDEIAS = [
-  { forte: 'Visualizar', resto: ' cada tarefa como um cartão num quadro.' },
-  { forte: 'Limitar', resto: ' quantas tarefas estão em curso ao mesmo tempo.' },
-  { forte: 'Medir', resto: ' o fluxo para saber se está a melhorar.' },
+  { titulo: 'Visualizar', texto: 'Cada tarefa é um cartão e cada coluna é um estado. Vê-se de relance o que está à espera, em curso e feito.' },
+  { titulo: 'Limitar', texto: 'A coluna «Em curso» tem um máximo. Só se começa uma tarefa nova quando outra acaba.' },
+  { titulo: 'Medir', texto: 'Conta-se quanto trabalho sai e quanto tempo demora, para saber se o fluxo está a melhorar.' },
 ] as const;
 
 const COLUNAS = [
-  { titulo: 'A fazer', classe: 'col-fazer', tarefas: ['Tarefa E', 'Tarefa F', 'Tarefa G'] },
-  { titulo: 'Em curso · máx. 2', classe: 'col-curso', tarefas: ['Tarefa C', 'Tarefa D'] },
-  { titulo: 'Feito', classe: 'col-feito', tarefas: ['Tarefa A', 'Tarefa B'] },
+  { titulo: 'A fazer', classe: 'fazer', tarefas: ['Tarefa E', 'Tarefa F', 'Tarefa G'] },
+  { titulo: 'Em curso', limite: 'máx. 2', classe: 'curso', tarefas: ['Tarefa C', 'Tarefa D'] },
+  { titulo: 'Feito', classe: 'feito', tarefas: ['Tarefa A', 'Tarefa B'] },
 ] as const;
 
-export const ecraKanban: Ecra = (seccao) => {
-  const bloco = document.createElement('div');
-  bloco.className = 'ecra-info__kanban';
+function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, texto?: string): HTMLElementTagNameMap[K] {
+  const elemento = document.createElement(tag);
+  if (classe) elemento.className = classe;
+  if (texto !== undefined) elemento.textContent = texto;
+  return elemento;
+}
+
+export const ecraKanban: Ecra = (seccao, _passo, percurso) => {
+  seccao.append(el('p', 'kanban__intro', 'Um método para gerir trabalho de forma visual, que nasceu nas fábricas da Toyota e hoje se usa em muitas equipas de software.'));
+
+  const bloco = el('div', 'kanban');
 
   // ---------- Esquerda: as três ideias ----------
-  const textos = document.createElement('div');
-  textos.className = 'kanban-textos';
-
-  const intro = document.createElement('p');
-  intro.textContent = 'Kanban é uma forma de gerir trabalho com três ideias simples:';
-
-  const lista = document.createElement('ol');
-  IDEIAS.forEach((ideia) => {
-    const li = document.createElement('li');
-    const forte = document.createElement('strong');
-    forte.textContent = ideia.forte;
-    li.append(forte, ideia.resto);
-    lista.append(li);
+  const ideias = el('ol', 'kanban__ideias');
+  IDEIAS.forEach((ideia, i) => {
+    const li = el('li', 'kanban__ideia');
+    li.append(
+      el('span', 'kanban__numero', String(i + 1)),
+      el('strong', 'kanban__ideia-titulo', ideia.titulo),
+      el('span', 'kanban__ideia-texto', ideia.texto),
+    );
+    ideias.append(li);
   });
 
-  const aSeguir = document.createElement('p');
-  aSeguir.className = 'kanban-textos__seguir';
-  aSeguir.textContent = 'No passo seguinte vais experimentar a segunda ideia: o que muda quando se limita o trabalho em curso.';
-
-  textos.append(intro, lista, aSeguir);
-
   // ---------- Direita: um quadro de exemplo ----------
-  const quadro = document.createElement('div');
-  quadro.className = 'kanban-quadro';
+  const exemplo = el('figure', 'kanban__exemplo');
+  const quadro = el('div', 'kanban__quadro');
   quadro.setAttribute('role', 'img');
   quadro.setAttribute(
     'aria-label',
     'Exemplo de quadro Kanban: três tarefas em «A fazer», duas em «Em curso», que tem o máximo de 2, e duas em «Feito».',
   );
-
   COLUNAS.forEach((col) => {
-    const coluna = document.createElement('div');
-    coluna.className = `kanban-coluna ${col.classe}`;
-    const titulo = document.createElement('h3');
-    titulo.textContent = col.titulo;
-    coluna.append(titulo);
-    col.tarefas.forEach((t) => {
-      const cartao = document.createElement('div');
-      cartao.className = 'kanban-cartao';
-      cartao.textContent = t;
-      coluna.append(cartao);
-    });
+    const coluna = el('div', `kanban__coluna kanban__coluna--${col.classe}`);
+    const cabeca = el('p', 'kanban__cabeca');
+    cabeca.append(el('span', undefined, col.titulo));
+    if ('limite' in col) cabeca.append(el('span', 'kanban__limite', col.limite));
+    coluna.append(cabeca);
+    col.tarefas.forEach((t) => coluna.append(el('div', 'kanban__cartao', t)));
     quadro.append(coluna);
   });
+  exemplo.append(
+    quadro,
+    el('figcaption', 'kanban__legenda', 'A «Em curso» está cheia: a Tarefa E só começa quando a C ou a D acabar.'),
+  );
 
-  bloco.append(textos, quadro);
-  seccao.append(bloco);
+  bloco.append(ideias, exemplo);
+
+  // ---------- Em baixo: ponte para o simulador ----------
+  const ponte = el('div', 'kanban__ponte');
+  ponte.append(el('p', undefined, 'A seguir, experimenta a segunda ideia: o que muda quando se limita o trabalho em curso?'));
+  const seguir = el('button', 'botao kanban__seguir');
+  seguir.type = 'button';
+  seguir.innerHTML = `<span>Ir para o simulador</span>${ICONES.seta}`;
+  seguir.addEventListener('click', () => percurso.avancar());
+  ponte.append(seguir);
+
+  seccao.append(bloco, ponte);
 };

@@ -35,7 +35,7 @@
 .magnetico { transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
 
 /* ---------- Inclinação 3D ---------- */
-.inicio__item, .cartao-opcao, .regra, .kanban-quadro, .quadro-vivo {
+.inicio__item, .cartao-opcao, .regra, .kanban__exemplo, .quadro-vivo {
   position: relative;
   transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .3s, border-color .3s;
 }
