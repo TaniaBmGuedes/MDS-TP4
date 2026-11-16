@@ -542,6 +542,10 @@ export const ecraMetricas: Ecra = (contentor) => {
   // «O teu cenário» está sempre lá: com o limite guardado ou com o inicial.
   const guardado = lerWipGuardado();
   usarWip(guardado ?? WIP_PROPRIO_INICIAL, false, guardado !== null);
-  irPara(0);
+  // Começa no diapositivo do limite que está no controlo de cima, para o
+  // título mostrar o mesmo WIP que o controlo. Se esse limite é o de um
+  // exemplo, a etiqueta diz qual («Exemplo 3 de 3 · é o valor que
+  // escolheste»). Depois passa sozinho pelos exemplos.
+  irPara(CENARIOS.length);
   requestAnimationFrame(tique);
 };
