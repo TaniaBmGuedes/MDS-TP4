@@ -33,5 +33,17 @@
     <main id="app" tabindex="-1"></main>
   </div>
   <script type="module" src="/src/main.ts"></script>
+  <!--
+    Chat do FlowLab (SCRUM-72): o bot «Kanban Master» do BOTSchool.ai.
+    O loader.js desenha o botão de chat flutuante em todas as páginas e lê a
+    configuração dos atributos data-*: o canal identifica o bot publicado e o
+    endpoint é a API que responde. Fica no fim do body e com async para não
+    atrasar o resto do site; se o BOTSchool estiver em baixo, o site funciona
+    na mesma, só sem chat.
+  -->
+  <script src="https://webchat-cc.ng.botschool.ai/loader.js"
+          data-channel-id="01a1c1dc-a793-7671-b633-d327ab0d6e9c"
+          data-endpoint="https://api-cc.ng.botschool.ai"
+          async></script>
 </body>
 </html>
