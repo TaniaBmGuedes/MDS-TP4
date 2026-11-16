@@ -6,8 +6,8 @@
 //    segundos; param com o rato ou o foco lá dentro e com a aba escondida.
 // 3. O último cenário, «O teu cenário», está sempre lá. Um controlo visível
 //    (− / + e um campo, de 1 a 12) escolhe o limite de WIP; o simulador
-//    calcula o cenário e o limite fica guardado. O duplo clique no número do
-//    WIP, no título, continua a funcionar como atalho.
+//    calcula o cenário e o limite fica guardado. O número do WIP no título
+//    de cada exemplo é só texto: o limite muda-se apenas nesse controlo.
 // 4. Por baixo dos cenários, a conclusão final compara-os com os números.
 import './metricas.css';
 import {
@@ -295,54 +295,6 @@ function guardarWip(v: number): void {
 }
 
 /**
- * O número do WIP no título. Com duplo clique (ou Enter) vira um campo:
- * escreve-se outro limite e o simulador cria um cenário novo com ele.
- */
-function criarNumeroWip(valor: number, aoMudar: (wip: number) => void): HTMLElement {
-  const numeroWip = el('span', 'cenario__wip', String(valor));
-  numeroWip.tabIndex = 0;
-  numeroWip.setAttribute('role', 'button');
-  numeroWip.setAttribute('aria-label', `Limite de WIP ${valor}. Clica duas vezes ou carrega em Enter para mudar.`);
-  numeroWip.title = 'Clica duas vezes para mudar';
-
-  const editar = (): void => {
-    const campo = el('input', 'cenario__campo');
-    campo.type = 'number';
-    campo.inputMode = 'numeric';
-    campo.min = String(WIP_MINIMO);
-    campo.max = String(WIP_MAXIMO);
-    campo.step = '1';
-    campo.value = String(valor);
-    campo.setAttribute('aria-label', `Novo limite de WIP, entre ${WIP_MINIMO} e ${WIP_MAXIMO}`);
-    let feito = false;
-    const fechar = (aplicar: boolean): void => {
-      if (feito) return;
-      feito = true;
-      const n = Number(campo.value);
-      campo.replaceWith(numeroWip);
-      if (aplicar && campo.value !== '' && Number.isFinite(n) && n !== valor) aoMudar(n);
-      else numeroWip.focus();
-    };
-    campo.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') fechar(true);
-      if (e.key === 'Escape') fechar(false);
-    });
-    campo.addEventListener('blur', () => fechar(true));
-    numeroWip.replaceWith(campo);
-    campo.focus();
-    campo.select();
-  };
-  numeroWip.addEventListener('dblclick', editar);
-  numeroWip.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      editar();
-    }
-  });
-  return numeroWip;
-}
-
-/**
  * O controlo visível de «O teu cenário»: − / + e um campo com o limite de WIP,
  * o intervalo escrito e um botão. Funciona com rato e com teclado (Enter).
  */
@@ -425,11 +377,7 @@ function criarExperimenta(aoEscolher: (wip: number) => void): {
 }
 
 /** O conteúdo de um diapositivo: cabeçalho, animação, métricas e conclusão. */
-function criarDiapositivo(
-  c: Cenario,
-  id: string,
-  aoMudarWip: (wip: number) => void,
-): { elemento: HTMLElement; palco: Palco; passo: HTMLElement } {
+function criarDiapositivo(c: Cenario, id: string): { elemento: HTMLElement; palco: Palco; passo: HTMLElement } {
   // div e não article: o padrão de carrossel pede role="group", que não é
   // permitido em article (auditoria de acessibilidade, H17).
   const d = el('div', 'cenario');
@@ -441,7 +389,8 @@ function criarDiapositivo(
   const passo = el('p', 'cenario__passo');
   const titulo = el('h2', 'cenario__titulo');
   titulo.id = id;
-  titulo.append('WIP ', criarNumeroWip(c.limiteWip, aoMudarWip), ` — ${c.nome}`);
+  // O número é só texto: o limite de WIP muda-se no controlo «O teu cenário».
+  titulo.append(`WIP ${c.limiteWip} — ${c.nome}`);
   if (!c.estavel) titulo.append(el('span', 'cenario__aviso', 'a fila cresce'));
   cab.append(passo, titulo, el('p', 'cenario__situacao', situacao(c)));
 
@@ -489,7 +438,7 @@ export const ecraMetricas: Ecra = (contentor) => {
   const pista = el('div', 'licao__pista');
   janela.append(pista);
 
-  const diapositivos = CENARIOS.map((c, i) => criarDiapositivo(c, `cenario-${i}`, (wip) => usarWip(wip, true)));
+  const diapositivos = CENARIOS.map((c, i) => criarDiapositivo(c, `cenario-${i}`));
 
   licao.append(janela);
   contentor.append(licao, criarFecho());
@@ -550,7 +499,7 @@ export const ecraMetricas: Ecra = (contentor) => {
     rotuloTeu = exemplo >= 0 ? TEXTOS.passoIgual(exemplo + 1, CENARIOS.length) : TEXTOS.passoTeu;
     if (guardar) guardarWip(c.limiteWip);
     experimenta.sincronizar(c.limiteWip);
-    const novo = criarDiapositivo(c, 'cenario-teu', (n) => usarWip(n, true));
+    const novo = criarDiapositivo(c, 'cenario-teu');
     if (diapositivos.length > CENARIOS.length) diapositivos[CENARIOS.length] = novo;
     else diapositivos.push(novo);
     montar();
@@ -593,6 +542,10 @@ export const ecraMetricas: Ecra = (contentor) => {
   // «O teu cenário» está sempre lá: com o limite guardado ou com o inicial.
   const guardado = lerWipGuardado();
   usarWip(guardado ?? WIP_PROPRIO_INICIAL, false, guardado !== null);
-  irPara(0);
+  // Começa no diapositivo do limite que está no controlo de cima, para o
+  // título mostrar o mesmo WIP que o controlo. Se esse limite é o de um
+  // exemplo, a etiqueta diz qual («Exemplo 3 de 3 · é o valor que
+  // escolheste»). Depois passa sozinho pelos exemplos.
+  irPara(CENARIOS.length);
   requestAnimationFrame(tique);
 };
