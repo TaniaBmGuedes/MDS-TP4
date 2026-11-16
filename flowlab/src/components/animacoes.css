@@ -51,9 +51,27 @@
       animation: ecra-bloco linear both;
       animation-timeline: --ecra;
     }
-    /* O quiz é o último passo: nunca sai do ecrã por cima. */
-    .ecra:last-child, .ecra:last-child > * { animation-range: entry 0% contain 0%; }
+    /* O quiz é o último passo: nunca sai do ecrã por cima, por isso só tem a
+       entrada. Precisa de animações próprias, sem a parte da saída: com as
+       de cima e só a gama encurtada, o browser parava no último keyframe
+       (o da saída) e o quiz ficava com opacidade 0,1, quase invisível. */
+    .ecra:last-child {
+      animation-name: ecra-entrada;
+      animation-range: entry 0% entry 100%;
+    }
+    .ecra:last-child > * {
+      animation-name: ecra-bloco-entrada;
+      animation-range: entry 0% entry 100%;
+    }
   }
+}
+@keyframes ecra-entrada {
+  from { opacity: .15; }
+  to { opacity: 1; }
+}
+@keyframes ecra-bloco-entrada {
+  from { translate: 0 22vh; scale: .92; }
+  to { translate: 0 0; scale: 1; }
 }
 @keyframes ecra-passagem {
   entry 0% { opacity: .15; }
