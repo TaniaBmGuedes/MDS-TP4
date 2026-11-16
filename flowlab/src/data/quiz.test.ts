@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { calcularEquipa } from '../model/equipa';
 import { simular } from '../model/simulador';
 import { WIP_SLIDER_MAX, WIP_SLIDER_MIN } from './grafico';
 import { PERGUNTAS, textoDilema, textoPontuacao } from './quiz';
+import { CENARIOS_EQUIPA, EQUIPA_BASE } from './scenarios';
 import { EQUIPA_INICIAL } from './simulacao';
 
 const r = (wip: number) => simular(wip, EQUIPA_INICIAL);
@@ -27,6 +29,18 @@ describe('PERGUNTAS', () => {
     }
   });
 
+  // Se a certa estivesse sempre na mesma posição, adivinhava-se o padrão.
+  it('as respostas certas não estão todas na mesma posição', () => {
+    const posicoes = PERGUNTAS.map((p) => p.certa);
+    for (const posicao of [0, 1, 2]) {
+      expect(posicoes.filter((x) => x === posicao).length).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it('as explicações não têm plurais errados', () => {
+    for (const p of PERGUNTAS) expect(p.explicacao).not.toMatch(/\b1 tarefas\b|\b1 dias\b/);
+  });
+
   it('as explicações não têm números estragados', () => {
     for (const p of PERGUNTAS) expect(p.explicacao).not.toMatch(/NaN|undefined|Infinity/);
   });
@@ -36,7 +50,14 @@ describe('PERGUNTAS', () => {
   it('as respostas certas batem com o simulador', () => {
     expect(r(pessoas * 2).leadTime).toBeGreaterThan(r(pessoas).leadTime);
     expect(r(pessoas).cycleTime).toBeLessThan(r(pessoas).leadTime);
-    expect(r(12).throughput).toBeLessThan(r(pessoas).throughput);
+    expect(r(pessoas * 2).throughput).toBeLessThan(r(pessoas).throughput);
+    // Mais gente com mais WIP: entrega mais por dia, mas cada tarefa demora mais.
+    const maisGente = CENARIOS_EQUIPA.find((c) => c.id === 'mais-gente')!.equipa;
+    const base = calcularEquipa(EQUIPA_BASE);
+    const comMaisGente = calcularEquipa(maisGente);
+    expect(comMaisGente.throughput).toBeGreaterThan(base.throughput);
+    expect(comMaisGente.throughput).toBeLessThan(base.throughput * 2);
+    expect(comMaisGente.leadTime).toBeGreaterThan(base.leadTime);
     expect(r(2).throughput).toBeLessThan(chegadasPorDia);
     expect(r(2).leadTime).toBeGreaterThan(r(pessoas).leadTime);
   });

@@ -42,8 +42,15 @@ export const CONCEITOS: readonly Conceito[] = [
     id: 'throughput',
     nome: 'Throughput',
     resumo: 'Conta só o que fica feito por dia, não o que se começa.',
-    perguntas: ['throughput'],
+    perguntas: ['dobro-wip', 'mais-gente'],
     passo: 'metricas',
+  },
+  {
+    id: 'mais-gente',
+    nome: 'Mais gente ou menos WIP',
+    resumo: 'Trazer gente só ajuda se o trabalho em curso não crescer com ela: primeiro limita o WIP.',
+    perguntas: ['mais-gente'],
+    passo: 'equipa',
   },
   {
     id: 'cfd',

@@ -1,14 +1,18 @@
 // Quiz final (T17), como no Sketch 2: 5 perguntas sobre o que a pessoa
 // experimentou no simulador, cada uma com os valores para a ver lá («Ver no
-// simulador»). As 4 primeiras vêm do protótipo v1, adaptadas à equipa de 4
-// pessoas do simulador; a 5.ª é nova.
+// simulador»). Cobrem os passos Simulador, Métricas e Equipa: WIP, Lei de
+// Little, lead time e cycle time, gráfico cumulativo, throughput e o efeito
+// de trazer mais gente. As respostas certas não estão sempre na mesma
+// posição, para não se acertar por adivinhar o padrão.
 //
-// Os números das explicações saem do modelo do simulador, por isso batem
-// certo com o que a pessoa vê ao carregar em «Ver no simulador».
+// Os números das explicações saem dos modelos (simulador e equipa), por isso
+// batem certo com o que a pessoa vê no site.
+import { calcularEquipa } from '../model/equipa';
 import { simular } from '../model/simulador';
 import type { EscolhaDilema } from '../model/percurso';
 import type { IdRegra } from './grafico';
 import { numero, throughput } from './metricas';
+import { CENARIOS_EQUIPA, EQUIPA_BASE } from './scenarios';
 import { EQUIPA_INICIAL } from './simulacao';
 
 export interface PerguntaQuiz {
@@ -27,6 +31,13 @@ export interface PerguntaQuiz {
 const { pessoas, chegadasPorDia } = EQUIPA_INICIAL;
 const r = (wip: number) => simular(wip, EQUIPA_INICIAL);
 const dias = (v: number): string => `${numero(v)} ${numero(v) === '1' ? 'dia' : 'dias'}`;
+const porDia = (v: number): string => `${throughput(v)} ${throughput(v) === '1' ? 'tarefa' : 'tarefas'} por dia`;
+
+// Passo «Equipa»: a equipa inicial (2 pessoas, 4 tarefas em curso) e o
+// cenário em que se traz mais gente e, com ela, mais trabalho a meio.
+const maisGente = CENARIOS_EQUIPA.find((c) => c.id === 'mais-gente')!.equipa;
+const eqBase = calcularEquipa(EQUIPA_BASE);
+const eqMaisGente = calcularEquipa(maisGente);
 
 export const PERGUNTAS: readonly PerguntaQuiz[] = [
   {
@@ -38,7 +49,7 @@ export const PERGUNTAS: readonly PerguntaQuiz[] = [
       'Fica igual, só muda o throughput',
     ],
     certa: 1,
-    explicacao: `Com as mesmas pessoas, o throughput não sobe (até desce, com tanta troca de tarefa). Pela Lei de Little, mais WIP com o mesmo throughput dá mais lead time: no simulador passa de ${dias(r(pessoas).leadTime)} para ${dias(r(pessoas * 2).leadTime)}.`,
+    explicacao: `Com as mesmas pessoas, o throughput não sobe: até desce, de ${porDia(r(pessoas).throughput)} para ${porDia(r(pessoas * 2).throughput)}, com tanta troca de tarefa. Pela Lei de Little, mais WIP sem mais throughput dá mais lead time: no simulador passa de ${dias(r(pessoas).leadTime)} para ${dias(r(pessoas * 2).leadTime)}.`,
     simulador: { wip: pessoas * 2, regra: 'horizontal' },
   },
   {
@@ -46,10 +57,10 @@ export const PERGUNTAS: readonly PerguntaQuiz[] = [
     texto: 'Qual é a diferença entre lead time e cycle time?',
     opcoes: [
       'São a mesma coisa',
-      'O lead time conta desde o pedido; o cycle time só desde que se começa',
       'O cycle time conta desde o pedido; o lead time só desde que se começa',
+      'O lead time conta desde o pedido; o cycle time só desde que se começa',
     ],
-    certa: 1,
+    certa: 2,
     explicacao: `O lead time inclui a espera em «A fazer»; o cycle time conta só o tempo em curso. Com ${pessoas} tarefas em curso, o lead time é ${dias(r(pessoas).leadTime)} e o cycle time ${dias(r(pessoas).cycleTime)}: a diferença é o tempo à espera.`,
     simulador: { wip: pessoas, regra: 'horizontal' },
   },
@@ -66,27 +77,27 @@ export const PERGUNTAS: readonly PerguntaQuiz[] = [
     simulador: { wip: 12, regra: 'alargar' },
   },
   {
-    id: 'throughput',
-    texto: `Com ${pessoas} pessoas, o que acontece às tarefas acabadas por dia (o throughput) quando o limite de WIP passa de ${pessoas} para 12?`,
+    id: 'mais-gente',
+    texto: `Uma equipa de ${EQUIPA_BASE.pessoas} pessoas com ${EQUIPA_BASE.wip} tarefas em curso passa a ter ${maisGente.pessoas} pessoas, mas também ${maisGente.wip} tarefas em curso. O que acontece?`,
     opcoes: [
-      'Sobem, porque há mais tarefas a avançar',
-      'Descem, porque se perde tempo a saltar entre tarefas',
-      'Ficam iguais, porque as pessoas são as mesmas',
+      'Entregam mais por dia, mas cada tarefa demora mais: o WIP cresceu com a equipa',
+      'Cada tarefa passa a demorar metade, porque há o dobro das pessoas',
+      'Nada muda, porque cada pessoa continua com o mesmo número de tarefas',
     ],
-    certa: 1,
-    explicacao: `O throughput conta só o que fica feito. Com 12 tarefas para ${pessoas} pessoas, cada uma salta entre várias e perde tempo: no simulador desce de ${throughput(r(pessoas).throughput)} para ${throughput(r(12).throughput)} tarefas por dia.`,
-    simulador: { wip: 12, regra: null },
+    certa: 0,
+    explicacao: `Com mais gente, o throughput sobe de ${porDia(eqBase.throughput)} para ${porDia(eqMaisGente.throughput)}, mas não para o dobro, porque coordenar mais pessoas custa tempo. Como o WIP também dobrou, o lead time sobe de ${dias(eqBase.leadTime)} para ${dias(eqMaisGente.leadTime)}. Mais gente só ajuda se o trabalho em curso não crescer com ela (passo «Equipa»).`,
+    simulador: { wip: maisGente.wip, regra: null },
   },
   {
     id: 'pouco-wip',
     texto: `E se o limite de WIP for só 2, com ${pessoas} pessoas?`,
     opcoes: [
       'É o ideal: menos tarefas a meio, menos espera',
-      'Há pessoas paradas: sai menos do que entra e a fila cresce',
       'O lead time desce para metade',
+      'Há pessoas paradas: sai menos do que entra e a fila cresce',
     ],
-    certa: 1,
-    explicacao: `Limitar demasiado também é mau: só 2 pessoas trabalham. Saem ${throughput(r(2).throughput)} tarefas por dia, menos do que as ${chegadasPorDia} que chegam, e o lead time sobe para ${dias(r(2).leadTime)}. O melhor ficou em uma tarefa por pessoa.`,
+    certa: 2,
+    explicacao: `Limitar demasiado também é mau: só 2 pessoas trabalham. Sai ${porDia(r(2).throughput)}, menos do que as ${chegadasPorDia} que chegam, e o lead time sobe para ${dias(r(2).leadTime)}. O melhor resultado é uma tarefa por pessoa.`,
     simulador: { wip: 2, regra: 'alargar' },
   },
 ];
