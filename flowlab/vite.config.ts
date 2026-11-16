@@ -10,6 +10,12 @@ export default defineConfig(({ mode }) => ({
   // avisa que o certificado não é de confiança; é normal e só acontece em
   // desenvolvimento. O build e o `npm run dev` normal não mudam.
   plugins: mode === 'https' ? [basicSsl()] : [],
+  // Para testar o chat num endereço público com HTTPS sem ser localhost
+  // (o BOTSchool não aceita localhost), usa-se um túnel do Cloudflare:
+  // `cloudflared tunnel --url http://localhost:5173` dá um endereço
+  // https://….trycloudflare.com. Por segurança o Vite só aceita pedidos de
+  // hosts conhecidos; este acrescenta os túneis. Só afeta o `npm run dev`.
+  server: { allowedHosts: ['.trycloudflare.com'] },
   test: {
     // Os testes (src/model, src/data e src/theme) não usam o DOM.
     environment: 'node',
