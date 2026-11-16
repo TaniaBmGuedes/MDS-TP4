@@ -1,0 +1,20 @@
+FlowLab · MDS TP4 (tema 2: Kanban e métricas de fluxo) · Turma P1
+Tânia Guedes, Ricardo Altamirano, Miguel Monteiro, Tiago Manata, Yan Nacamae
+Entrega a 17/11/2026 (documentos com dados de 16/11/2026)
+
+Entregáveis (enunciado, secção 6)
+  01_Design_Thinking.docx                Design Thinking output
+  02_Plano_do_Projeto.docx               Objetivos, visão, requisitos, release plan, regras e Definition of Done
+  03_Backlog_Sprints_e_Metricas.docx     Product backlog, sprint goals, sprint backlogs e burndown
+  04_Atas_Reviews_e_Retrospetivas.docx   Atas das reviews e retrospetivas
+  05_Teste_do_Chatbot.docx               Conjunto de perguntas de teste do chatbot
+  06_Relatorio_TP4.docx                  Relatório final
+  07_Apresentacao_Final.pptx             Apresentação
+  PDF/                                   Os mesmos documentos em PDF
+
+Ligações
+  Produto (Netlify):  https://delicate-quokka-e180ac.netlify.app
+                      Versão mais recente do main, com o chat: https://deploy-preview-44--delicate-quokka-e180ac.netlify.app
+                      (a produção não é atualizada desde 13/11 por falta de créditos no Netlify)
+  Backlog (Jira):     https://isec-team-mfrdhjnv.atlassian.net/jira/software/projects/SCRUM/boards/1
+  Código (GitHub):    https://github.com/TaniaBmGuedes/MDS-TP4
