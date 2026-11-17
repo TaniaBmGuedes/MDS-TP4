@@ -14,7 +14,7 @@ Entregáveis (enunciado, secção 6)
 
 Ligações
   Produto (Netlify):  https://delicate-quokka-e180ac.netlify.app
-                      Versão mais recente do main, com o chat: https://deploy-preview-44--delicate-quokka-e180ac.netlify.app
+                      Versão mais recente do main, com o chat: https://deploy-preview-45--delicate-quokka-e180ac.netlify.app
                       (a produção não é atualizada desde 13/11 por falta de créditos no Netlify)
   Backlog (Jira):     https://isec-team-mfrdhjnv.atlassian.net/jira/software/projects/SCRUM/boards/1
   Código (GitHub):    https://github.com/TaniaBmGuedes/MDS-TP4
